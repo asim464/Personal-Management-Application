@@ -28,7 +28,6 @@
 </template>
 
 <script>
-import { currentUser } from "@/constants/config.js";
 import { UserRole } from "../../../utils/auth.roles";
 export default {
   data() {

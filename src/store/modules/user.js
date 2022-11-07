@@ -1,10 +1,12 @@
 import axios from 'axios';
-import { currentUser, isAuthGuardActive, apiUrl } from '../../constants/config'
+import jwt_decode from "jwt-decode";
+import { isAuthGuardActive, apiUrl } from '../../constants/config'
 import { setCurrentUser, getCurrentUser } from '../../utils'
 
 export default {
   state: {
-    currentUser: isAuthGuardActive ? getCurrentUser() : currentUser,
+    // currentUser: isAuthGuardActive ? getCurrentUser() : currentUser,
+    currentUser: null,
     loginError: null,
     processing: false,
     forgotMailSuccess: null,
@@ -62,11 +64,11 @@ export default {
       if (res.status==201) {
         commit('clearError');
         commit('setProcessing', true);
-        
+        var data = jwt_decode(res.data.access_token)
+        console.log(data)
         user => {
-          const item = { uid: user.user.uid, ...currentUser }
-          setCurrentUser(item)
-          commit('setUser', item)
+          // setCurrentUser(item)
+          // commit('setUser', item)
         };
         return true;
       } else {

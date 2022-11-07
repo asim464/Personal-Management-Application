@@ -16,6 +16,7 @@
     "chart.js": "2.9.4",
     "core-js": "^3.23.3",
     "jquery": "^1.9.1",
+    "jwt-decode": "^3.1.2",
     "v-contextmenu": "^2.9.0",
     "video.js": "^7.12.3",
     "vue": "^2.6.14",
