@@ -165,18 +165,21 @@ export default {
             toaster: "b-toaster-top-center",
           }
         );
+        
       } else {
         var res = this.login({
           email: this.form.email,
           password: this.form.password,
         });
-        if (res == true) {
+        if (res.state == true) {
+          alert("this is me")
           this.$bvToast.toast("Logged in successfully", {
             title: "Logged In",
             variant: "success",
             solid: true,
             toaster: "b-toaster-top-center",
           });
+          this.$router.go("/app");
         } else {
           this.$bvToast.toast("E-mail or Password incorrect. Kindly re-check.", {
             title: "Invalid Credentials",
