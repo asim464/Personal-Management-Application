@@ -56,7 +56,7 @@ export default {
   actions: {
     async login({ commit }, payload) {
 
-      var res = await axios.post(`${this.apiUrl}/auth/login`, {payload});
+      var res = await axios.post(apiUrl+"auth/login", payload);
       if (res==201) {
         commit('clearError');
         commit('setProcessing', true);

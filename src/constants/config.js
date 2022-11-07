@@ -17,7 +17,7 @@ export const localeOptions = [
   { id: 'enrtl', name: 'English RTL', direction: 'rtl' }
 ]
 
-export const apiUrl = "https://app-propertymanagement.herokuapp.com/";
+export const apiUrl = 'https://app-propertymanagement.herokuapp.com/';
 
 export const currentUser = {
   id: 1,
