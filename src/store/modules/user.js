@@ -57,9 +57,12 @@ export default {
     async login({ commit }, payload) {
 
       var res = await axios.post(apiUrl+"auth/login", payload);
-      if (res==201) {
+      console.log(res);
+
+      if (res.status==201) {
         commit('clearError');
         commit('setProcessing', true);
+        
         user => {
           const item = { uid: user.user.uid, ...currentUser }
           setCurrentUser(item)
