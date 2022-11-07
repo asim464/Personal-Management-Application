@@ -1,11 +1,11 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import { isAuthGuardActive, apiUrl } from "../../constants/config";
+import { apiUrl } from "../../constants/config";
 import { setCurrentUser, getCurrentUser } from "../../utils";
 
 export default {
   state: {
-    // currentUser: isAuthGuardActive ? getCurrentUser() : currentUser,
+    isAuthGuardActive: Boolean,
     currentUser: {
       id: Number,
       first_name: String,
@@ -23,6 +23,7 @@ export default {
     resetPasswordSuccess: null,
   },
   getters: {
+    isAuthGuardActive: (state) => state.isAuthGuardActive,
     currentUser: (state) => state.currentUser,
     processing: (state) => state.processing,
     loginError: (state) => state.loginError,
@@ -32,11 +33,13 @@ export default {
   mutations: {
     setUser(state, payload) {
       state.currentUser = payload;
+      state.isAuthGuardActive = true;
       state.processing = false;
       state.loginError = null;
     },
     setLogout(state) {
       state.currentUser = null;
+      state.isAuthGuardActive = false;
       state.processing = false;
       state.loginError = null;
     },
@@ -73,33 +76,14 @@ export default {
         commit("clearError");
         commit("setProcessing", true);
         var data = jwt_decode(res.data.access_token);
-        console.log(data.id);
         var item = { id: data.id, ...data };
-        // {
-        //   id: data.id,
-        //   first_name: data.firstNamem,
-        //   last_name: data.lastName,
-        //   user_name: data.userName,
-        //   email: data.userEmail,
-        //   role: data.roles,
-        //   status: data.status,
-        //   image_url: data.ImageUrl,
-        //   address: data.Address
-        // }
+        console.log(item)
         setCurrentUser(item);
         commit("setUser", item);
         return true;
       } else {
         return false;
       }
-
-      // .signInWithEmailAndPassword(payload.email, payload.password)
-      // .then(
-
-      // err => {
-      //   setCurrentUser(null);
-      //   commit('setError', err.message)
-      // }
     },
     forgotPassword({ commit }, payload) {
       commit("clearError");
