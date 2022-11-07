@@ -3,8 +3,6 @@ import { UserRole } from "../utils/auth.roles";
 export const defaultMenuType = 'menu-default' // 'menu-default', 'menu-sub-hidden', 'menu-hidden';
 export const adminRoot = '/app';
 export const searchPath = `${adminRoot}/#`
-// export const buyUrl = 'https://1.envato.market/nEyZa'
-// export const apiUrl = 'https://api.coloredstrategies.com';
 
 export const subHiddenBreakpoint = 1440
 export const menuHiddenBreakpoint = 768
@@ -27,9 +25,6 @@ export const apiUrl = 'https://app-propertymanagement.herokuapp.com/';
 //   role: UserRole.Admin
 // }
 
-// export const currentUser
-
-export const isAuthGuardActive = false;
 export const themeRadiusStorageKey = 'theme_radius'
 export const themeSelectedColorStorageKey = 'theme_selected_color'
 export const defaultColor = 'light.blueolympic'
