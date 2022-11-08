@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="currentUser.role == UserRole.SuperAdmin">
+    <div v-if="currentUser.roles == UserRole.SuperAdmin">
       <b-row>
         <b-colxx xxs="12">
           <piaf-breadcrumb :heading="$t('menu.start')" />
@@ -29,12 +29,20 @@
 
 <script>
 import { UserRole } from "../../../utils/auth.roles";
+import { mapGetters } from "vuex";
 export default {
+  computed: {
+    ...mapGetters(["currentUser"]),
+  },
   data() {
     return {
-      currentUser,
       UserRole,
     };
   },
+  created(){
+    console.log(this.currentUser)
+    console.log(this.UserRole)
+
+  }
 };
 </script>

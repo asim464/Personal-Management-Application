@@ -10,7 +10,7 @@ const data = [{
     icon: "simple-icon-paper-plane",
     label: "menu.start",
     to: `${adminRoot}/piaf/start`,
-    // roles: [UserRole.Admin, UserRole.Editor],
+    roles: [UserRole.Admin, UserRole.Editor],
   },
   ]
 },
