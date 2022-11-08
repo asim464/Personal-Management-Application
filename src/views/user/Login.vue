@@ -125,8 +125,8 @@ export default {
     return {
       flag: Boolean,
       form: {
-        email: "example@ex.com",
-        password: "xxxxxxx",
+        email: "Admin@gmail.com",
+        password: "qwerty123456",
       },
     };
   },
