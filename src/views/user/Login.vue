@@ -6,8 +6,7 @@
           <p class="white mb-0">
             Please use your credentials to login.
             <br />If you are not a member, please
-            <router-link to="/user/register" class="white">register</router-link
-            >.
+            <router-link to="/user/register" class="white">register</router-link>.
           </p>
         </div>
         <div class="form-side">
@@ -16,62 +15,34 @@
           </router-link>
           <h6 class="mb-4">Login</h6>
 
-          <b-form
-            @submit.prevent="formSubmit"
-            class="av-tooltip tooltip-label-bottom"
-          >
+          <b-form @submit.prevent="formSubmit" class="av-tooltip tooltip-label-bottom">
             <b-form-group label="E-mail" class="has-float-label mb-4">
-              <b-form-input
-                type="text"
-                v-model="$v.form.email.$model"
-                :state="!$v.form.email.$error"
-              />
-              <b-form-invalid-feedback v-if="!$v.form.email.required"
-                >Please enter your email address</b-form-invalid-feedback
-              >
-              <b-form-invalid-feedback v-else-if="!$v.form.email.email"
-                >Please enter a valid email address</b-form-invalid-feedback
-              >
-              <b-form-invalid-feedback v-else-if="!$v.form.email.minLength"
-                >Your email must be minimum 4
-                characters</b-form-invalid-feedback
-              >
+              <b-form-input type="text" v-model="$v.form.email.$model" :state="!$v.form.email.$error" />
+              <b-form-invalid-feedback v-if="!$v.form.email.required">Please enter your email address
+              </b-form-invalid-feedback>
+              <b-form-invalid-feedback v-else-if="!$v.form.email.email">Please enter a valid email address
+              </b-form-invalid-feedback>
+              <b-form-invalid-feedback v-else-if="!$v.form.email.minLength">Your email must be minimum 4
+                characters</b-form-invalid-feedback>
             </b-form-group>
 
             <b-form-group label="Password" class="has-float-label mb-4">
-              <b-form-input
-                type="password"
-                v-model="$v.form.password.$model"
-                :state="!$v.form.password.$error"
-              />
-              <b-form-invalid-feedback v-if="!$v.form.password.required"
-                >Please enter your password</b-form-invalid-feedback
-              >
-              <b-form-invalid-feedback
-                v-else-if="
-                  !$v.form.password.minLength || !$v.form.password.maxLength
-                "
-                >Your password must be between 4 and 16
-                characters</b-form-invalid-feedback
-              >
+              <b-form-input type="password" v-model="$v.form.password.$model" :state="!$v.form.password.$error" />
+              <b-form-invalid-feedback v-if="!$v.form.password.required">Please enter your password
+              </b-form-invalid-feedback>
+              <b-form-invalid-feedback v-else-if="
+                !$v.form.password.minLength || !$v.form.password.maxLength
+              ">Your password must be between 4 and 16
+                characters</b-form-invalid-feedback>
             </b-form-group>
             <div class="d-flex justify-content-between align-items-center">
-              <router-link to="/user/forgot-password"
-                >Forgot Password</router-link
-              >
-              <b-button
-                :click="formSubmit"
-                type="submit"
-                variant="primary"
-                size="lg"
-                :disabled="processing"
-                :class="{
-                  'btn-multiple-state btn-shadow': true,
-                  'show-spinner': processing,
-                  'show-success': !processing && loginError === false,
-                  'show-fail': !processing && loginError,
-                }"
-              >
+              <router-link to="/user/forgot-password">Forgot Password</router-link>
+              <b-button :click="formSubmit" type="submit" variant="primary" size="lg" :disabled="processing" :class="{
+                'btn-multiple-state btn-shadow': true,
+                'show-spinner': processing,
+                'show-success': !processing && loginError === false,
+                'show-fail': !processing && loginError,
+              }">
                 <span class="spinner d-inline-block">
                   <span class="bounce1"></span>
                   <span class="bounce2"></span>
@@ -86,19 +57,14 @@
                 <span class="label">LOGIN</span>
               </b-button>
             </div>
-            <div
-              class="
+            <div class="
                 d-flex
                 justify-content-between
                 align-items-center
                 mt-4
                 pl-4
-              "
-              style="font-weight: 400px; font-size: medium"
-            >
-              <router-link to="/user/register"
-                ><u>Not a member. Click here to Register Now!</u></router-link
-              >
+              " style="font-weight: 400px; font-size: medium">
+              <router-link to="/user/register"><u>Not a member. Click here to Register Now!</u></router-link>
             </div>
           </b-form>
         </div>
@@ -110,6 +76,9 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import { validationMixin } from "vuelidate";
+import axios from "axios";
+import jwt_decode from "jwt-decode";
+import { apiUrl } from "../../constants/config";
 const {
   required,
   maxLength,
@@ -143,16 +112,16 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["currentUser", "processing", "loginError"]),
+    ...mapGetters(["processing", "loginError", "isAuthGuardActive"]),
   },
   methods: {
     ...mapActions(["login"]),
-    formSubmit() {
+    async formSubmit() {
       this.$v.$touch();
       this.$v.form.$touch();
 
       if (
-        
+
         (this.form.email == "example@ex.com") &
         (this.form.password == "xxxxxxx")
       ) {
@@ -166,19 +135,27 @@ export default {
           }
         );
       } else {
-        var data = this.login({
+        var payload = {
           email: this.form.email,
           password: this.form.password,
-        });
-        var res = this.$store.dispatch('login', data);
-        
-        if (res == true) {
+        }
+
+        var res = await axios.post(apiUrl + "auth/login", payload);
+
+        if (res.status == 201) {
+          var data = jwt_decode(res.data.access_token);
+          var item = { id: data.id, ...data };
+          this.login(item)
+        }
+        if (this.isAuthGuardActive) {
+          console.log(this.isAuthGuardActive);
           this.$bvToast.toast("Logged in successfully", {
             title: "Logged In",
             variant: "success",
             solid: true,
             toaster: "b-toaster-top-center",
           });
+          this.$router.push(adminRoot);
         } else {
           this.$bvToast.toast("E-mail or Password incorrect. Kindly re-check.", {
             title: "Invalid Credentials",
@@ -193,22 +170,22 @@ export default {
       //}
     },
   },
-  watch: {
-    currentUser(val) {
-      if (val && val.uid && val.uid.length > 0) {
-        setTimeout(() => {
-          this.$router.push(adminRoot);
-        }, 200);
-      }
-    },
-    loginError(val) {
-      if (val != null) {
-        this.$notify("error", "Login Error", val, {
-          duration: 3000,
-          permanent: false,
-        });
-      }
-    },
-  },
+  // watch: {
+  //   currentUser(val) {
+  //     if (val && val.uid && val.uid.length > 0) {
+  //       setTimeout(() => {
+  //         this.$router.push(adminRoot);
+  //       }, 200);
+  //     }
+  //   },
+  //   loginError(val) {
+  //     if (val != null) {
+  //       this.$notify("error", "Login Error", val, {
+  //         duration: 3000,
+  //         permanent: false,
+  //       });
+  //     }
+  //   },
+  // },
 };
 </script>
