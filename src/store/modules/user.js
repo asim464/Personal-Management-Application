@@ -1,8 +1,6 @@
 import { setCurrentUser, getCurrentUser } from "../../utils";
-import createPersistedState from "vuex-persistedstate";
 
 export default {
-  plugins: [createPersistedState()],
   state: {
     isAuthGuardActive: false,
     currentUser: {},
@@ -64,6 +62,7 @@ export default {
         commit("setProcessing", true);
         setCurrentUser(payload);
         commit("setUser", payload);
+        console.log(payload);
       
     },
     forgotPassword({ commit }, payload) {
