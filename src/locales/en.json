@@ -25,6 +25,7 @@
     "home": "Home",
     "app": "Home",
     "dashboard": "Dashboard",
+    "Dashboard": "Dashboard",
     "default": "Default",
     "analytics": "Analytics",
     "ecommerce": "Ecommerce",
@@ -118,7 +119,8 @@
     "second-menu": "Second Menu",
     "second": "Second",
     "single": "Single",
-    "agency": "Agency"
+    "agency": "Agency",
+    "Agency": "Agency"
   },
   "dashboards": {
     "pending-orders": "Pending Orders",

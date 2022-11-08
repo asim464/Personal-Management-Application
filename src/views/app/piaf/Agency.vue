@@ -10,7 +10,46 @@
       <b-row>
         <b-colxx xxs="12">
           <b-card class="mb-4" :title="$t('menu.agency')">
-            <b-table striped hover :items="items"></b-table>
+            <!-- <b-row>
+              <b-alert v-model="showSuccessAlert" variant="success" dismissible>
+                {{ alertMessage }}
+              </b-alert>
+            </b-row> -->
+            <b-row class="d-flex">
+              <b-colxx xxs="6">
+                <h3
+                  style="
+                    font-family: 'Nunito', sans-serif;
+                    font-weight: 400;
+                    font-size: 18px;
+                    padding-top: 1.4rem;
+                  "
+                >
+                  Agencies List
+                </h3>
+              </b-colxx>
+              <b-colxx
+                xxs="6"
+                style="
+                  display: flex;
+                  justify-content: flex-end;
+                  padding-bottom: 1rem;
+                "
+              >
+                <b-button 
+                    variant="success"
+                    v-b-modal.modalright
+                  ><i
+                    class="simple-icon-plus"
+                    style="padding-inline: 0.5rem; top: 1px; position: relative"
+                  ></i
+                  >Create Agency</b-button
+                >
+              </b-colxx>
+            </b-row>
+            <add-new-agency-modal />
+            <b-table small hover :items="items" responsive="sm">
+            </b-table>
           </b-card>
         </b-colxx>
       </b-row>
@@ -34,8 +73,12 @@ import { UserRole } from "../../../utils/auth.roles";
 import { mapGetters } from "vuex";
 import axios from "axios";
 import { apiUrl } from "../../../constants/config";
+import AddNewAgencyModal from "../../../components/Form/AddNewAgencyModal.vue";
 export default {
   name: "Agency",
+  components: {
+    "add-new-agency-modal": AddNewAgencyModal
+  },
   computed: {
     ...mapGetters(["currentUser"]),
   },
@@ -45,7 +88,7 @@ export default {
       UserRole,
     };
   },
-  async created() {
+  async mounted() {
     var config = {
       headers: {
         Authorization: `Bearer ${this.currentUser.token}`,
@@ -57,10 +100,10 @@ export default {
     for (let i = 0; i < data.length; i++) {
       var temp = {
         ID: data[i].id,
-        Name: data[i].name,
-        Address:
+        NAME: data[i].name,
+        ADDRESS:
           data[i].Address.house_number + ", " + data[i].Address.street_number,
-        Country: data[i].Address.country,
+        COUNTRY: data[i].Address.country,
         CO: data[i].Address.co,
       };
       this.items.push(temp);
@@ -70,5 +113,5 @@ export default {
 };
 </script>
   
-  <style>
+<style scoped>
 </style>

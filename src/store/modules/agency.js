@@ -2,48 +2,28 @@ import { setCurrentUser, getCurrentUser } from "../../utils";
 
 export default {
   state: {
-    isAuthGuardActive: false,
-    currentUser: {},
-    loginError: null,
+    agenciesList: [],
     processing: false,
-    forgotMailSuccess: null,
-    resetPasswordSuccess: null,
   },
   getters: {
-    isAuthGuardActive: (state) => state.isAuthGuardActive,
-    currentUser: (state) => state.currentUser,
+    agenciesList: (state) => state.agenciesList,
     processing: (state) => state.processing,
-    loginError: (state) => state.loginError,
-    forgotMailSuccess: (state) => state.forgotMailSuccess,
-    resetPasswordSuccess: (state) => state.resetPasswordSuccess,
   },
   mutations: {
-    setUser(state, payload) {
-      state.currentUser = payload;
-      state.isAuthGuardActive = true;
+    createAgency(state, payload) {
+      state.agenciesList = payload;
       state.processing = false;
-      state.loginError = null;
     },
-    setLogout(state) {
-      state.currentUser = null;
-      state.isAuthGuardActive = false;
+    deleteAgency(state, payload) {
+      state.agenciesList = state.agenciesList.splice(payload, 1);
       state.processing = false;
-      state.loginError = null;
     },
     setProcessing(state, payload) {
       state.processing = payload;
-      state.loginError = null;
     },
-    setError(state, payload) {
-      state.loginError = payload;
+    editAgency(state, payload) {
       state.currentUser = null;
       state.processing = false;
-    },
-    setForgotMailSuccess(state) {
-      state.loginError = null;
-      state.currentUser = null;
-      state.processing = false;
-      state.forgotMailSuccess = true;
     },
     setResetPasswordSuccess(state) {
       state.loginError = null;

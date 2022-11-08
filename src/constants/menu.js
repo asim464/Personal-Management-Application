@@ -12,8 +12,8 @@ const data = [{
     to: `${adminRoot}/piaf/Dashboard`,
     roles: [UserRole.SuperAdmin]
   }, {
-    icon: "simple-icon-paper-plane",
-    label: "Agencies",
+    icon: "simple-icon-list",
+    label: "menu.agency",
     to: `${adminRoot}/piaf/Agency`,
     roles: [UserRole.SuperAdmin]
   }
