@@ -10,41 +10,74 @@
       <b-row>
         <b-colxx xxs="12">
           <b-card class="mb-4" :title="$t('menu.user')">
-            <b-row class="d-flex">
-              <b-colxx xxs="6">
-                <h3
+            <!-- <b-row>
+              <b-alert v-model="showSuccessAlert" variant="success" dismissible>
+                {{ alertMessage }}
+              </b-alert>
+            </b-row> -->
+            <div v-if="processingAgent" class="loading"></div>
+            <div v-else>
+              <b-row class="d-flex">
+                <b-colxx xxs="6">
+                  <h3
+                    style="
+                      font-family: 'Nunito', sans-serif;
+                      font-weight: 400;
+                      font-size: 18px;
+                      padding-top: 1.4rem;
+                    "
+                  >
+                    Users List
+                  </h3>
+                </b-colxx>
+                <b-colxx
+                  xxs="6"
                   style="
-                    font-family: 'Nunito', sans-serif;
-                    font-weight: 400;
-                    font-size: 18px;
-                    padding-top: 1.4rem;
+                    display: flex;
+                    justify-content: flex-end;
+                    padding-bottom: 1rem;
                   "
                 >
-                  Users List
-                </h3>
-              </b-colxx>
-              <b-colxx
-                xxs="6"
-                style="
-                  display: flex;
-                  justify-content: flex-end;
-                  padding-bottom: 1rem;
-                "
+                  <b-button variant="success" v-b-modal.modalright
+                    ><i
+                      class="iconsminds-add-user"
+                      style="
+                        padding-inline: 0.5rem;
+                        top: 1px;
+                        position: relative;
+                      "
+                    ></i
+                    >Create User</b-button
+                  >
+                </b-colxx>
+              </b-row>
+              <add-new-user-modal />
+              <b-table
+                small
+                hover
+                :items="agentsList"
+                :fields="fields"
+                responsive="sm"
               >
-                <b-button 
-                    variant="success"
-                    v-b-modal.modalright
-                  ><i
-                    class="iconsminds-add-user"
-                    style="padding-inline: 0.5rem; top: 1px; position: relative"
-                  ></i
-                  >Create User</b-button
-                >
-              </b-colxx>
-            </b-row>
-            <add-new-user-modal />
-            <b-table small hover :items="items" responsive="sm">
-            </b-table>
+                <template #cell(actions)="row">
+                  <b-button
+                    variant="primary"
+                    size="sm"
+                    @click="info(row.item, row.index, $event.target)"
+                    class="mr-1"
+                  >
+                    Update
+                  </b-button>
+                  <b-button
+                    variant="danger"
+                    size="sm"
+                    @click="row.toggleDetails"
+                  >
+                    Delete
+                  </b-button>
+                </template>
+              </b-table>
+            </div>
           </b-card>
         </b-colxx>
       </b-row>
@@ -62,53 +95,65 @@
     </div>
   </div>
 </template>
-  
-  <script>
+
+<script>
 import { UserRole } from "../../../utils/auth.roles";
-import { mapGetters } from "vuex";
-import axios from "axios";
-import { apiUrl } from "../../../constants/config";
+import { mapGetters, mapActions } from "vuex";
 import AddNewUserModal from "../../../components/Form/AddNewUserModal.vue";
 export default {
   name: "Second",
   components: {
-    "add-new-user-modal": AddNewUserModal
+    "add-new-user-modal": AddNewUserModal,
   },
   computed: {
-    ...mapGetters(["currentUser"]),
+    ...mapGetters(["currentUser", "agentsList", "processingAgent"]),
   },
   data() {
     return {
-      items: [],
       UserRole,
+      fields: [
+        {
+          key: "id",
+        },
+        {
+          key: "email",
+        },
+        {
+          key: "firstName",
+          label: "FIRST NAME",
+        },
+        {
+          key: "lastName",
+          label: "LAST NAME",
+        },
+        {
+          key: "userName",
+          label: "USERNAME",
+        },
+        {
+          key: "roles",
+          label: "ROLE",
+        },
+        {
+          key: "status",
+          label: "STATUS",
+        },
+        {
+          key: "actions",
+          label: "ACTIONS",
+        },
+      ],
     };
   },
-  async mounted() {
-    var config = {
-      headers: {
-        Authorization: `Bearer ${this.currentUser.token}`,
-      },
-    };
-    var res = await axios.get(apiUrl + "users/findallUsers", config);
-    var data = res.data;
-    console.log(data);
-    for (let i = 0; i < data.length; i++) {
-      var temp = {
-        "ID": data[i].id,
-        "EMAIL": data[i].email,
-        "FIRST NAME": data[i].firstName,
-        "LAST NAME": data[i].lastName,
-        "USERNAME": data[i].userName,
-        "ROLE": data[i].roles,
-        "DESCRIPTION": data[i].description,
-        "STATUS": data[i].status
-      };
-      this.items.push(temp);
-    }
-    console.log(this.items);
+  mounted() {
+    this.setAgents();
+    // console.log(this.items);
+  },
+  methods: {
+    ...mapActions(["setAgents"]),
   },
 };
 </script>
-  
+
 <style scoped>
 </style>

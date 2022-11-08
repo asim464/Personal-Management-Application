@@ -5,6 +5,7 @@ import app from '../main'
 import menu from './modules/menu'
 import user from './modules/user'
 import agency from './modules/agency'
+import agents from './modules/agents'
 import { setCurrentLanguage } from '../utils'
 import createPersistedState from "vuex-persistedstate";
 
@@ -29,5 +30,6 @@ export default new Vuex.Store({
     menu,
     user,
     agency,
+    agents,
   }
 })
