@@ -1,6 +1,6 @@
-import user from "./user";
 import axios from "axios";
 import { apiUrl } from "../../constants/config";
+import { getCurrentUser } from "../../utils";
 const state = {
   agenciesList: [],
   // processing: false,
@@ -28,12 +28,14 @@ const mutations = {
 
 const actions = {
   async setAgencies({ commit }) {
-    let token = user.state.currentUser.token;
+    let user = getCurrentUser();
+
     var config = {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${user.token}`,
       },
     };
+    console.log(user);
     var res = await axios.get(apiUrl + "agency/findallAgencies", config);
 
     if (res.status == 200) {
