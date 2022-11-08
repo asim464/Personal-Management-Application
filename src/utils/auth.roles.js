@@ -1,5 +1,5 @@
 export const UserRole = {
-  SuperAdmin: "SuperAdmin",
+  SuperAdmin: 0,
   Admin: 1,
   Agent: 2,
   Customer: 3
