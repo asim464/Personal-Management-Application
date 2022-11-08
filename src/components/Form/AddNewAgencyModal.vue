@@ -8,13 +8,13 @@
     >
       <b-form>
         <b-form-group label="Name">
-          <b-form-input v-model="agencyName" />
+          <b-form-input v-model="newItem.agencyName"  />
         </b-form-group>
         <b-form-group label="Street Number">
-          <b-form-input v-model="newItem.streetNo" :rows="2" :max-rows="2" />
+          <b-form-input v-model="newItem.street_number" :rows="2" :max-rows="2" />
         </b-form-group>
         <b-form-group label="House Number">
-          <b-form-input v-model="newItem.houseNo" :rows="2" :max-rows="2" />
+          <b-form-input v-model="newItem.house_number" :rows="2" :max-rows="2" />
         </b-form-group>
         <b-form-group label="City">
           <b-form-input v-model="newItem.city" :rows="2" :max-rows="2" />
@@ -23,7 +23,7 @@
           <b-form-input v-model="newItem.country" :rows="2" :max-rows="2" />
         </b-form-group>
         <b-form-group label="Postal Code">
-          <b-form-input v-model="newItem.postalNo" :rows="2" :max-rows="2" />
+          <b-form-input  v-model="newItem.postal_code" type="number" :rows="2" :max-rows="2" />
         </b-form-group>
         <b-form-group label="CO">
           <b-form-input v-model="newItem.co" :rows="2" :max-rows="2" />
@@ -46,40 +46,31 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
-import axios from "axios";
-import { apiUrl } from "../../constants/config";
+import {mapGetters,mapActions} from "vuex";
 export default {
   name: "AddNewAgencyModal",
   computed: {
-    ...mapGetters(["currentUser"]),
+    ...mapGetters(["currentUser","isCreated"]),
   },
   data() {
     return {
-      agencyName: "",
+      
       newItem: {
-        streetNo: "",
-        houseNo: "",
+        agencyName: "",
+        street_number: "",
+        house_number: "",
         city: "",
         country: "",
-        postalNo: "",
+        postal_code: "",
         co: "",
       },
     };
   },
   methods: {
-    async addNewItem() {
-      var config = {
-        headers: {
-          Authorization: `Bearer ${this.currentUser.token}`,
-        },
-      };
-      var res = await axios.post(
-        apiUrl + "agency/create/" + this.agencyName,
-        config,
-        this.newItem
-      );
-      if ((await res).status == 201) {
+    ...mapActions(["createAgency","changedstate"]),
+     addNewItem() {
+      this.createAgency(this.newItem)
+      if (this.isCreated) {
         this.$bvToast.toast("Success", {
           title: "Agency Created Successfully",
           variant: "success",
@@ -87,6 +78,7 @@ export default {
           toaster: "b-toaster-top-center",
         });
         this.hideModal("modalright");
+        this.changedstate();
       }
     },
     hideModal(refname) {
