@@ -28,7 +28,7 @@
                   <b-button type="submit" variant="primary" size="lg" class="btn-shadow">{{ $t('user.register-button')}}</b-button>
               </div>
               <div class="d-flex justify-content-between align-items-center mt-4 pl-2" style="font-weight:400px; font-size:medium;">
-                        <router-link to="/user/login"><u>Already have an account. Click here to Login now!</u></router-link>
+                        <router-link to="/user/login"><i class="simple-icon-login"></i> <u>Already have an account. Click here to Login now!</u></router-link>
                     </div>
           </b-form>
         </div>
