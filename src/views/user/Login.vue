@@ -11,7 +11,7 @@
           </p>
         </div>
         <div class="form-side">
-          <i class="simple-icon-login"></i>
+          <i class="simple-icon-login" style="font-size:2rem;"></i>
           <h6 class="mb-4">Login</h6>
 
           <b-form
@@ -95,7 +95,12 @@
               style="font-weight: 400px; font-size: medium"
             >
               <router-link to="/user/register"
-                ><u>Not a member. Click here to Register Now!</u></router-link
+                ><u
+                  >Not a member. Click here to Register<i
+                    class="iconsminds-add-user"
+                  ></i>
+                  Now!</u
+                ></router-link
               >
             </div>
           </b-form>
