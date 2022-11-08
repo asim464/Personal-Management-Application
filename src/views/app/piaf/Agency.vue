@@ -39,7 +39,7 @@
             <b-table small hover :items="agenciesList" :fields="fields" responsive="sm">
               <template #cell(actions)="row">
                 <b-button variant="primary" size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">
-                  update
+                  Update
                 </b-button>
                 <b-button variant="danger" size="sm" @click="row.toggleDetails">
                   Delete
