@@ -25,7 +25,7 @@
         <b-form-group label="Description">
           <b-text-area v-model="newItem.desc" :rows="2" :max-rows="2" />
         </b-form-group>
-        <b-form-group label="">
+        <b-form-group label="Status">
           <b-form-radio-group
             stacked
             class="pt-2"
@@ -37,6 +37,8 @@
           <b-form-select
             v-model="newItem.role"
             :options="roles"
+            :rows="2" 
+            :max-rows="2"
           ></b-form-select>
         </b-form-group>
       </b-form>
