@@ -8,10 +8,15 @@ const data = [{
   to: `${adminRoot}/piaf`,
   subs: [{
     icon: "simple-icon-paper-plane",
-    label: "menu.start",
-    to: `${adminRoot}/piaf/start`,
-    roles: [UserRole.Admin, UserRole.Editor],
-  },
+    label: "menu.dashboard",
+    to: `${adminRoot}/piaf/Dashboard`,
+    roles: [UserRole.SuperAdmin]
+  }, {
+    icon: "simple-icon-paper-plane",
+    label: "Agencies",
+    to: `${adminRoot}/piaf/Agency`,
+    roles: [UserRole.SuperAdmin]
+  }
   ]
 },
 {
@@ -23,6 +28,7 @@ const data = [{
     icon: "simple-icon-paper-plane",
     label: "menu.second",
     to: `${adminRoot}/second-menu/second`,
+    roles: [UserRole.SuperAdmin, UserRole.Admin, UserRole.Agent]
   },
   ]
 },

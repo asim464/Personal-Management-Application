@@ -63,7 +63,6 @@ export default {
         commit("setProcessing", true);
         setCurrentUser(payload);
         commit("setUser", payload);
-        console.log(payload);
       
     },
     forgotPassword({ commit }, payload) {

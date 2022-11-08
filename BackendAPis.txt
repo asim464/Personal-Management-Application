@@ -1,8 +1,0 @@
-Swagger :
-
-https://app-propertymanagement.herokuapp.com/api#/users/UsersController_create
-
-
-
-Url:
-http://app-propertymanagement.herokuapp.com/auth/login

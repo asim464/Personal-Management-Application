@@ -48,13 +48,6 @@
           >{{l.name}}</b-dropdown-item>
         </b-dropdown>
       </div>
-      <!-- <div class="position-relative d-none d-none d-lg-inline-block">
-        <a
-          class="btn btn-outline-primary btn-sm ml-2"
-          target="_top"
-          :href="buyUrl"
-        >{{$t('user.buy')}}</a>
-      </div> -->
     </div>
     <router-link class="navbar-logo" :to="adminRoot">
       <span class="logo d-none d-xs-block"></span>
@@ -88,7 +81,7 @@
             <div>
               <router-link to="#" class="icon-menu-item">
                 <i class="iconsminds-shop-4 d-block" />
-                {{$t('menu.dashboards')}}
+                {{$t('menu.dashboard')}}
               </router-link>
               <router-link to="#" class="icon-menu-item">
                 <i class="iconsminds-pantone d-block" />
@@ -197,7 +190,6 @@ import {
   searchPath,
   menuHiddenBreakpoint,
   localeOptions,
-  // buyUrl,
   adminRoot
 } from "../../constants/config";
 import { getDirection, setDirection, getThemeColor, setThemeColor } from "../../utils";
@@ -216,7 +208,6 @@ export default {
       menuHiddenBreakpoint,
       searchPath,
       localeOptions,
-      // buyUrl,
       notifications,
       isDarkActive: false,
       adminRoot

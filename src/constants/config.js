@@ -17,14 +17,6 @@ export const localeOptions = [
 
 export const apiUrl = 'https://app-propertymanagement.herokuapp.com/';
 
-// export const currentUser = {
-//   id: 1,
-//   title: 'Sarah Kortney',
-//   img: '/assets/img/profiles/l-1.jpg',
-//   date: 'Last seen today 15:24',
-//   role: UserRole.Admin
-// }
-
 export const themeRadiusStorageKey = 'theme_radius'
 export const themeSelectedColorStorageKey = 'theme_selected_color'
 export const defaultColor = 'light.blueolympic'

@@ -24,7 +24,7 @@
   "menu": {
     "home": "Home",
     "app": "Home",
-    "dashboards": "Dashboards",
+    "dashboard": "Dashboard",
     "default": "Default",
     "analytics": "Analytics",
     "ecommerce": "Ecommerce",
@@ -117,8 +117,8 @@
     "piaf": "Piaf",
     "second-menu": "Second Menu",
     "second": "Second",
-    "start": "Start",
-    "single": "Single"
+    "single": "Single",
+    "agency": "Agency"
   },
   "dashboards": {
     "pending-orders": "Pending Orders",

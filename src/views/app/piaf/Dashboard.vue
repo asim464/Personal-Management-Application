@@ -1,15 +1,15 @@
 <template>
   <div>
-    <div v-if="currentUser.roles == UserRole.SuperAdmin">
+    <div v-if="currentUser.role == UserRole.SuperAdmin">
       <b-row>
         <b-colxx xxs="12">
-          <piaf-breadcrumb :heading="$t('menu.start')" />
+          <piaf-breadcrumb :heading="$t('menu.dashboard')" />
           <div class="separator mb-5"></div>
         </b-colxx>
       </b-row>
       <b-row>
         <b-colxx xxs="12">
-          <b-card class="mb-4" :title="$t('menu.start')"> </b-card>
+          <b-card class="mb-4" :title="$t('menu.dashboard')"> </b-card>
         </b-colxx>
       </b-row>
     </div>
@@ -31,6 +31,7 @@
 import { UserRole } from "../../../utils/auth.roles";
 import { mapGetters } from "vuex";
 export default {
+  name: "Dashboard",
   computed: {
     ...mapGetters(["currentUser"]),
   },
@@ -39,10 +40,5 @@ export default {
       UserRole,
     };
   },
-  created(){
-    console.log(this.currentUser)
-    console.log(this.UserRole)
-
-  }
 };
 </script>
