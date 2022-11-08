@@ -3,18 +3,8 @@ import { setCurrentUser, getCurrentUser } from "../../utils";
 
 export default {
   state: {
-    isAuthGuardActive: Boolean,
-    currentUser: {
-      id: Number,
-      first_name: String,
-      last_name: String,
-      user_name: String,
-      email: String,
-      role: String,
-      status: String,
-      image_url: String,
-      address: String,
-    },
+    isAuthGuardActive: false,
+    currentUser: {},
     loginError: null,
     processing: false,
     forgotMailSuccess: null,
@@ -67,21 +57,14 @@ export default {
     },
   },
   actions: {
-    async login({ commit }, payload) {
-      var res = await axios.post(apiUrl + "auth/login", payload);
+     login({ commit }, payload) {
 
-      if (res.status == 201) {
         commit("clearError");
         commit("setProcessing", true);
-        var data = jwt_decode(res.data.access_token);
-        var item = { id: data.id, ...data };
-        console.log(item)
-        setCurrentUser(item);
-        commit("setUser", item);
-        return true;
-      } else {
-        return false;
-      }
+        setCurrentUser(payload);
+        commit("setUser", payload);
+        console.log(payload);
+      
     },
     forgotPassword({ commit }, payload) {
       commit("clearError");
