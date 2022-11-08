@@ -34,16 +34,10 @@
           />
         </b-form-group>
         <b-form-group label="Role">
-          <b-dropdown
+          <b-form-select
             v-model="newItem.role"
-            text="Select Role"
-            :rows="2"
-            :max-rows="2"
-          >
-            <b-dropdown-item v-for="roles in UserRole" :key="roles">{{
-              roles
-            }}</b-dropdown-item>
-          </b-dropdown>
+            :options="roles"
+          ></b-form-select>
         </b-form-group>
       </b-form>
 
@@ -63,14 +57,10 @@
 import { mapGetters } from "vuex";
 import axios from "axios";
 import { apiUrl } from "../../constants/config";
-import { UserRole } from "../../utils/auth.roles";
 export default {
   name: "AddNewUserModal",
   computed: {
     ...mapGetters(["currentUser"]),
-  },
-  components: {
-    UserRole,
   },
   data() {
     return {
@@ -82,12 +72,18 @@ export default {
         userName: "",
         desc: "",
         status: Boolean,
-        role: ""
+        role: "",
       },
       statuses: {
         0: "Active",
-        1: "In Active"
-      }
+        1: "In Active",
+      },
+      roles: [
+        {"value": "SuperAdmin", "text": "SuperAdmin"},
+        {"value": "Admin", "text": "Admin"},
+        {"value": "Agent", "text": "Agent"},
+        {"value": "Customer", "text": "Customer"},
+      ]
     };
   },
   methods: {
