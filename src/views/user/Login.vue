@@ -110,6 +110,9 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import { validationMixin } from "vuelidate";
+import axios from "axios";
+import { apiUrl } from "../../constants/config";
+import jwt_decode from "jwt-decode";
 const {
   required,
   maxLength,
@@ -147,7 +150,7 @@ export default {
   },
   methods: {
     ...mapActions(["login"]),
-    formSubmit() {
+   async formSubmit() {
       this.$v.$touch();
       this.$v.form.$touch();
 
@@ -167,18 +170,25 @@ export default {
         );
         
       } else {
-        var res = this.login({
+        var payload = {
           email: this.form.email,
           password: this.form.password,
-        });
-        if (res == true) {
+        }
+        var res = await axios.post(apiUrl + "auth/login", payload)
+        console.log(res);
+        if (res.status== 201) {
+          
+          var data = jwt_decode(res.data.access_token);
+          var item = { id: data.id, ...data };
+          
+          this.login(item)
           this.$bvToast.toast("Logged in successfully", {
             title: "Logged In",
             variant: "success",
             solid: true,
             toaster: "b-toaster-top-center",
           });
-          this.$router.push("/app");
+          this.$router.push(adminRoot);
           
         } else {
           this.$bvToast.toast("E-mail or Password incorrect. Kindly re-check.", {
