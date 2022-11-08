@@ -105,8 +105,12 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["setAgents"]),
     addUser() {
       this.$store.dispatch("createAgent", this.newItem);
+      this.$nextTick(() => {
+        this.setAgents();
+      })
     },
     hideModal(refname) {
       this.$refs[refname].hide();

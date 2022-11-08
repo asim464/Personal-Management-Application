@@ -4,14 +4,10 @@ import { getCurrentUser } from "../../utils";
 const state = {
   agenciesList: [],
   processingAgency: false,
-  isCreated: false,
-  isupdated: false,
 };
 
 const getters = {
   agenciesList: (state) => state.agenciesList,
-  isCreated: (state) => state.isCreated,
-  isupdated: (state) => state.isupdated,
   processingAgency: (state) => state.processingAgency,
 };
 
@@ -20,8 +16,8 @@ const mutations = {
     state.agenciesList = payload;
     state.processingAgency = false;
   },
-  createAgency(state) {
-    state.isCreated = true;
+  createAgency(state, payload) {
+    state.agenciesList = [...state.agenciesList, payload]
     state.processingAgency = false;
   },
   deleteAgency(state, payload) {
@@ -51,18 +47,11 @@ const actions = {
         Authorization: `Bearer ${user.token}`,
       },
     };
-    var res = await axios.get(apiUrl + "agency/findallAgencies", config);
-
-    if (res.status == 200) {
-      commit("setProcessingAgency", true);
-      commit("setAllAgency", res.data);
-    }
     await axios
       .get(apiUrl + "agency/findallAgencies", config)
       .then((res) => {
         if (res.status == 200) {
           commit("setAllAgency", res.data);
-          console.log(res.data);
         }
       })
       .catch((err) => {
@@ -70,15 +59,16 @@ const actions = {
       });
   },
   async createAgency({commit},payload) {
+    commit("setProcessingAgency", true);
     let user = getCurrentUser();
     let name = payload.agencyName
-    delete payload.agencyName
+    // delete payload.agencyName
     let pst = Number(payload.postal_code);
 
     payload.postal_code= pst
 
-    console.log(payload);
-    console.log(name);
+    // console.log(payload);
+    // console.log(name);
     // commit("createAgency")
 
     var config = {
@@ -86,20 +76,41 @@ const actions = {
         Authorization: `Bearer ${user.token}`,
       },
     };
-      console.log(apiUrl + "agency/create/"+name,);
     await axios
       .post(apiUrl + "agency/create/"+name,payload,config)
       .then((res) => {
-        if (res.status == 201) {
-          this.setAgencies();
-          console.log(res.data);
-          commit("createAgency")
+        if (res.status == 200) {
+          commit("setProcessingAgency", false);
+          // console.log(res.data);
+          commit("createAgency", payload)
         }
       })
       .catch((err) => {
         console.log(err);
       });
   },
+  async deleteAgency({commit}, payload) {
+    commit("setProcessingAgency", true);
+    let user = getCurrentUser();
+    let id = payload.data.id;
+    var config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    await axios
+      .delete(apiUrl + "agency/"+id,config)
+      .then((res) => {
+        if (res.status == 200) {
+          commit("setProcessingAgency", false);
+          commit("deleteAgency", payload.index);
+          // this.setAgencies();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 };
 
 export default {

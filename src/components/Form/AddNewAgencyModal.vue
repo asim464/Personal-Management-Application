@@ -54,7 +54,6 @@ export default {
   },
   data() {
     return {
-      
       newItem: {
         agencyName: "",
         street_number: "",
@@ -68,6 +67,7 @@ export default {
   },
   methods: {
     ...mapActions(["createAgency","changedstate"]),
+    ...mapActions(["setAgencies"]),
      addNewItem() {
       this.createAgency(this.newItem)
       if (this.isCreated) {
@@ -77,8 +77,10 @@ export default {
           solid: true,
           toaster: "b-toaster-top-center",
         });
+        this.$nextTick(() => {
+          this.setAgencies();
+        })
         this.hideModal("modalright");
-        this.changedstate();
       }
     },
     hideModal(refname) {

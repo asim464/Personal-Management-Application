@@ -151,13 +151,15 @@ export default {
   },
   methods: {
     ...mapActions(["setAgents"]),
-    deleteUser(data, index) {
+    async deleteUser(data, index) {
       let payload={
         data,
         index
       };
-      this.$store.dispatch("deleteAgent", payload);
-      this.setAgents();
+      await this.$store.dispatch("deleteAgent", payload);
+      this.$nextTick(() => {
+        this.setAgents();
+      })
     }
   },
 };

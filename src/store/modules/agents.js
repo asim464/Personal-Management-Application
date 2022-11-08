@@ -42,7 +42,6 @@ const actions = {
     var res = await axios.get(apiUrl + "users/findallUsers", config);
 
     if (res.status == 200) {
-      commit("setProcessingAgent", false);
       commit("setAllAgents", res.data);
     }
   },
@@ -55,17 +54,17 @@ const actions = {
         Authorization: `Bearer ${user.token}`,
       },
     };
-    var res = await axios.post(
-      apiUrl + `users/signup/${payload.agencyID}`,
-      payload.user,
-      config
-    );
-    console(res.status)
-    if ( res.status == 200) {
-      commit("createAgent", payload.user);
-      this.setAgents({commit});
-      commit("setProcessingAgent", false);
-    }
+    await axios
+      .post(apiUrl + `users/signup/${payload.agencyID}`, payload.user, config)
+      .then((res) => {
+        if (res.status == 200) {
+          commit("setProcessingAgent", false);
+          commit("createAgent", payload.user);
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      });
   },
   async deleteAgent({ commit }, payload) {
     commit("setProcessingAgent", true);
@@ -76,16 +75,17 @@ const actions = {
         Authorization: `Bearer ${user.token}`,
       },
     };
-    var res = await axios.delete(
-      apiUrl + `users/deleteUser/${payload.data.id}`,
-      config
-    );
-
-    if (res.status == 200) {
-      commit("deleteAgent", payload.index);
-      this.setAgents({commit});
-      commit("setProcessingAgent", false);
-    }
+    await axios
+      .delete(apiUrl + "users/deleteUser/"+payload.data.id,config)
+      .then((res) => {
+        if (res.status == 200) {
+          commit("setProcessingAgent", false);
+          commit("deleteAgent", payload.index);
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      });
   },
 };
 

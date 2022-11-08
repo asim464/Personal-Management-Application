@@ -66,7 +66,7 @@
                   <b-button
                     variant="danger"
                     size="sm"
-                    @click="row.toggleDetails"
+                    @click="deleteAgency(row.item, row.index)"
                   >
                     Delete
                   </b-button>
@@ -134,6 +134,13 @@ export default {
   },
   methods: {
     ...mapActions(["setAgencies"]),
+    async deleteAgency(data, index) {
+      let payload={data, index}
+      await this.$store.dispatch("deleteAgency", payload);
+      this.$nextTick(() => {
+        this.setAgencies();
+      })
+    }
   },
 };
 </script>
