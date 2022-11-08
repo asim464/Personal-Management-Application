@@ -165,13 +165,12 @@ export default {
             toaster: "b-toaster-top-center",
           }
         );
+        
       } else {
-        var data = this.login({
+        var res = this.login({
           email: this.form.email,
           password: this.form.password,
         });
-        var res = this.$store.dispatch('login', data);
-        
         if (res == true) {
           this.$bvToast.toast("Logged in successfully", {
             title: "Logged In",
@@ -179,6 +178,8 @@ export default {
             solid: true,
             toaster: "b-toaster-top-center",
           });
+          this.$router.push("/app");
+          
         } else {
           this.$bvToast.toast("E-mail or Password incorrect. Kindly re-check.", {
             title: "Invalid Credentials",
