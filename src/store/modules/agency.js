@@ -6,14 +6,12 @@ const state = {
   processingAgency: false,
   isCreated: false,
   isupdated: false,
-  // processing: false,
 };
 
 const getters = {
   agenciesList: (state) => state.agenciesList,
   isCreated: (state) => state.isCreated,
   isupdated: (state) => state.isupdated,
-  // processing: (state) => state.processing,
   processingAgency: (state) => state.processingAgency,
 };
 
@@ -22,10 +20,9 @@ const mutations = {
     state.agenciesList = payload;
     state.processingAgency = false;
   },
-  createAgency(state, payload) {
-    state.agenciesList = payload;
+  createAgency(state) {
+    state.isCreated = true;
     state.processingAgency = false;
-    // state.processing = false;
   },
   deleteAgency(state, payload) {
     state.agenciesList = state.agenciesList.splice(payload, 1);
@@ -33,9 +30,6 @@ const mutations = {
   },
   setProcessingAgency(state, payload) {
     state.processingAgency = payload;
-  },
-  createAgency(state) {
-    state.isCreated = true;
   },
   stateChanged(state){
     state.isCreated = false;
