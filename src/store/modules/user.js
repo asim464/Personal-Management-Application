@@ -1,4 +1,4 @@
-import { setCurrentUser, getCurrentUser } from "../../utils";
+import { setCurrentUser } from "../../utils";
 import createPersistedState from "vuex-persistedstate";
 
 export default {

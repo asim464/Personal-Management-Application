@@ -56,13 +56,14 @@
 </template>
   
   <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import axios from "axios";
 import { apiUrl } from "../../constants/config";
 export default {
   name: "AddNewUserModal",
   computed: {
     ...mapGetters(["currentUser"]),
+    ...mapGetters(["agentsList"])
   },
   data() {
     return {

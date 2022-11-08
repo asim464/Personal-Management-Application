@@ -5544,7 +5544,7 @@ input:-webkit-autofill {
 
 /* 35.Loading */
 .loading {
-  display: inline-block;
+  display: inline-flex;
   width: 30px;
   height: 30px;
   border: 2px solid rgba($theme-color-1, 0.2);
@@ -5554,7 +5554,7 @@ input:-webkit-autofill {
   -webkit-animation: spin 1s ease-in-out infinite;
   left: calc(50% - 15px);
   top: calc(50% - 15px);
-  position: fixed;
+  position: relative;
   z-index: 1;
 }
 
@@ -5600,7 +5600,7 @@ input:-webkit-autofill {
   -webkit-animation: spin 1s ease-in-out infinite;
   left: calc(50% - 15px);
   top: calc(50% - 15px);
-  position: fixed;
+  position: relative;
   z-index: 1;
 }
 
