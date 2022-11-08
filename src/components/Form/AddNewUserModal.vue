@@ -3,41 +3,57 @@
     <b-modal
       id="modalright"
       ref="modalright"
-      :title="$t('menu.user')"
+      title="Add New User"
       modal-class="modal-right"
     >
       <b-form>
         <b-form-group label="Agency">
-          <b-dropdown v-model="agencyName" />
+          <b-form-select v-model="newItem.agencyID">
+            <template #first>
+              <b-form-select-option value="" disabled
+                >-- Please select an option --</b-form-select-option
+              >
+            </template>
+            <b-form-select-option
+              v-for="agency in agenciesList"
+              :key="agency.id"
+              :value="agency.id"
+              >{{ agency.name }}</b-form-select-option
+            >
+          </b-form-select>
         </b-form-group>
         <b-form-group label="Email">
-          <b-form-input v-model="newItem.email" :rows="2" :max-rows="2" />
+          <b-form-input v-model="newItem.user.email" :rows="2" :max-rows="2" />
         </b-form-group>
         <b-form-group label="First Name">
-          <b-form-input v-model="newItem.fName" :rows="2" :max-rows="2" />
+          <b-form-input v-model="newItem.user.firstName" :rows="2" :max-rows="2" />
         </b-form-group>
         <b-form-group label="Last Name">
-          <b-form-input v-model="newItem.lName" :rows="2" :max-rows="2" />
+          <b-form-input v-model="newItem.user.lastName" :rows="2" :max-rows="2" />
         </b-form-group>
         <b-form-group label="Username">
-          <b-form-input v-model="newItem.userName" :rows="2" :max-rows="2" />
+          <b-form-input
+            v-model="newItem.user.userName"
+            :rows="2"
+            :max-rows="2"
+          />
         </b-form-group>
         <b-form-group label="Description">
-          <b-text-area v-model="newItem.desc" :rows="2" :max-rows="2" />
+          <b-textarea v-model="newItem.user.description" :rows="2" :max-rows="2" />
         </b-form-group>
         <b-form-group label="Status">
           <b-form-radio-group
             stacked
             class="pt-2"
             :options="statuses"
-            v-model="newItem.status"
+            v-model="newItem.user.status"
           />
         </b-form-group>
         <b-form-group label="Role">
           <b-form-select
-            v-model="newItem.role"
+            v-model="newItem.user.roles"
             :options="roles"
-            :rows="2" 
+            :rows="2"
             :max-rows="2"
           ></b-form-select>
         </b-form-group>
@@ -47,7 +63,7 @@
         <b-button variant="outline-secondary" @click="hideModal('modalright')"
           >Cancel</b-button
         >
-        <b-button variant="primary" @click="addNewItem()" class="mr-1"
+        <b-button variant="primary" @click="addUser()" class="mr-1"
           >Create</b-button
         >
       </template>
@@ -57,59 +73,40 @@
   
   <script>
 import { mapGetters, mapActions } from "vuex";
-import axios from "axios";
-import { apiUrl } from "../../constants/config";
 export default {
   name: "AddNewUserModal",
   computed: {
-    ...mapGetters(["currentUser"]),
-    ...mapGetters(["agentsList"])
+    ...mapGetters(["currentUser", "agenciesList"]),
   },
   data() {
     return {
-      agencyName: "",
       newItem: {
-        email: "",
-        fName: "",
-        lName: "",
-        userName: "",
-        desc: "",
-        status: Boolean,
-        role: "",
+        agencyID: "",
+        user: {
+          email: "",
+          firstName: "",
+          lastName: "",
+          userName: "",
+          description: "",
+          status: "",
+          roles: "",
+        },
       },
-      statuses: {
-        0: "Active",
-        1: "In Active",
-      },
+      statuses: [
+        "Active",
+        "In Active"
+      ],
       roles: [
-        {"value": "SuperAdmin", "text": "SuperAdmin"},
-        {"value": "Admin", "text": "Admin"},
-        {"value": "Agent", "text": "Agent"},
-        {"value": "Customer", "text": "Customer"},
-      ]
+        { value: "SuperAdmin", text: "SuperAdmin" },
+        { value: "Admin", text: "Admin" },
+        { value: "Agent", text: "Agent" },
+        { value: "Customer", text: "Customer" },
+      ],
     };
   },
   methods: {
-    async addNewItem() {
-      var config = {
-        headers: {
-          Authorization: `Bearer ${this.currentUser.token}`,
-        },
-      };
-      var res = await axios.post(
-        apiUrl + "agency/create/" + this.agencyName,
-        config,
-        this.newItem
-      );
-      if ((await res).status == 201) {
-        this.$bvToast.toast("Success", {
-          title: "Agency Created Successfully",
-          variant: "success",
-          solid: true,
-          toaster: "b-toaster-top-center",
-        });
-        this.hideModal("modalright");
-      }
+    addUser() {
+      this.$store.dispatch("createAgent", this.newItem);
     },
     hideModal(refname) {
       this.$refs[refname].hide();

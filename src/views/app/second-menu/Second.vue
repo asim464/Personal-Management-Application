@@ -10,12 +10,7 @@
       <b-row>
         <b-colxx xxs="12">
           <b-card class="mb-4" :title="$t('menu.user')">
-            <!-- <b-row>
-              <b-alert v-model="showSuccessAlert" variant="success" dismissible>
-                {{ alertMessage }}
-              </b-alert>
-            </b-row> -->
-            <div v-if="processingAgent" class="loading"></div>
+            <div v-if="processingAgent" class="loading" />
             <div v-else>
               <b-row class="d-flex">
                 <b-colxx xxs="6">
@@ -54,7 +49,6 @@
               <add-new-user-modal />
               <b-table
                 small
-                hover
                 :items="agentsList"
                 :fields="fields"
                 responsive="sm"
@@ -71,7 +65,7 @@
                   <b-button
                     variant="danger"
                     size="sm"
-                    @click="row.toggleDetails"
+                    @click="deleteUser(row.item, row.index)"
                   >
                     Delete
                   </b-button>
@@ -106,7 +100,12 @@ export default {
     "add-new-user-modal": AddNewUserModal,
   },
   computed: {
-    ...mapGetters(["currentUser", "agentsList", "processingAgent"]),
+    ...mapGetters(["currentUser", "agentsList"]),
+    ...mapGetters(["processingAgent"])
+  },
+  updated: {
+    ...mapGetters(["agentsList"]),
+    ...mapGetters(["processingAgent"])
   },
   data() {
     return {
@@ -114,9 +113,11 @@ export default {
       fields: [
         {
           key: "id",
+          label: "ID"
         },
         {
           key: "email",
+          label: "EMAIL"
         },
         {
           key: "firstName",
@@ -147,10 +148,17 @@ export default {
   },
   mounted() {
     this.setAgents();
-    // console.log(this.items);
   },
   methods: {
     ...mapActions(["setAgents"]),
+    deleteUser(data, index) {
+      let payload={
+        data,
+        index
+      };
+      this.$store.dispatch("deleteAgent", payload);
+      this.setAgents();
+    }
   },
 };
 </script>

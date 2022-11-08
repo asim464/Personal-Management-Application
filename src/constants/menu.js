@@ -6,16 +6,15 @@ const data = [{
   icon: "iconsminds-administrator",
   label: "menu.piaf",
   to: `${adminRoot}/piaf`,
+  roles: [UserRole.SuperAdmin],
   subs: [{
     icon: "simple-icon-paper-plane",
     label: "menu.dashboard",
     to: `${adminRoot}/piaf/Dashboard`,
-    roles: [UserRole.SuperAdmin]
   }, {
     icon: "simple-icon-list",
     label: "menu.agency",
     to: `${adminRoot}/piaf/Agency`,
-    roles: [UserRole.SuperAdmin]
   }
   ]
 },
@@ -24,11 +23,11 @@ const data = [{
   icon: "iconsminds-business-man-woman",
   label: "menu.admin",
   to: `${adminRoot}/second-menu`,
+  roles: [UserRole.SuperAdmin, UserRole.Admin],
   subs: [{
     icon: "simple-icon-list",
     label: "menu.user",
     to: `${adminRoot}/second-menu/second`,
-    roles: [UserRole.SuperAdmin, UserRole.Admin]
   },
   ]
 },
