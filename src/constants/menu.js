@@ -3,7 +3,7 @@ import { UserRole } from "../utils/auth.roles";
 
 const data = [{
   id: "piaf",
-  icon: "iconsminds-shop",
+  icon: "iconsminds-administrator",
   label: "menu.piaf",
   to: `${adminRoot}/piaf`,
   subs: [{
@@ -21,14 +21,14 @@ const data = [{
 },
 {
   id: "second-menu",
-  icon: "iconsminds-chemical",
-  label: "menu.second-menu",
+  icon: "iconsminds-business-man-woman",
+  label: "menu.admin",
   to: `${adminRoot}/second-menu`,
   subs: [{
-    icon: "simple-icon-paper-plane",
-    label: "menu.second",
+    icon: "simple-icon-list",
+    label: "menu.user",
     to: `${adminRoot}/second-menu/second`,
-    roles: [UserRole.SuperAdmin, UserRole.Admin, UserRole.Agent]
+    roles: [UserRole.SuperAdmin, UserRole.Admin]
   },
   ]
 },

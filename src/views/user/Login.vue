@@ -11,9 +11,7 @@
           </p>
         </div>
         <div class="form-side">
-          <router-link to="/">
-            <span class="logo-single" />
-          </router-link>
+          <i class="simple-icon-login"></i>
           <h6 class="mb-4">Login</h6>
 
           <b-form

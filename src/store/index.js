@@ -5,10 +5,12 @@ import app from '../main'
 import menu from './modules/menu'
 import user from './modules/user'
 import { setCurrentLanguage } from '../utils'
+import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+  plugins: [createPersistedState()],
   state: {
   },
   mutations: {

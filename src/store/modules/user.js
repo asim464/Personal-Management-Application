@@ -1,6 +1,8 @@
 import { setCurrentUser, getCurrentUser } from "../../utils";
+import createPersistedState from "vuex-persistedstate";
 
 export default {
+  plugins: [createPersistedState()],
   state: {
     isAuthGuardActive: false,
     currentUser: {},
