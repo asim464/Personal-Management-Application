@@ -8,13 +8,21 @@
     >
       <b-form>
         <b-form-group label="Name">
-          <b-form-input v-model="newItem.agencyName"  />
+          <b-form-input v-model="newItem.agencyName" />
         </b-form-group>
         <b-form-group label="Street Number">
-          <b-form-input v-model="newItem.street_number" :rows="2" :max-rows="2" />
+          <b-form-input
+            v-model="newItem.street_number"
+            :rows="2"
+            :max-rows="2"
+          />
         </b-form-group>
         <b-form-group label="House Number">
-          <b-form-input v-model="newItem.house_number" :rows="2" :max-rows="2" />
+          <b-form-input
+            v-model="newItem.house_number"
+            :rows="2"
+            :max-rows="2"
+          />
         </b-form-group>
         <b-form-group label="City">
           <b-form-input v-model="newItem.city" :rows="2" :max-rows="2" />
@@ -23,7 +31,12 @@
           <b-form-input v-model="newItem.country" :rows="2" :max-rows="2" />
         </b-form-group>
         <b-form-group label="Postal Code">
-          <b-form-input  v-model="newItem.postal_code" type="number" :rows="2" :max-rows="2" />
+          <b-form-input
+            v-model="newItem.postal_code"
+            type="number"
+            :rows="2"
+            :max-rows="2"
+          />
         </b-form-group>
         <b-form-group label="CO">
           <b-form-input v-model="newItem.co" :rows="2" :max-rows="2" />
@@ -46,7 +59,7 @@
 </template>
 
 <script>
-import {mapGetters,mapActions} from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
   name: "AddNewAgencyModal",
   computed: {
@@ -66,22 +79,13 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["createAgency"]),
     ...mapActions(["setAgencies"]),
-     addNewItem() {
-      this.createAgency(this.newItem)
-      if (this.isCreated) {
-        this.$bvToast.toast("Success", {
-          title: "Agency Created Successfully",
-          variant: "success",
-          solid: true,
-          toaster: "b-toaster-top-center",
-        });
-        this.$nextTick(() => {
-          this.setAgencies();
-        })
-        this.hideModal("modalright");
-      }
+    addNewItem() {
+      this.$store.dispatch("createAgency", this.newItem);
+      this.$nextTick(() => {
+        this.setAgencies();
+      });
+      this.hideModal("modalright");
     },
     hideModal(refname) {
       this.$refs[refname].hide();

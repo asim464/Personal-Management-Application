@@ -8,13 +8,21 @@
     >
       <b-form>
         <b-form-group label="Name">
-          <b-form-input v-model="item.agencyName" disabled/>
+          <b-form-input v-model="item.agencyName" disabled />
         </b-form-group>
         <b-form-group label="Street Number">
-          <b-form-input v-model="item.data.street_number" :rows="2" :max-rows="2" />
+          <b-form-input
+            v-model="item.data.street_number"
+            :rows="2"
+            :max-rows="2"
+          />
         </b-form-group>
         <b-form-group label="House Number">
-          <b-form-input v-model="item.data.house_number" :rows="2" :max-rows="2" />
+          <b-form-input
+            v-model="item.data.house_number"
+            :rows="2"
+            :max-rows="2"
+          />
         </b-form-group>
         <b-form-group label="City">
           <b-form-input v-model="item.data.city" :rows="2" :max-rows="2" />
@@ -62,18 +70,10 @@ export default {
     ...mapActions(["setAgencies"]),
     editAgency() {
       this.updateAgency(this.$props.item);
-      if (this.isCreated) {
-        this.$bvToast.toast("Success", {
-          title: "Agency Created Successfully",
-          variant: "success",
-          solid: true,
-          toaster: "b-toaster-top-center",
-        });
-        this.$nextTick(() => {
-          this.setAgencies();
-        });
-        this.hideModal("upmodalright");
-      }
+      this.$nextTick(() => {
+        this.setAgencies();
+      });
+      this.hideModal("upmodalright");
     },
     hideModal(refname) {
       this.$refs[refname].hide();

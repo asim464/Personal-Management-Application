@@ -34,10 +34,6 @@ const mutations = {
 };
 
 const actions = {
-  changedstate({commit}){
-    commit("stateChanged");
-
-  },
   async setAgencies({ commit }) {
     commit("setProcessingAgency", true);
     let user = getCurrentUser();
