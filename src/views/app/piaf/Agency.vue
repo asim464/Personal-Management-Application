@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="currentUser.role == UserRole.SuperAdmin">
+    <div v-if="currentUser.role != null & currentUser.role != UserRole.Agent & currentUser.role != UserRole.Customer">
       <b-row>
         <b-colxx xxs="12">
           <piaf-breadcrumb :heading="$t('menu.agency')" />
@@ -20,8 +20,7 @@
                       font-weight: 400;
                       font-size: 18px;
                       padding-top: 1.4rem;
-                    "
-                  >
+                    ">
                     Agencies List
                   </h3>
                 </b-colxx>
@@ -31,29 +30,30 @@
                     display: flex;
                     justify-content: flex-end;
                     padding-bottom: 1rem;
-                  "
-                >
-                  <b-button variant="success" v-b-modal.modalright
-                    ><i
+                  ">
+                  <b-button v-if="currentUser.role == UserRole.SuperAdmin" variant="success" v-b-modal.modalright>
+                    <i
                       class="simple-icon-plus"
                       style="
                         padding-inline: 0.5rem;
                         top: 1px;
                         position: relative;
-                      "
-                    ></i
-                    >Create Agency</b-button
-                  >
+                    ">
+                    </i>
+                      Create Agency
+                    </b-button>
                 </b-colxx>
               </b-row>
               <add-new-agency-modal />
               <b-table
+                v-if="currentUser.role == UserRole.Admin"
                 small
                 hover
-                :items="agenciesList"
+                :items="agency"
                 :fields="fields"
                 responsive="sm"
               >
+              <!-- v-if="(row.item.id == agent.agencyId) & (currentUser.role == UserRole.Admin)" -->
                 <template #cell(actions)="row">
                   <b-button
                     v-b-modal.upmodalright
@@ -62,9 +62,59 @@
                     @click="updateAgency(row.item, row.index)"
                     class="mr-1"
                   >
-                    update
+                    Update
                   </b-button>
+                  <!-- <b-button
+                    v-else-if="currentUser.role == UserRole.SuperAdmin"
+                    v-b-modal.upmodalright
+                    variant="primary"
+                    size="sm"
+                    @click="updateAgency(row.item, row.index)"
+                    class="mr-1"
+                  >
+                    Update
+                  </b-button> -->
                   <b-button
+                    v-if="currentUser.role == UserRole.SuperAdmin"
+                    variant="danger"
+                    size="sm"
+                    @click="deleteAgency(row.item, row.index)"
+                  >
+                    Delete
+                  </b-button>
+                </template>
+              </b-table>
+              <b-table
+                v-if="currentUser.role == UserRole.SuperAdmin"
+                small
+                hover
+                :items="agenciesList"
+                :fields="fields"
+                responsive="sm"
+              >
+              <!-- v-if="(row.item.id == agent.agencyId) & (currentUser.role == UserRole.Admin)" -->
+                <template #cell(actions)="row">
+                  <b-button
+                    v-b-modal.upmodalright
+                    variant="primary"
+                    size="sm"
+                    @click="updateAgency(row.item, row.index)"
+                    class="mr-1"
+                  >
+                    Update
+                  </b-button>
+                  <!-- <b-button
+                    v-else-if="currentUser.role == UserRole.SuperAdmin"
+                    v-b-modal.upmodalright
+                    variant="primary"
+                    size="sm"
+                    @click="updateAgency(row.item, row.index)"
+                    class="mr-1"
+                  >
+                    Update
+                  </b-button> -->
+                  <b-button
+                    v-if="currentUser.role == UserRole.SuperAdmin"
                     variant="danger"
                     size="sm"
                     @click="deleteAgency(row.item, row.index)"
@@ -98,6 +148,9 @@ import { UserRole } from "../../../utils/auth.roles";
 import { mapGetters, mapActions } from "vuex";
 import AddNewAgencyModal from "../../../components/Form/AddNewAgencyModal.vue";
 import UpdateAgencyModal from "../../../components/Form/UpdateAgencyModal.vue";
+import axios from 'axios';
+import { apiUrl } from "../../../constants/config";
+import { getCurrentUser } from "../../../utils";
 export default {
   name: "Agency",
   components: {
@@ -109,6 +162,7 @@ export default {
   },
   data() {
     return {
+      agency: [],
       UserRole,
       fields: [
         {
@@ -133,9 +187,35 @@ export default {
       data: {},
     };
   },
-  mounted() {
+  async created() {
+    var user = getCurrentUser();
+    var config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    await axios
+      .get(apiUrl+"users/findUser/"+user.id, config)
+      .then(async (res) => {
+        let ay = res.data;
+        await axios
+          .get(apiUrl + "agency/findAgency/" + ay.agencyId, config)
+          .then((res) => {
+            this.agency = [
+              {
+                id: res.data.id,
+                name: res.data.name,
+                Address:{
+                  house_number: res.data.Address.house_number,
+                  country: res.data.Address.country,
+                }
+              }
+            ];
+          })
+      });
+  },
+  async mounted() {
     this.setAgencies();
-    // console.log(this.items);
   },
   methods: {
     ...mapActions(["setAgencies"]),

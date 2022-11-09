@@ -41,18 +41,6 @@ export default {
       state.currentUser = null;
       state.processing = false;
     },
-    setForgotMailSuccess(state) {
-      state.loginError = null;
-      state.currentUser = null;
-      state.processing = false;
-      state.forgotMailSuccess = true;
-    },
-    setResetPasswordSuccess(state) {
-      state.loginError = null;
-      state.currentUser = null;
-      state.processing = false;
-      state.resetPasswordSuccess = true;
-    },
     clearError(state) {
       state.loginError = null;
     },
@@ -66,45 +54,6 @@ export default {
         commit("setProcessing", false);
         commit("setUser", payload);
     },
-    forgotPassword({ commit }, payload) {
-      commit("clearError");
-      commit("setProcessing", true);
-      // firebase
-      //   .auth()
-      //   .sendPasswordResetEmail(payload.email)
-      //   .then(
-      (user) => {
-        commit("clearError");
-        commit("setForgotMailSuccess");
-      };
-      // err => {
-      //   commit('setError', err.message)
-      //   setTimeout(() => {
-      //     commit('clearError')
-      //   }, 3000)
-      // }
-      // )
-    },
-    resetPassword({ commit }, payload) {
-      commit("clearError");
-      commit("setProcessing", true);
-      // firebase
-      //   .auth()
-      //   .confirmPasswordReset(payload.resetPasswordCode, payload.newPassword)
-      //   .then(
-      (user) => {
-        commit("clearError");
-        commit("setResetPasswordSuccess");
-      };
-      //   err => {
-      //     commit('setError', err.message)
-      //     setTimeout(() => {
-      //       commit('clearError')
-      //     }, 3000)
-      //   }
-      // )
-    },
-
     signOut({ commit }) {
       setCurrentUser(null);
       commit("setLogout");

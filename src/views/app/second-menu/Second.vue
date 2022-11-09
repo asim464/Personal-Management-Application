@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="currentUser.role == UserRole.SuperAdmin">
+    <div v-if="currentUser.role != null & currentUser != UserRole.Agent & currentUser != UserRole.Customer">
       <b-row>
         <b-colxx xxs="12">
           <piaf-breadcrumb :heading="$t('menu.admin')" />
@@ -20,8 +20,7 @@
                       font-weight: 400;
                       font-size: 18px;
                       padding-top: 1.4rem;
-                    "
-                  >
+                    ">
                     Users List
                   </h3>
                 </b-colxx>
@@ -31,10 +30,9 @@
                     display: flex;
                     justify-content: flex-end;
                     padding-bottom: 1rem;
-                  "
-                >
-                  <b-button variant="success" v-b-modal.modalright
-                    ><i
+                  ">
+                  <b-button variant="success" v-b-modal.modalright>
+                    <i
                       class="iconsminds-add-user"
                       style="
                         padding-inline: 0.5rem;
@@ -48,6 +46,33 @@
               </b-row>
               <add-new-user-modal />
               <b-table
+                v-if="currentUser.role == UserRole.Admin"
+                small
+                :items="agents"
+                :fields="fields"
+                responsive="sm"
+              >
+                <template #cell(actions)="row">
+                  <b-button
+                    v-b-modal.upmodalright
+                    variant="primary"
+                    size="sm"
+                    @click="updateUser(row.index)"
+                    class="mr-1"
+                  >
+                    Update
+                  </b-button>
+                  <b-button
+                    variant="danger"
+                    size="sm"
+                    @click="deleteUser(row.item, row.index)"
+                  >
+                    Delete
+                  </b-button>
+                </template>
+              </b-table>
+              <b-table
+                v-else-if="currentUser.role == UserRole.SuperAdmin"
                 small
                 :items="agentsList"
                 :fields="fields"
@@ -97,6 +122,9 @@ import { UserRole } from "../../../utils/auth.roles";
 import { mapGetters, mapActions } from "vuex";
 import AddNewUserModal from "../../../components/Form/AddNewUserModal.vue";
 import UpdateUserModal from "../../../components/Form/UpdateUserModal.vue";
+import axios from 'axios';
+import { apiUrl } from '../../../constants/config';
+import { getCurrentUser } from "../../../utils";
 export default {
   name: "Second",
   components: {
@@ -107,12 +135,28 @@ export default {
     ...mapGetters(["currentUser", "agentsList"]),
     ...mapGetters(["processingAgent"])
   },
-  // updated: {
-  //   ...mapGetters(["agentsList"]),
-  //   ...mapGetters(["processingAgent"])
-  // },
+  async created() {
+    
+    var user = getCurrentUser();
+    var config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    await axios
+      .get(apiUrl+"users/findUser/"+user.id, config)
+      .then(async (res) => {
+        let ur = res.data;
+        await axios
+          .get(apiUrl + "agency/findAgency/" + ur.agencyId, config)
+          .then((res) => {
+            this.agents = res.data.User;
+          })
+      });
+  },
   data() {
     return {
+      agents: [],
       UserRole,
       fields: [
         {

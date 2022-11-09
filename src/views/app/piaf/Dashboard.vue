@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="currentUser.role == UserRole.SuperAdmin">
+    <div v-if="currentUser != null">
       <b-row>
         <b-colxx xxs="12">
           <piaf-breadcrumb :heading="$t('menu.dashboard')" />

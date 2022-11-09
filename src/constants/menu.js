@@ -6,7 +6,7 @@ const data = [{
   icon: "iconsminds-administrator",
   label: "menu.piaf",
   to: `${adminRoot}/piaf`,
-  roles: [UserRole.SuperAdmin],
+  roles: [UserRole.SuperAdmin, UserRole.Admin],
   subs: [{
     icon: "simple-icon-paper-plane",
     label: "menu.dashboard",

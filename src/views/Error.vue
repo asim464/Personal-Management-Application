@@ -34,11 +34,10 @@
   </div>
 </template>
 <script>
-import { adminRoot } from '../constants/config';
 export default {
   methods: {
     goBack() {
-      this.$router.push(adminRoot);
+      this.$router.push("/user/login");
     },
   },
   mounted: function () {

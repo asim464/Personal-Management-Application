@@ -8,11 +8,8 @@
     >
       <b-form>
         <b-form-group label="Agency">
-          <b-form-select v-model="item.agencyId" >
+          <b-form-select v-model="item.agencyId" disabled>
             <template #first>
-              <b-form-select-option value="null" disabled
-                >-- Please select an option --</b-form-select-option
-              >
             </template>
             <b-form-select-option
               v-for="agency in agenciesList"

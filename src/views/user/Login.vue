@@ -11,7 +11,7 @@
           </p>
         </div>
         <div class="form-side">
-          <i class="simple-icon-login" style="font-size:2rem;"></i>
+          <i class="simple-icon-login" style="font-size: 2rem"></i>
           <h6 class="mb-4">Login</h6>
 
           <b-form
@@ -178,93 +178,74 @@ export default {
           password: this.form.password,
         };
 
-        var res = await axios.post(apiUrl + "auth/login", payload);
+        await axios
+          .post(apiUrl + "auth/login", payload)
+          .then((res) => {
+            if (res.status == 201) {
+              var data = jwt_decode(res.data.access_token);
+              if (data.roles == "SuperAdmin") {
+                this.flag = true;
+                var item = {
+                  id: data.id,
+                  role: UserRole.SuperAdmin,
+                  token: res.data.access_token,
+                  ...data,
+                };
+              } else if (data.roles == "Admin") {
+                this.flag = true;
+                var item = {
+                  id: data.id,
+                  role: UserRole.Admin,
+                  token: res.data.access_token,
+                  ...data,
+                };
+              } else if (data.roles == "Agent") {
+                this.flag = true;
+                var item = {
+                  id: data.id,
+                  role: UserRole.Agent,
+                  token: res.data.access_token,
+                  ...data,
+                };
+              } else if (data.roles == "Customer") {
+                this.flag = true;
+                var item = {
+                  id: data.id,
+                  role: UserRole.Customer,
+                  token: res.data.access_token,
+                  ...data,
+                };
+              } else {
+                this.flag = false;
+                this.errorNotification(
+                  "User Registered but not activated",
+                  "Error 405!"
+                );
+              }
 
-        if (res.status == 201) {
-          var data = jwt_decode(res.data.access_token);
-          if (data.roles == "SuperAdmin") {
-            this.flag = true;
-            var item = {
-              id: data.id,
-              role: UserRole.SuperAdmin,
-              token: res.data.access_token,
-              ...data,
-            };
-          } else if (data.roles == "Admin") {
-            this.flag = true;
-            var item = {
-              id: data.id,
-              role: UserRole.Admin,
-              token: res.data.access_token,
-              ...data,
-            };
-          } else if (data.roles == "Agent") {
-            this.flag = true;
-            var item = {
-              id: data.id,
-              role: UserRole.Agent,
-              token: res.data.access_token,
-              ...data,
-            };
-          } else if (data.roles == "Customer") {
-            this.flag = true;
-            var item = {
-              id: data.id,
-              role: UserRole.Customer,
-              token: res.data.access_token,
-              ...data,
-            };
-          } else {
-            this.flag = false;
-            this.errorNotification(
-              "User Registered but not activated",
-              "Error 405!"
+              this.flag ? this.login(item) : this.login(null);
+              if (this.isAuthGuardActive) {
+                this.$notify("Success", "Login Success", res.status, {
+                  duration: 5000,
+                  permanent: false,
+                });
+                this.$router.push(adminRoot);
+              }
+            }
+          })
+          .catch((err) => {
+            this.$notify(
+              "Error",
+              "Login Failure! Username or Password Incorrect",
+              err,
+              {
+                duration: 5000,
+                permanent: true,
+              }
             );
-          }
-
-          this.flag ? this.login(item) : this.login(null);
-          if (this.isAuthGuardActive) {
-            this.$bvToast.toast("Logged in successfully", {
-              title: "Logged In",
-              variant: "success",
-              solid: true,
-              toaster: "b-toaster-top-center",
-            });
-            this.$router.push(adminRoot);
-          }
-        } else if (res.status == 400) {
-          this.errorNotification(
-            "E-mail or Password incorrect. Kindly re-check.",
-            "Invalid Credentials"
-          );
-        }
+          });
       }
     },
-    errorNotification(message, toastTitle) {
-      this.$bvToast.toast(message, {
-        title: toastTitle,
-        variant: "danger",
-        solid: true,
-        toaster: "b-toaster-top-center",
-      });
-    },
   },
-  // watch: {
-  //   currentUser(val) {
-  //     if (val && val.uid && val.uid.length > 0) {
-  //       setTimeout(() => {
-  //         this.$router.push(adminRoot);
-  //       }, 200);
-  //     }
-  //   },
-  //   loginError(val) {
-  //     if (val != null) {
-  //       this.$notify("error", "Login Error", val, {
-  //         duration: 3000,
-  //         permanent: false,
-  //       });
-  //     }
-  //   },
-  // },
 };
 </script>
