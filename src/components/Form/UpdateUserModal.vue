@@ -95,7 +95,6 @@ export default {
     return {
       statuses: ["Active", "In Active"],
       roles: [
-        { value: "SuperAdmin", text: "SuperAdmin" },
         { value: "Admin", text: "Admin" },
         { value: "Agent", text: "Agent" },
         { value: "Customer", text: "Customer" },

@@ -1,6 +1,12 @@
 <template>
   <div>
-    <div v-if="currentUser.role != null & currentUser.role != UserRole.Agent & currentUser.role != UserRole.Customer">
+    <div
+      v-if="
+        (currentUser.role != null) &
+        (currentUser.role != UserRole.Agent) &
+        (currentUser.role != UserRole.Customer)
+      "
+    >
       <b-row>
         <b-colxx xxs="12">
           <piaf-breadcrumb :heading="$t('menu.agency')" />
@@ -20,7 +26,8 @@
                       font-weight: 400;
                       font-size: 18px;
                       padding-top: 1.4rem;
-                    ">
+                    "
+                  >
                     Agencies List
                   </h3>
                 </b-colxx>
@@ -30,18 +37,24 @@
                     display: flex;
                     justify-content: flex-end;
                     padding-bottom: 1rem;
-                  ">
-                  <b-button v-if="currentUser.role == UserRole.SuperAdmin" variant="success" v-b-modal.modalright>
+                  "
+                >
+                  <b-button
+                    v-if="currentUser.role == UserRole.SuperAdmin"
+                    variant="success"
+                    v-b-modal.modalright
+                  >
                     <i
                       class="simple-icon-plus"
                       style="
                         padding-inline: 0.5rem;
                         top: 1px;
                         position: relative;
-                    ">
+                      "
+                    >
                     </i>
-                      Create Agency
-                    </b-button>
+                    Create Agency
+                  </b-button>
                 </b-colxx>
               </b-row>
               <add-new-agency-modal />
@@ -53,7 +66,6 @@
                 :fields="fields"
                 responsive="sm"
               >
-              <!-- v-if="(row.item.id == agent.agencyId) & (currentUser.role == UserRole.Admin)" -->
                 <template #cell(actions)="row">
                   <b-button
                     v-b-modal.upmodalright
@@ -64,16 +76,6 @@
                   >
                     Update
                   </b-button>
-                  <!-- <b-button
-                    v-else-if="currentUser.role == UserRole.SuperAdmin"
-                    v-b-modal.upmodalright
-                    variant="primary"
-                    size="sm"
-                    @click="updateAgency(row.item, row.index)"
-                    class="mr-1"
-                  >
-                    Update
-                  </b-button> -->
                   <b-button
                     v-if="currentUser.role == UserRole.SuperAdmin"
                     variant="danger"
@@ -92,7 +94,7 @@
                 :fields="fields"
                 responsive="sm"
               >
-              <!-- v-if="(row.item.id == agent.agencyId) & (currentUser.role == UserRole.Admin)" -->
+                <!-- v-if="(row.item.id == agent.agencyId) & (currentUser.role == UserRole.Admin)" -->
                 <template #cell(actions)="row">
                   <b-button
                     v-b-modal.upmodalright
@@ -148,14 +150,14 @@ import { UserRole } from "../../../utils/auth.roles";
 import { mapGetters, mapActions } from "vuex";
 import AddNewAgencyModal from "../../../components/Form/AddNewAgencyModal.vue";
 import UpdateAgencyModal from "../../../components/Form/UpdateAgencyModal.vue";
-import axios from 'axios';
+import axios from "axios";
 import { apiUrl } from "../../../constants/config";
 import { getCurrentUser } from "../../../utils";
 export default {
   name: "Agency",
   components: {
     "add-new-agency-modal": AddNewAgencyModal,
-    "update-agency-modal": UpdateAgencyModal
+    "update-agency-modal": UpdateAgencyModal,
   },
   computed: {
     ...mapGetters(["currentUser", "agenciesList", "processingAgency"]),
@@ -195,7 +197,7 @@ export default {
       },
     };
     await axios
-      .get(apiUrl+"users/findUser/"+user.id, config)
+      .get(apiUrl + "users/findUser/" + user.id, config)
       .then(async (res) => {
         let ay = res.data;
         await axios
@@ -205,13 +207,17 @@ export default {
               {
                 id: res.data.id,
                 name: res.data.name,
-                Address:{
+                Address: {
+                  street_number: res.data.Address.street_number,
                   house_number: res.data.Address.house_number,
+                  city: res.data.Address.city,
                   country: res.data.Address.country,
-                }
-              }
+                  postal_code: res.data.Address.postal_code,
+                  co: res.data.Address.co,
+                },
+              },
             ];
-          })
+          });
       });
   },
   async mounted() {
@@ -220,20 +226,29 @@ export default {
   methods: {
     ...mapActions(["setAgencies"]),
     async deleteAgency(data, index) {
-      let payload={data, index}
+      let payload = { data, index };
       await this.$store.dispatch("deleteAgency", payload);
       this.$nextTick(() => {
         this.setAgencies();
-      })
+      });
     },
     updateAgency(data, index) {
-      this.data = {
-        index: index,
-        data: this.agenciesList[index].Address,
-        agencyName: this.agenciesList[index].name,
-        agencyID: data.id
+      if (this.currentUser.role == UserRole.SuperAdmin) {
+        this.data = {
+          index: index,
+          data: this.agenciesList[index].Address,
+          agencyName: this.agenciesList[index].name,
+          agencyID: data.id,
+        };
+      } else if (this.currentUser.role == UserRole.Admin) {
+        this.data = {
+          index: index,
+          data: this.agency[index].Address,
+          agencyName: this.agency[index].name,
+          agencyID: this.agency[index].id,
+        }
       }
-    }
+    },
   },
 };
 </script>
