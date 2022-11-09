@@ -246,34 +246,6 @@ export default {
           });
       }
     },
-          }
-
-          this.flag ? this.login(item) : this.login(null);
-          if (this.isAuthGuardActive) {
-            this.$notify(
-              "Success",
-              "LOGIN Success",
-              "lOGED IN Successfully",
-              {
-                duration: 3000,
-                permanent: false,
-              });
-            this.$router.push(adminRoot)
-          }
-        } else if (res.status == 400) {
-          this.errorNotification(
-            "E-mail or Password incorrect. Kindly re-check.",
-            "Invalid Credentials"
-          );
-        }
-      }
-    },
-    errorNotification(message, toastTitle) {
-      this.$notify("error", "Login Error", val, {
-          duration: 3000,
-          permanent: false,
-        });
-    },
   },
 };
 </script>
