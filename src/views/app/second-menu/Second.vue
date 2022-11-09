@@ -55,9 +55,10 @@
               >
                 <template #cell(actions)="row">
                   <b-button
+                    v-b-modal.upmodalright
                     variant="primary"
                     size="sm"
-                    @click="info(row.item, row.index, $event.target)"
+                    @click="updateUser(row.index)"
                     class="mr-1"
                   >
                     Update
@@ -71,6 +72,7 @@
                   </b-button>
                 </template>
               </b-table>
+              <update-user-modal :item="data" />
             </div>
           </b-card>
         </b-colxx>
@@ -94,19 +96,21 @@
 import { UserRole } from "../../../utils/auth.roles";
 import { mapGetters, mapActions } from "vuex";
 import AddNewUserModal from "../../../components/Form/AddNewUserModal.vue";
+import UpdateUserModal from "../../../components/Form/UpdateUserModal.vue";
 export default {
   name: "Second",
   components: {
     "add-new-user-modal": AddNewUserModal,
+    "update-user-modal": UpdateUserModal
   },
   computed: {
     ...mapGetters(["currentUser", "agentsList"]),
     ...mapGetters(["processingAgent"])
   },
-  updated: {
-    ...mapGetters(["agentsList"]),
-    ...mapGetters(["processingAgent"])
-  },
+  // updated: {
+  //   ...mapGetters(["agentsList"]),
+  //   ...mapGetters(["processingAgent"])
+  // },
   data() {
     return {
       UserRole,
@@ -144,6 +148,7 @@ export default {
           label: "ACTIONS",
         },
       ],
+      data: {}
     };
   },
   mounted() {
@@ -160,6 +165,22 @@ export default {
       this.$nextTick(() => {
         this.setAgents();
       })
+    },
+    updateUser(index) {
+      this.data = {
+        index: index,
+        agencyId: this.agentsList[index].agencyId,
+        userId: this.agentsList[index].id,
+        data: {
+          email: this.agentsList[index].email,
+          firstName: this.agentsList[index].firstName,
+          lastName: this.agentsList[index].lastName,
+          userName: this.agentsList[index].userName,
+          description: this.agentsList[index].description,
+          status: this.agentsList[index].status,
+          roles: this.agentsList[index].roles
+        }
+      }
     }
   },
 };

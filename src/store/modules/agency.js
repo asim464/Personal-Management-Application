@@ -24,12 +24,12 @@ const mutations = {
     state.agenciesList = state.agenciesList.splice(payload, 1);
     state.processingAgency = false;
   },
+  updateAgency(state, payload) {
+    state.agenciesList[payload.index].Address = payload.data;
+    state.processingAgency = false;
+  },
   setProcessingAgency(state, payload) {
     state.processingAgency = payload;
-  },
-  stateChanged(state){
-    state.isCreated = false;
-    state.isupdated = false;
   }
 };
 
@@ -62,14 +62,9 @@ const actions = {
     commit("setProcessingAgency", true);
     let user = getCurrentUser();
     let name = payload.agencyName
-    // delete payload.agencyName
     let pst = Number(payload.postal_code);
 
     payload.postal_code= pst
-
-    // console.log(payload);
-    // console.log(name);
-    // commit("createAgency")
 
     var config = {
       headers: {
@@ -81,7 +76,6 @@ const actions = {
       .then((res) => {
         if (res.status == 200) {
           commit("setProcessingAgency", false);
-          // console.log(res.data);
           commit("createAgency", payload)
         }
       })
@@ -104,7 +98,27 @@ const actions = {
         if (res.status == 200) {
           commit("setProcessingAgency", false);
           commit("deleteAgency", payload.index);
-          // this.setAgencies();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+  async updateAgency({commit}, payload) {
+    commit("setProcessingAgency", true);
+    let user = getCurrentUser();
+    let id = payload.agencyID;
+    var config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    await axios
+      .patch(apiUrl + "agency/updateAgency/"+id, payload.data, config)
+      .then((res) => {
+        if (res.status == 200) {
+          commit("setProcessingAgency", false);
+          commit("updateAgency", payload);
         }
       })
       .catch((err) => {

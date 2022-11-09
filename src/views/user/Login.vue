@@ -84,7 +84,7 @@
                 <span class="label">LOGIN</span>
               </b-button>
             </div>
-            <div
+            <!-- <div
               class="
                 d-flex
                 justify-content-between
@@ -102,7 +102,7 @@
                   Now!</u
                 ></router-link
               >
-            </div>
+            </div> -->
           </b-form>
         </div>
       </b-card>

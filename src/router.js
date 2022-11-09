@@ -9,8 +9,8 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    component: () => import("./views/user/Register.vue"),
-    redirect: `/user/Register`
+    component: () => import("./views/user/Login.vue"),
+    redirect: `/user/login`
   },
   {
     path: adminRoot,
@@ -79,11 +79,11 @@ const routes = [
         component: () =>
           import(/* webpackChunkName: "user" */ "./views/user/Login")
       },
-      {
-        path: "register",
-        component: () =>
-          import(/* webpackChunkName: "user" */ "./views/user/Register")
-      },
+      // {
+      //   path: "register",
+      //   component: () =>
+      //     import(/* webpackChunkName: "user" */ "./views/user/Register")
+      // },
       {
         path: "forgot-password",
         component: () =>

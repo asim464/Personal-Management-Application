@@ -17,11 +17,23 @@ const mutations = {
     state.processingAgent = false;
   },
   createAgent(state, payload) {
-    state.agentsList = [...state.agentsList, payload] ;
+    state.agentsList = [...state.agentsList, payload];
     state.processingAgent = false;
   },
   deleteAgent(state, payload) {
     state.agentsList = state.agentsList.splice(payload, 1);
+    state.processingAgent = false;
+  },
+  updateAgent(state, payload) {
+    state.agentsList[payload.index] = {
+      email: payload.data.email,
+      firstName: payload.data.firstName,
+      lastName: payload.data.lastName,
+      userName: payload.data.userName,
+      description: payload.data.description,
+      status: payload.data.status,
+      roles: payload.data.roles,
+    };
     state.processingAgent = false;
   },
   setProcessingAgent(state, payload) {
@@ -63,7 +75,7 @@ const actions = {
         }
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
       });
   },
   async deleteAgent({ commit }, payload) {
@@ -76,7 +88,7 @@ const actions = {
       },
     };
     await axios
-      .delete(apiUrl + "users/deleteUser/"+payload.data.id,config)
+      .delete(apiUrl + "users/deleteUser/" + payload.data.id, config)
       .then((res) => {
         if (res.status == 200) {
           commit("setProcessingAgent", false);
@@ -84,7 +96,28 @@ const actions = {
         }
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
+      });
+  },
+  async updateAgent({ commit }, payload) {
+    commit("setProcessingAgent", true);
+    let user = getCurrentUser();
+    let id = payload.userId;
+    var config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    await axios
+      .patch(apiUrl + "users/updateUser/" + id, payload.data, config)
+      .then((res) => {
+        if (res.status == 200) {
+          commit("setProcessingAgent", false);
+          commit("updateAgent", payload);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
       });
   },
 };

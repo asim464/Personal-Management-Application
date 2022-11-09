@@ -56,9 +56,10 @@
               >
                 <template #cell(actions)="row">
                   <b-button
+                    v-b-modal.upmodalright
                     variant="primary"
                     size="sm"
-                    @click="info(row.item, row.index, $event.target)"
+                    @click="updateAgency(row.item, row.index)"
                     class="mr-1"
                   >
                     update
@@ -72,6 +73,7 @@
                   </b-button>
                 </template>
               </b-table>
+              <update-agency-modal :item="data" />
             </div>
           </b-card>
         </b-colxx>
@@ -95,10 +97,12 @@
 import { UserRole } from "../../../utils/auth.roles";
 import { mapGetters, mapActions } from "vuex";
 import AddNewAgencyModal from "../../../components/Form/AddNewAgencyModal.vue";
+import UpdateAgencyModal from "../../../components/Form/UpdateAgencyModal.vue";
 export default {
   name: "Agency",
   components: {
     "add-new-agency-modal": AddNewAgencyModal,
+    "update-agency-modal": UpdateAgencyModal
   },
   computed: {
     ...mapGetters(["currentUser", "agenciesList", "processingAgency"]),
@@ -126,6 +130,7 @@ export default {
           label: "Action",
         },
       ],
+      data: {},
     };
   },
   mounted() {
@@ -140,6 +145,14 @@ export default {
       this.$nextTick(() => {
         this.setAgencies();
       })
+    },
+    updateAgency(data, index) {
+      this.data = {
+        index: index,
+        data: this.agenciesList[index].Address,
+        agencyName: this.agenciesList[index].name,
+        agencyID: data.id
+      }
     }
   },
 };

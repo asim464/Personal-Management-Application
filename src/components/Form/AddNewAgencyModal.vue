@@ -50,7 +50,7 @@ import {mapGetters,mapActions} from "vuex";
 export default {
   name: "AddNewAgencyModal",
   computed: {
-    ...mapGetters(["currentUser","isCreated"]),
+    ...mapGetters(["currentUser"]),
   },
   data() {
     return {
@@ -66,7 +66,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["createAgency","changedstate"]),
+    ...mapActions(["createAgency"]),
     ...mapActions(["setAgencies"]),
      addNewItem() {
       this.createAgency(this.newItem)
