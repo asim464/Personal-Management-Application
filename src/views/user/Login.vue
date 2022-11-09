@@ -224,13 +224,15 @@ export default {
 
           this.flag ? this.login(item) : this.login(null);
           if (this.isAuthGuardActive) {
-            this.$bvToast.toast("Logged in successfully", {
-              title: "Logged In",
-              variant: "success",
-              solid: true,
-              toaster: "b-toaster-top-center",
-            });
-            this.$router.push(adminRoot);
+            this.$notify(
+              "Success",
+              "LOGIN Success",
+              "lOGED IN Successfully",
+              {
+                duration: 3000,
+                permanent: false,
+              });
+            this.$router.push(adminRoot)
           }
         } else if (res.status == 400) {
           this.errorNotification(
@@ -241,12 +243,10 @@ export default {
       }
     },
     errorNotification(message, toastTitle) {
-      this.$bvToast.toast(message, {
-        title: toastTitle,
-        variant: "danger",
-        solid: true,
-        toaster: "b-toaster-top-center",
-      });
+      this.$notify("error", "Login Error", val, {
+          duration: 3000,
+          permanent: false,
+        });
     },
   },
   // watch: {
