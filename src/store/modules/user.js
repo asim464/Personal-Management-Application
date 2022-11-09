@@ -63,8 +63,8 @@ export default {
         commit("clearError");
         commit("setProcessing", true);
         setCurrentUser(payload);
-        commit("setUser", payload);
         commit("setProcessing", false);
+        commit("setUser", payload);
     },
     forgotPassword({ commit }, payload) {
       commit("clearError");

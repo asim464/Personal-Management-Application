@@ -1,62 +1,69 @@
 <template>
-<b-row class="h-100">
-    <b-colxx xxs="12" md="10" class="mx-auto my-auto">
-        <b-card class="auth-card" no-body>
-            <div class="position-relative image-side">
-                <p class="text-white h2">{{ $t('dashboards.magic-is-in-the-details') }}</p>
-                <p class="white mb-0">
-                    Please use your e-mail to reset your password.
-                    <br />If you are not a member, please
-                    <router-link to="/user/register" class="white">register</router-link>.
-                </p>
-            </div>
-            <div class="form-side">
-                <router-link to="/">
-                    <span class="logo-single" />
-                </router-link>
-                <h6 class="mb-4">{{ $t('user.forgot-password')}}</h6>
-                <b-form @submit.prevent="formSubmit" class="av-tooltip tooltip-label-bottom">
-                    <b-form-group :label="$t('user.email')" class="has-float-label mb-4">
-                        <b-form-input type="text" v-model="$v.form.email.$model" :state="!$v.form.email.$error" />
-                        <b-form-invalid-feedback v-if="!$v.form.email.required">Please enter your email address</b-form-invalid-feedback>
-                        <b-form-invalid-feedback v-else-if="!$v.form.email.email">Please enter a valid email address</b-form-invalid-feedback>
-                        <b-form-invalid-feedback v-else-if="!$v.form.email.minLength">Your email must be minimum 4 characters</b-form-invalid-feedback>
-                    </b-form-group>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <router-link to="/user/forgot-password">{{ $t('user.forgot-password-question')}}</router-link>
-                        <b-button type="submit" variant="primary" size="lg" :disabled="processing" :class="{'btn-multiple-state btn-shadow': true,
-                    'show-spinner': processing,
-                    'show-success': !processing && loginError===false,
-                    'show-fail': !processing && loginError }">
-                            <span class="spinner d-inline-block">
-                                <span class="bounce1"></span>
-                                <span class="bounce2"></span>
-                                <span class="bounce3"></span>
-                            </span>
-                            <span class="icon success">
-                                <i class="simple-icon-check"></i>
-                            </span>
-                            <span class="icon fail">
-                                <i class="simple-icon-exclamation"></i>
-                            </span>
-                            <span class="label">{{ $t('user.reset-password-button') }}</span>
-                        </b-button>
-                    </div>
-                </b-form>
-            </div>
-        </b-card>
-    </b-colxx>
-</b-row>
+    <b-row class="h-100">
+        <b-colxx xxs="12" md="10" class="mx-auto my-auto">
+            <b-card class="auth-card" no-body>
+                <div class="position-relative image-side">
+                    <p class="text-white h2">{{ $t('dashboards.magic-is-in-the-details') }}</p>
+                    <p class="white mb-0">
+                        Please use your e-mail to reset your password.
+                        <br />If you are not a member, please
+                        <router-link to="/user/register" class="white">register</router-link>.
+                    </p>
+                </div>
+                <div class="form-side">
+                    <router-link to="/">
+                        <span class="logo-single" />
+                    </router-link>
+                    <h6 class="mb-4">{{ $t('user.forgot-password') }}</h6>
+                    <b-form @submit.prevent="formSubmit" class="av-tooltip tooltip-label-bottom">
+                        
+                        <label class="form-group has-float-label mb-4">
+                            <input type="email" class="form-control" v-model="email" />
+                            <span>{{ $t("user.email") }}</span>
+                        </label>
+                        <label class="form-group has-float-label mb-4">
+                            <input type="password" class="form-control" v-model="password" />
+                            <span>{{ $t("user.password") }}</span>
+                        </label>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <router-link to="/user/forgot-password">{{ $t('user.forgot-password-question') }}
+                            </router-link>
+                            <b-button type="submit" variant="primary" size="lg" :disabled="processing" :class="{
+                                'btn-multiple-state btn-shadow': true,
+                                'show-spinner': processing,
+                                'show-success': !processing && loginError === false,
+                                'show-fail': !processing && loginError
+                            }">
+                                <span class="spinner d-inline-block">
+                                    <span class="bounce1"></span>
+                                    <span class="bounce2"></span>
+                                    <span class="bounce3"></span>
+                                </span>
+                                <span class="icon success">
+                                    <i class="simple-icon-check"></i>
+                                </span>
+                                <span class="icon fail">
+                                    <i class="simple-icon-exclamation"></i>
+                                </span>
+                                <span class="label">{{ $t('user.reset-password-button') }}</span>
+                            </b-button>
+                        </div>
+                    </b-form>
+                </div>
+            </b-card>
+        </b-colxx>
+    </b-row>
 </template>
 
 <script>
-import {
-    mapGetters,
-    mapActions
-} from "vuex";
-import {
-    validationMixin
-} from "vuelidate";
+import { mapGetters, mapActions } from "vuex";
+import { validationMixin } from "vuelidate";
+import axios from "axios";
+
+import { apiUrl } from "../../constants/config";
+
+
+
 const {
     required,
     maxLength,
@@ -67,9 +74,9 @@ const {
 export default {
     data() {
         return {
-            form: {
-                email: "test@coloredstrategies.com"
-            }
+            email: "",
+            password: "",
+
         };
     },
     mixins: [validationMixin],
@@ -86,14 +93,38 @@ export default {
         ...mapGetters(["processing", "loginError", "forgotMailSuccess"])
     },
     methods: {
-        ...mapActions(["forgotPassword"]),
-        formSubmit() {
+
+
+        async formSubmit() {
             this.$v.form.$touch();
-            if (!this.$v.form.$anyError) {
-                this.forgotPassword({
-                    email: this.form.email
+            const formdata = {
+                email: this.email,
+                password: this.password,
+
+            };
+            var res = await axios.post(apiUrl + "auth/temporaryForgetPassword", formdata);
+            if (res.status == 201) {
+                this.$bvToast.toast("Password Changed successfully", {
+                    title: "Logged In",
+                    variant: "success",
+                    solid: true,
+                    toaster: "b-toaster-top-center",
                 });
+                this.$router.push("/")
             }
+            else if (res.status == 201) {
+                this.errorNotification(
+                    "E-mail or Password incorrect. Kindly re-check.",
+                    "Invalid Credentials"
+                );
+
+            }
+
+            // if (!this.$v.form.$anyError) {
+            //     this.forgotPassword({
+            //         email: this.form.email
+            //     });
+            // }
         }
     },
     watch: {
@@ -111,9 +142,9 @@ export default {
                     "success",
                     "Forgot Password Success",
                     "Please check your email.", {
-                        duration: 3000,
-                        permanent: false
-                    }
+                    duration: 3000,
+                    permanent: false
+                }
                 );
             }
         }
