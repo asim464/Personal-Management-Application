@@ -114,9 +114,7 @@ export default {
                 permanent: false,
               }
             );
-            this.$nextTick(() => {
-              this.$router.push("/user/login");
-            });
+            this.$router.push("/user/login");
           }
         })
         .catch((err) => {

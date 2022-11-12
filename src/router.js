@@ -1,8 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import AuthGuard from "./utils/auth.guard";
+// import AuthGuard from "./utils/auth.guard";
 import { adminRoot } from "./constants/config";
-import { UserRole } from "./utils/auth.roles";
+import { getCurrentUser } from "./utils";
 
 Vue.use(VueRouter);
 
@@ -16,7 +16,7 @@ const routes = [
     path: adminRoot,
     component: () => import(/* webpackChunkName: "app" */ "./views/app"),
     redirect: `${adminRoot}/piaf`,
-    meta: { loginRequired: true, roles: [UserRole.SuperAdmin, UserRole.Admin, UserRole.Agent, UserRole.Customer] },
+    meta: { loginRequired: true},
     /*
    define with Authorization :
    meta: { loginRequired: true, roles: [UserRole.Admin, UserRole.Editor] },
@@ -27,17 +27,17 @@ const routes = [
         component: () =>
           import(/* webpackChunkName: "piaf" */ "./views/app/piaf"),
         redirect: `${adminRoot}/piaf/Dashboard`,
-        meta: { loginRequired: true, roles: [UserRole.SuperAdmin] },
+        meta: { loginRequired: true},
         children: [
           {
             path: 'Dashboard',
             component: () => import(/* webpackChunkName: "piaf" */ './views/app/piaf/Dashboard'),
-            meta: { loginRequired: true, roles: [UserRole.SuperAdmin] },
+            meta: { loginRequired: true},
           },
           {
             path: 'Agency',
             component: () => import(/* webpackChunkName: "piaf" */ './views/app/piaf/Agency'),
-            meta: { loginRequired: true, roles: [UserRole.SuperAdmin] },
+            meta: { loginRequired: true},
           }
         ]
       },
@@ -49,7 +49,7 @@ const routes = [
         children: [
           { path: 'UsersListingView', component: () => import(/* webpackChunkName: "UsersListingView" */ './views/app/second-menu/UsersListingView') }
         ],
-        meta: { loginRequired: true, roles: [UserRole.SuperAdmin, UserRole.Admin, UserRole.Agent]}
+        meta: { loginRequired: true}
       },
 
 
@@ -57,7 +57,7 @@ const routes = [
         path: "single",
         component: () =>
           import(/* webpackChunkName: "single" */ "./views/app/single"),
-        meta: { loginRequired: true, roles: [UserRole.SuperAdmin, UserRole.Admin, UserRole.Agent, UserRole.Customer] }
+        meta: { loginRequired: true}
       }
     ]
   },
@@ -89,11 +89,11 @@ const routes = [
         component: () =>
           import(/* webpackChunkName: "user" */ "./views/user/ForgotPassword")
       },
-      {
-        path: "reset-password",
-        component: () =>
-          import(/* webpackChunkName: "user" */ "./views/user/ResetPassword")
-      },
+      // {
+      //   path: "reset-password",
+      //   component: () =>
+      //     import(/* webpackChunkName: "user" */ "./views/user/ResetPassword")
+      // },
 
     ]
   },
@@ -108,5 +108,18 @@ const router = new VueRouter({
   routes,
   mode: "history",
 });
-router.beforeEach(AuthGuard);
+
+router.beforeEach((to, from, next) => {
+  let user = getCurrentUser();
+  if(to.meta.loginRequired) {
+    if(user) {
+      return next();
+    } else {
+      router.push({path: '/unauthorized'});
+    }
+  }
+  else {
+    return next();
+  }
+});
 export default router;

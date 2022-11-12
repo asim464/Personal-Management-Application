@@ -68,13 +68,13 @@ export default {
   data() {
     return {
       newItem: {
-        agencyName: String,
-        street_number: String,
-        house_number: String,
-        city: String,
-        country: String,
-        postal_code: String,
-        co: String,
+        agencyName: "",
+        street_number: "",
+        house_number: "",
+        city: "",
+        country: "",
+        postal_code: null,
+        co: "",
       },
     };
   },

@@ -224,7 +224,7 @@ export default {
               }
 
               this.flag ? this.login(item) : this.login(null);
-              if (this.isAuthGuardActive) {
+              if (this.flag) {
                 this.$notify("Success", "Login Success", res.status, {
                   duration: 5000,
                   permanent: false,
