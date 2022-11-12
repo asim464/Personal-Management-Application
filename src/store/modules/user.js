@@ -1,5 +1,8 @@
 import { setCurrentUser } from "../../utils";
 import createPersistedState from "vuex-persistedstate";
+import { UserRole } from "../../utils/auth.roles";
+import { apiUrl } from "../../constants/config";
+import axios from "axios"
 
 export default {
   plugins: [createPersistedState()],
@@ -46,13 +49,31 @@ export default {
     },
   },
   actions: {
-     login({ commit }, payload) {
-
-        commit("clearError");
-        commit("setProcessing", true);
-        setCurrentUser(payload);
-        commit("setProcessing", false);
-        commit("setUser", payload);
+    async login({ commit }, payload) {
+      commit("clearError");
+      commit("setProcessing", true);
+      if (payload != null) {
+        if (payload.role == UserRole.Admin) {
+          var config = {
+            headers: {
+              Authorization: `Bearer ${payload.token}`,
+            },
+          };
+          await axios
+            .get(apiUrl + "users/findUser/" + payload.id, config)
+            .then(async (res) => {
+              Object.assign(payload, {agencyID: res.data.agencyId})
+              await axios
+                .get(apiUrl + "agency/findAgency/" + payload.agencyID, config)
+                .then((res) => {
+                  Object.assign(payload, {agencyName: res.data.name})
+                });
+            });
+        }
+      }
+      setCurrentUser(payload);
+      commit("setProcessing", false);
+      commit("setUser", payload);
     },
     signOut({ commit }) {
       setCurrentUser(null);

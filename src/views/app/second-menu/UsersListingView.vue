@@ -56,7 +56,7 @@
               <b-table
                 v-if="currentUser.role == UserRole.Admin"
                 small
-                :items="agents"
+                :items="agentsList"
                 :fields="fields"
                 responsive="sm"
               >
@@ -130,11 +130,9 @@ import { UserRole } from "../../../utils/auth.roles";
 import { mapGetters, mapActions } from "vuex";
 import AddNewUserModal from "../../../components/Form/AddNewUserModal.vue";
 import UpdateUserModal from "../../../components/Form/UpdateUserModal.vue";
-import axios from "axios";
-import { apiUrl } from "../../../constants/config";
-import { getCurrentUser } from "../../../utils";
+
 export default {
-  name: "Second",
+  name: "UsersListingView",
   components: {
     "add-new-user-modal": AddNewUserModal,
     "update-user-modal": UpdateUserModal,
@@ -143,27 +141,8 @@ export default {
     ...mapGetters(["currentUser", "agentsList"]),
     ...mapGetters(["processingAgent"]),
   },
-  async created() {
-    var user = getCurrentUser();
-    var config = {
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    };
-    await axios
-      .get(apiUrl + "users/findUser/" + user.id, config)
-      .then(async (res) => {
-        let ur = res.data;
-        await axios
-          .get(apiUrl + "agency/findAgency/" + ur.agencyId, config)
-          .then((res) => {
-            this.agents = res.data.User;
-          });
-      });
-  },
   data() {
     return {
-      agents: [],
       UserRole,
       fields: [
         {
@@ -199,23 +178,38 @@ export default {
           label: "ACTIONS",
         },
       ],
-      data: {},
+      data: {
+        index: Number,
+        agencyId: Number,
+        userId: Number,
+        data: {
+            email: String,
+            firstName: String,
+            lastName: String,
+            userName:String,
+            description: String,
+            status: String,
+            roles: String,
+          }
+      },
     };
   },
   mounted() {
-    this.setAgents();
+    this.$store.dispatch("setAgents");
+  },
+  updated() {
+    this.$root.$on('bv::modal::hide', function(e) {
+      this.$store.dispatch("setAgents");
+    })
   },
   methods: {
-    ...mapActions(["setAgents"]),
     async deleteUser(data, index) {
       let payload = {
         data,
         index,
       };
       await this.$store.dispatch("deleteAgent", payload);
-      this.$nextTick(() => {
-        this.setAgents();
-      });
+      this.$store.dispatch("setAgents");
     },
     updateUser(index) {
       if (this.currentUser.role == UserRole.SuperAdmin) {
@@ -236,16 +230,16 @@ export default {
       } else if (this.currentUser.role == UserRole.Admin) {
         this.data = {
           index: index,
-          agencyID: this.agents[index].agencyId,
-          userId: this.agents[index].id,
+          agencyID: this.agentsList[index].agencyId,
+          userId: this.agentsList[index].id,
           data: {
-            email: this.agents[index].email,
-            firstName: this.agents[index].firstName,
-            lastName: this.agents[index].lastName,
-            userName: this.agents[index].userName,
-            description: this.agents[index].description,
-            status: this.agents[index].status,
-            roles: this.agents[index].roles,
+            email: this.agentsList[index].email,
+            firstName: this.agentsList[index].firstName,
+            lastName: this.agentsList[index].lastName,
+            userName: this.agentsList[index].userName,
+            description: this.agentsList[index].description,
+            status: this.agentsList[index].status,
+            roles: this.agentsList[index].roles,
           },
         };
       }

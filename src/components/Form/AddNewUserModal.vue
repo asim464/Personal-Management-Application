@@ -18,7 +18,7 @@
               :key="agency.id"
               :value="newItem.agencyID"
               disabled
-              >{{ agency.name }}</b-form-select-option
+              >{{ currentUser.agencyName }}</b-form-select-option
             >
           </b-form-select>
           <b-form-select
@@ -101,7 +101,6 @@
   
   <script>
 import { mapGetters, mapActions } from "vuex";
-import axios from "axios";
 import { getCurrentUser } from "../../utils";
 import { UserRole } from "../../utils/auth.roles";
 
@@ -111,17 +110,20 @@ export default {
     ...mapGetters(["currentUser", "agenciesList"]),
   },
   async created() {
-    var user = getCurrentUser();
-    var config = {
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    };
-    await axios
-      .get(apiUrl + "users/findUser/" + user.id, config)
-      .then(async (res) => {
-        this.newItem.agencyID = res.data.agencyId;
-      });
+    let ur = getCurrentUser();
+    this.newItem.agencyID = ur.agencyID;
+    if (ur.role == UserRole.SuperAdmin) {
+      this.roles = [
+        { value: "Admin", text: "Admin" },
+        { value: "Agent", text: "Agent" },
+        { value: "Customer", text: "Customer" },
+      ];
+    } else if (ur.role == UserRole.Admin) {
+      this.roles = [
+        { value: "Agent", text: "Agent" },
+        { value: "Customer", text: "Customer" },
+      ];
+    }
   },
   data() {
     return {
@@ -139,21 +141,15 @@ export default {
         },
       },
       statuses: ["Active", "In Active"],
-      roles: [
-        { value: "SuperAdmin", text: "SuperAdmin" },
-        { value: "Admin", text: "Admin" },
-        { value: "Agent", text: "Agent" },
-        { value: "Customer", text: "Customer" },
-      ],
+      roles: [],
     };
   },
   methods: {
-    ...mapActions(["setAgents"]),
     addUser() {
       this.$store.dispatch("createAgent", this.newItem);
-      this.$nextTick(() => {
-        this.setAgents();
-      });
+      this.hideModal("modalright");
+      this.$store.dispatch("setAgents");
+      
     },
     hideModal(refname) {
       this.$refs[refname].hide();

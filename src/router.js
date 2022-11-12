@@ -45,9 +45,9 @@ const routes = [
         path: "second-menu",
         component: () =>
           import(/* webpackChunkName: "second-menu" */ "./views/app/second-menu"),
-        redirect: `${adminRoot}/second-menu/second`,
+        redirect: `${adminRoot}/second-menu/UsersListingView`,
         children: [
-          { path: 'second', component: () => import(/* webpackChunkName: "piaf" */ './views/app/second-menu/Second') }
+          { path: 'UsersListingView', component: () => import(/* webpackChunkName: "UsersListingView" */ './views/app/second-menu/UsersListingView') }
         ],
         meta: { loginRequired: true, roles: [UserRole.SuperAdmin, UserRole.Admin, UserRole.Agent]}
       },

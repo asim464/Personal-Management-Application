@@ -4,7 +4,7 @@ import { UserRole } from "../utils/auth.roles";
 const data = [{
   id: "piaf",
   icon: "iconsminds-administrator",
-  label: "menu.piaf",
+  label: "menu.piaf_lbl",
   to: `${adminRoot}/piaf`,
   roles: [UserRole.SuperAdmin, UserRole.Admin],
   subs: [{
@@ -27,7 +27,7 @@ const data = [{
   subs: [{
     icon: "simple-icon-list",
     label: "menu.user",
-    to: `${adminRoot}/second-menu/second`,
+    to: `${adminRoot}/second-menu/UsersListingView`,
   },
   ]
 },

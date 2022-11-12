@@ -186,7 +186,19 @@ export default {
           label: "Action",
         },
       ],
-      data: {},
+      data: {
+        index: Number,
+        agencyName: String,
+        agencyID: Number,
+        data: {
+          street_number: String,
+          house_number: String,
+          city: String,
+          country: String,
+          postal_code: String,
+          co: String,
+        },
+      },
     };
   },
   async created() {
@@ -197,27 +209,22 @@ export default {
       },
     };
     await axios
-      .get(apiUrl + "users/findUser/" + user.id, config)
-      .then(async (res) => {
-        let ay = res.data;
-        await axios
-          .get(apiUrl + "agency/findAgency/" + ay.agencyId, config)
-          .then((res) => {
-            this.agency = [
-              {
-                id: res.data.id,
-                name: res.data.name,
-                Address: {
-                  street_number: res.data.Address.street_number,
-                  house_number: res.data.Address.house_number,
-                  city: res.data.Address.city,
-                  country: res.data.Address.country,
-                  postal_code: res.data.Address.postal_code,
-                  co: res.data.Address.co,
-                },
-              },
-            ];
-          });
+      .get(apiUrl + "agency/findAgency/" + user.agencyID, config)
+      .then((res) => {
+        this.agency = [
+          {
+            id: user.agencyID,
+            name: user.agencyName,
+            Address: {
+              street_number: res.data.Address.street_number,
+              house_number: res.data.Address.house_number,
+              city: res.data.Address.city,
+              country: res.data.Address.country,
+              postal_code: res.data.Address.postal_code,
+              co: res.data.Address.co,
+            },
+          },
+        ];
       });
   },
   async mounted() {
@@ -246,7 +253,7 @@ export default {
           data: this.agency[index].Address,
           agencyName: this.agency[index].name,
           agencyID: this.agency[index].id,
-        }
+        };
       }
     },
   },

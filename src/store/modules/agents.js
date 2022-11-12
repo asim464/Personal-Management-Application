@@ -1,6 +1,7 @@
 import axios from "axios";
 import { apiUrl } from "../../constants/config";
 import { getCurrentUser } from "../../utils";
+import { UserRole } from "../../utils/auth.roles";
 const state = {
   agentsList: [],
   processingAgent: false,
@@ -51,11 +52,21 @@ const actions = {
         Authorization: `Bearer ${user.token}`,
       },
     };
-    var res = await axios.get(apiUrl + "users/findallUsers", config);
-
-    if (res.status == 200) {
-      commit("setAllAgents", res.data);
-    }
+    await axios.get(apiUrl + "users/findallUsers", config).then((res) => {
+      if (res.status == 200) {
+        if (user.role == UserRole.SuperAdmin) {
+          commit("setAllAgents", res.data);
+        } else if (user.role == UserRole.Admin) {
+          let ls = [];
+          res.data.forEach((element) => {
+            if (element.agencyId == user.agencyID) {
+              ls.push(element);
+            }
+          });
+          commit("setAllAgents", ls);
+        }
+      }
+    });
   },
   async createAgent({ commit }, payload) {
     commit("setProcessingAgent", true);
