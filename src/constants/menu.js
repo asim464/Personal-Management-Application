@@ -11,7 +11,13 @@ const data = [{
     icon: "simple-icon-paper-plane",
     label: "menu.dashboard",
     to: `${adminRoot}/piaf/Dashboard`,
-  }, {
+  },
+  {
+    icon: "simple-icon-list",
+    label: "menu.user",
+    to: `${adminRoot}/piaf/UsersListingView`,
+  },
+  {
     icon: "simple-icon-list",
     label: "menu.agency",
     to: `${adminRoot}/piaf/Agency`,
@@ -20,14 +26,14 @@ const data = [{
 },
 {
   id: "second-menu",
-  icon: "iconsminds-business-man-woman",
+  icon: "iconsminds-business-man-woman", 
   label: "menu.admin",
   to: `${adminRoot}/second-menu`,
-  roles: [UserRole.SuperAdmin, UserRole.Admin],
+  roles: [UserRole.SuperAdmin, UserRole.Admin, UserRole.Agent, UserRole.Customer],
   subs: [{
     icon: "simple-icon-list",
     label: "menu.user",
-    to: `${adminRoot}/second-menu/UsersListingView`,
+    to: `${adminRoot}/second-menu/PropertiesListing`,
   },
   ]
 },
@@ -41,23 +47,25 @@ const data = [{
     label: "menu.login",
     to: "/user/login",
     newWindow: true
-  }, {
-    icon: "simple-icon-user-follow",
-    label: "menu.register",
-    to: "/user/register",
-    newWindow: true
-  }, {
+  }, 
+  // {
+  //   icon: "simple-icon-user-follow",
+  //   label: "menu.register",
+  //   to: "/user/register",
+  //   newWindow: true
+  // },
+  {
     icon: "simple-icon-user-unfollow",
     label: "menu.forgot-password",
     to: "/user/forgot-password",
     newWindow: true
   },
-  {
-    icon: "simple-icon-user-following",
-    label: "menu.reset-password",
-    to: "/user/reset-password",
-    newWindow: true
-  }
+  // {
+  //   icon: "simple-icon-user-following",
+  //   label: "menu.reset-password",
+  //   to: "/user/reset-password",
+  //   newWindow: true
+  // }
   ]
 },
 {

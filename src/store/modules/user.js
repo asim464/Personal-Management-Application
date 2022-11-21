@@ -46,12 +46,13 @@ export default {
     },
     clearError(state) {
       state.loginError = null;
+      state.processing = false;
     },
   },
   actions: {
     async login({ commit }, payload) {
-      commit("clearError");
-      commit("setProcessing", true);
+      // commit("clearError");
+      // commit("setProcessing", true);
       if (payload != null) {
         if (payload.role == UserRole.Admin) {
           var config = {

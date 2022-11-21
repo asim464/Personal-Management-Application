@@ -38,16 +38,16 @@ import { getCurrentUser } from '../utils';
 export default {
   methods: {
     goBack() {
-      let ur = getCurrentUser();
-      if(ur==null) {
-        this.$router.push("/user/login");
-      }
-      else if (ur.role == UserRole.SuperAdmin) {
-        this.$router.push("/app/piaf/Agency")
-      }
-      else if (ur.role == UserRole.Admin) {
-        this.$router.push("/app/second-menu/UsersListingView")
-      }
+      // let ur = getCurrentUser();
+      // if(ur==null) {
+      //   this.$router.push("/user/login");
+      // }
+      // else if (ur.role == UserRole.SuperAdmin) {
+        this.$router.push("/app/piaf/")
+      // }
+      // else if (ur.role == UserRole.Admin) {
+      //   this.$router.push("/app/second-menu/UsersListingView")
+      // }
     },
   },
   mounted: function () {

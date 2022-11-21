@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 // import AuthGuard from "./utils/auth.guard";
 import { adminRoot } from "./constants/config";
 import { getCurrentUser } from "./utils";
+import store from "@/store/"
 
 Vue.use(VueRouter);
 
@@ -38,6 +39,11 @@ const routes = [
             path: 'Agency',
             component: () => import(/* webpackChunkName: "piaf" */ './views/app/piaf/Agency'),
             meta: { loginRequired: true},
+          },
+          {
+            path: 'UsersListingView',
+            component: () => import(/* webpackChunkName: "piaf" */ './views/app/piaf/UsersListingView'),
+            meta: { loginRequired: true},
           }
         ]
       },
@@ -45,9 +51,9 @@ const routes = [
         path: "second-menu",
         component: () =>
           import(/* webpackChunkName: "second-menu" */ "./views/app/second-menu"),
-        redirect: `${adminRoot}/second-menu/UsersListingView`,
+        redirect: `${adminRoot}/second-menu/PropertiesListing`,
         children: [
-          { path: 'UsersListingView', component: () => import(/* webpackChunkName: "UsersListingView" */ './views/app/second-menu/UsersListingView') }
+          { path: 'PropertiesListing', component: () => import(/* webpackChunkName: "PropertiesListing" */ './views/app/second-menu/PropertiesListing') }
         ],
         meta: { loginRequired: true}
       },
@@ -111,7 +117,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   let user = getCurrentUser();
-  if(to.meta.loginRequired) {
+  if(to.meta.loginRequired & store.getters.isAuthGuardActive) {
     if(user) {
       return next();
     } else {

@@ -49,10 +49,10 @@
         </b-dropdown>
       </div>
     </div>
-    <router-link class="navbar-logo" :to="adminRoot">
+    <!-- <router-link class="navbar-logo" :to="adminRoot">
       <span class="logo d-none d-xs-block"></span>
       <span class="logo-mobile d-block d-xs-none"></span>
-    </router-link>
+    </router-link> -->
 
     <div class="navbar-right">
       <div class="d-none d-md-inline-block align-middle mr-3">
