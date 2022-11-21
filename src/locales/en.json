@@ -24,6 +24,7 @@
   "menu": {
     "home": "Home",
     "app": "Home",
+    "property": "Properties List",
     "dashboard": "Dashboard",
     "Dashboard": "Dashboard",
     "default": "Default",

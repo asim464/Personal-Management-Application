@@ -26,16 +26,10 @@ const data = [{
 },
 {
   id: "second-menu",
-  icon: "iconsminds-business-man-woman", 
-  label: "menu.admin",
-  to: `${adminRoot}/second-menu`,
+  icon: "iconsminds-green-house",
+  label: "menu.property",
+  to: `${adminRoot}/second-menu/propertiesListing`,
   roles: [UserRole.SuperAdmin, UserRole.Admin, UserRole.Agent, UserRole.Customer],
-  subs: [{
-    icon: "simple-icon-list",
-    label: "menu.user",
-    to: `${adminRoot}/second-menu/PropertiesListing`,
-  },
-  ]
 },
 {
   id: "pages",
@@ -47,7 +41,7 @@ const data = [{
     label: "menu.login",
     to: "/user/login",
     newWindow: true
-  }, 
+  },
   // {
   //   icon: "simple-icon-user-follow",
   //   label: "menu.register",
@@ -74,12 +68,12 @@ const data = [{
   label: "menu.single",
   to: `${adminRoot}/single`,
 },
-{
-  id: "docs",
-  icon: "iconsminds-library",
-  label: "menu.docs",
-  to: "https://piaf-vue-docs.coloredstrategies.com/",
-  newWindow: true
-}
+// {
+//   id: "docs",
+//   icon: "iconsminds-library",
+//   label: "menu.docs",
+//   to: "https://piaf-vue-docs.coloredstrategies.com/",
+//   newWindow: true
+// }
 ];
 export default data;

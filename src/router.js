@@ -44,7 +44,7 @@ const routes = [
             path: 'UsersListingView',
             component: () => import(/* webpackChunkName: "piaf" */ './views/app/piaf/UsersListingView'),
             meta: { loginRequired: true},
-          }
+          },
         ]
       },
       {
@@ -53,7 +53,16 @@ const routes = [
           import(/* webpackChunkName: "second-menu" */ "./views/app/second-menu"),
         redirect: `${adminRoot}/second-menu/PropertiesListing`,
         children: [
-          { path: 'PropertiesListing', component: () => import(/* webpackChunkName: "PropertiesListing" */ './views/app/second-menu/PropertiesListing') }
+          {
+            path: 'PropertiesListing',
+            component: () => import(/* webpackChunkName: "PropertiesListing" */ './views/app/second-menu/PropertiesListing'),
+            meta: { loginRequired: true},
+          },
+          {
+            path: 'propertyDetails',
+            component: () => import(/* webpackChunkName: "piaf" */ './views/app/second-menu/PropertyDetails'),
+            meta: { loginRequired: true},
+          }
         ],
         meta: { loginRequired: true}
       },
