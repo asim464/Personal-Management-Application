@@ -208,18 +208,22 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 export default {
   name: "PropertyDetails",
   mounted() {
     let uri = window.location.search.substring(1);
     let id = new URLSearchParams(uri);
     this.propertyID = id.get("p");
-    console.log(this.propertyID);
     
+    this.propertiesList.forEach(element => {
+      if (element.id == this.propertyID) {
+        this.details = element;
+      }
+    });
   },
   computed: {
-    ...mapState(['propertiesList'])
+    ...mapGetters(['propertiesList'])
   },
   data() {
     return {

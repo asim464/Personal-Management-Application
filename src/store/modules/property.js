@@ -36,7 +36,8 @@ const actions = {
     commit("setAllProperty", payload);
   },
   findProperty({ commit }, payload) {
-    commit("findProperty", payload);
+    let det = commit("findProperty", payload);
+    return det;
   },
   //   async createProperty({commit},payload) {
   //     commit("setProcessingProperty", true);
