@@ -151,7 +151,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["processing", "loginError", "isAuthGuardActive"]),
+    ...mapGetters(["loginError", "isAuthGuardActive"]),
   },
   methods: {
     ...mapActions(["login"]),

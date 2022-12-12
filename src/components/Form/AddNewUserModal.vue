@@ -26,14 +26,14 @@
             v-model="newItem.agencyID"
           >
             <template #first>
-              <b-form-select-option value="" disabled
+              <b-form-select-option value="" default
                 >-- Please select an option --</b-form-select-option
               >
             </template>
             <b-form-select-option
               v-for="agency in agenciesList"
               :key="agency.id"
-              :value="newItem.agencyID"
+              :value="agency.id"
               >{{ agency.name }}</b-form-select-option
             >
           </b-form-select>
@@ -100,7 +100,7 @@
 </template>
   
   <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters } from "vuex";
 import { getCurrentUser } from "../../utils";
 import { UserRole } from "../../utils/auth.roles";
 
@@ -111,7 +111,6 @@ export default {
   },
   async created() {
     let ur = getCurrentUser();
-    this.newItem.agencyID = ur.agencyID;
     if (ur.role == UserRole.SuperAdmin) {
       this.roles = [
         { value: "Admin", text: "Admin" },
@@ -149,7 +148,6 @@ export default {
       this.$store.dispatch("createAgent", this.newItem);
       this.hideModal("modalright");
       this.$store.dispatch("setAgents");
-      
     },
     hideModal(refname) {
       this.$refs[refname].hide();

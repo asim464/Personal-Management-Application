@@ -91,9 +91,6 @@ export default {
       },
     },
   },
-  computed: {
-    ...mapGetters(["processing"]),
-  },
   methods: {
     async formSubmit() {
       this.$v.form.$touch();

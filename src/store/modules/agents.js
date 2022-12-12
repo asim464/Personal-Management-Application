@@ -78,15 +78,17 @@ const actions = {
       },
     };
     await axios
-      .post(apiUrl + `users/signup/${payload.agencyID}`, payload.user, config)
+      .post(apiUrl + 'users/signup/'+payload.agencyID, payload.user, config)
       .then((res) => {
         if (res.status == 200) {
           commit("setProcessingAgent", false);
           commit("createAgent", payload.user);
+          return 200;
         }
       })
       .catch((err) => {
         console.log(err);
+        return 401;
       });
   },
   async deleteAgent({ commit }, payload) {

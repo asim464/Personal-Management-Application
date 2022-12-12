@@ -127,7 +127,7 @@
 
 <script>
 import { UserRole } from "../../../utils/auth.roles";
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters } from "vuex";
 import AddNewUserModal from "../../../components/Form/AddNewUserModal.vue";
 import UpdateUserModal from "../../../components/Form/UpdateUserModal.vue";
 

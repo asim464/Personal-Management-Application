@@ -46,8 +46,7 @@ const routes = [
             meta: { loginRequired: true},
           },
         ]
-      },
-      {
+      },{
         path: "second-menu",
         component: () =>
           import(/* webpackChunkName: "second-menu" */ "./views/app/second-menu"),
@@ -65,8 +64,7 @@ const routes = [
           }
         ],
         meta: { loginRequired: true}
-      },
-
+      }, 
 
       {
         path: "single",

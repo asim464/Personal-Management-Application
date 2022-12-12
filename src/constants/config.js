@@ -19,5 +19,5 @@ export const apiUrl = 'https://app-propertymanagement.herokuapp.com/';
 
 export const themeRadiusStorageKey = 'theme_radius'
 export const themeSelectedColorStorageKey = 'theme_selected_color'
-export const defaultColor = 'light.blueolympic'
+export const defaultColor = 'light.purplemonster'
 export const colors = ['bluenavy', 'blueyale', 'blueolympic', 'greenmoss', 'greenlime', 'purplemonster', 'orangecarrot', 'redruby', 'yellowgranola', 'greysteel']

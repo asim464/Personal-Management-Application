@@ -28,7 +28,7 @@ const data = [{
   id: "second-menu",
   icon: "iconsminds-green-house",
   label: "menu.property",
-  to: `${adminRoot}/second-menu/propertiesListing`,
+  to: `${adminRoot}/second-menu/PropertiesListing`,
   roles: [UserRole.SuperAdmin, UserRole.Admin, UserRole.Agent, UserRole.Customer],
 },
 {

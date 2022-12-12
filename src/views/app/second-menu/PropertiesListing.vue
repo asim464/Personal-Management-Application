@@ -2,7 +2,7 @@
   <b-row>
     <b-colxx class="disable-text-selection">
       <list-page-heading
-        :title="$t('menu.data-list')"
+        :title="$t('menu.prop-listing')"
         :selectAll="selectAll"
         :isSelectedAll="isSelectedAll"
         :isAnyItemSelected="isAnyItemSelected"
@@ -44,38 +44,61 @@ import axios from "axios";
 import { apiUrl } from "../../../constants/config";
 import ListPageHeading from "../../../containers/pages/ListPageHeading";
 import ListPageListing from "../../..//containers/pages/ListPageListing";
+
+import { getCurrentUser } from "../../../utils";
 export default {
-  name:"PropertiesListing",
+  name: "PropertiesListing",
   components: {
     "list-page-heading": ListPageHeading,
-    "list-page-listing": ListPageListing
+    "list-page-listing": ListPageListing,
   },
   data() {
     return {
       isLoad: false,
-      apiBase: apiUrl + "property",
       displayMode: "list",
       sort: {
-        column: "title",
-        label: "Product Name"
+        key: "id",
+        label: "ID",
       },
-      page: 1,
-      perPage: 4,
+      page: 2,
+      perPage: 2,
       search: "",
-      from: 0,
-      to: 4,
-      total: 5,
+      from: 1,
+      to: 2,
+      total: 0,
       lastPage: 0,
       items: [],
-      selectedItems: []
+      selectedItems: [],
     };
   },
   methods: {
-    loadItems() {
+    async loadItems() {
       this.isLoad = false;
+      var user = getCurrentUser();
+      var config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      await axios
+        .get(apiUrl + "property", config)
+        .then((res) => {
+          if (res.status == 200) {
+            this.items = res.data;
+            this.total = this.items.length;
+            console.log(this.items);
+            this.isLoad = true;
+          }
+        })
+        .catch((err) => {
+          console.log("error :", err);
+        });
+
+      /*
 
       axios
-        .get(this.apiBase)
+        .get("https://api.coloredstrategies.com/cakes/fordatatable")
         .then(response => {
           return response.data;
         })
@@ -94,10 +117,12 @@ export default {
           this.lastPage = res.last_page;
           this.isLoad = true;
         });
+        */
     },
 
     changeDisplayMode(displayType) {
       this.displayMode = displayType;
+      console.log(this.displayMode);
     },
     changePageSize(perPage) {
       this.page = 1;
@@ -115,7 +140,7 @@ export default {
       if (this.selectedItems.length >= this.items.length) {
         if (isToggle) this.selectedItems = [];
       } else {
-        this.selectedItems = this.items.map(x => x.id);
+        this.selectedItems = this.items.map((x) => x.id);
       }
     },
     keymap(event) {
@@ -150,13 +175,13 @@ export default {
           Math.max(start, end) + 1
         );
         this.selectedItems.push(
-          ...itemsForToggle.map(item => {
+          ...itemsForToggle.map((item) => {
             return item.id;
           })
         );
       } else {
         if (this.selectedItems.includes(itemId)) {
-          this.selectedItems = this.selectedItems.filter(x => x !== itemId);
+          this.selectedItems = this.selectedItems.filter((x) => x !== itemId);
         } else this.selectedItems.push(itemId);
       }
     },
@@ -173,7 +198,7 @@ export default {
     },
     changePage(pageNum) {
       this.page = pageNum;
-    }
+    },
   },
   computed: {
     isSelectedAll() {
@@ -195,10 +220,10 @@ export default {
     },
     apiUrl() {
       this.loadItems();
-    }
+    },
   },
   mounted() {
     this.loadItems();
-  }
+  },
 };
 </script>

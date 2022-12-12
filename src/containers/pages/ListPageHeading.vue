@@ -3,14 +3,14 @@
     <b-colxx xxs="12">
       <h1>{{ title }}</h1>
       <div class="top-right-button-container">
-<!--        <b-button-->
-<!--          v-b-modal.modalright-->
-<!--          variant="primary"-->
-<!--          size="lg"-->
-<!--          class="top-right-button"-->
-<!--        >{{ $t('pages.add-new') }}</b-button>-->
+       <b-button
+         v-b-modal.modalAddProp
+         variant="primary"
+         size="lg"
+         class="top-right-button newPropBtn"
+       ><i class="iconsminds-add" style="position: relative; margin-right:5px;" />ADD NEW</b-button>
         <b-button-group>
-          <b-dropdown split right @click="selectAll(true)" class="check-button" variant="primary">
+          <b-dropdown split right @click="selectAll(true)" class="check-button ml-2" variant="primary">
             <label
               class="custom-control custom-checkbox pl-4 mb-0 d-inline-block"
               slot="button-content"
@@ -30,11 +30,11 @@
               >&nbsp;</span>
             </label>
             <b-dropdown-item>{{$t('pages.delete')}}</b-dropdown-item>
-            <b-dropdown-item>{{$t('pages.another-action')}}</b-dropdown-item>
+            <b-dropdown-item>{{$t('pages.edit')}}</b-dropdown-item>
           </b-dropdown>
         </b-button-group>
       </div>
-<!--      <add-new-modal :categories="categories" :statuses="statuses"></add-new-modal>-->
+     <add-new-property-modal></add-new-property-modal>
       <piaf-breadcrumb />
       <div class="mb-2 mt-2">
         <b-button
@@ -114,14 +114,14 @@ import {
   ThumbListIcon,
   ImageListIcon
 } from "../../components/Svg";
-// import AddNewModal from "./AddNewModal";
+import AddNewPropertyModal from "../../components/Form/AddNewPropertyModal.vue";
 
 export default {
   components: {
     "data-list-icon": DataListIcon,
     "thumb-list-icon": ThumbListIcon,
     "image-list-icon": ImageListIcon,
-    // "add-new-modal": AddNewModal
+    "add-new-property-modal": AddNewPropertyModal
   },
   props: [
     "title",
@@ -142,46 +142,57 @@ export default {
   ],
   data() {
     return {
-      categories: [
-        {
-          label: "Cakes",
-          value: "Cakes"
-        },
-        {
-          label: "Cupcakes",
-          value: "Cupcakes"
-        },
-        {
-          label: "Desserts",
-          value: "Desserts"
-        }
-      ],
-      statuses: [
-        {
-          text: "ON HOLD",
-          value: "ON HOLD"
-        },
-        {
-          text: "PROCESSED",
-          value: "PROCESSED"
-        }
-      ],
+      // categories: [
+      //   {
+      //     label: "Cakes",
+      //     value: "Cakes"
+      //   },
+      //   {
+      //     label: "Cupcakes",
+      //     value: "Cupcakes"
+      //   },
+      //   {
+      //     label: "Desserts",
+      //     value: "Desserts"
+      //   }
+      // ],
+      // statuses: [
+      //   {
+      //     text: "ON HOLD",
+      //     value: "ON HOLD"
+      //   },
+      //   {
+      //     text: "PROCESSED",
+      //     value: "PROCESSED"
+      //   }
+      // ],
       sortOptions: [
         {
-          column: "title",
-          label: "Product Name"
+          key: "id",
+          label: "ID"
         },
         {
-          column: "category",
-          label: "Category"
+          key: "title",
+          label: "Title"
         },
         {
-          column: "status",
+          key: "data.updateAt",
+          label: "Last Updated"
+        },
+        {
+          key: "data.status",
           label: "Status"
+        },
+        {
+          key: "data.price",
+          label: "Price"
         }
       ],
-      pageSizes: [4, 8, 12]
+      pageSizes: []
     };
   }
 };
 </script>
+
+<style scoped>
+</style>
