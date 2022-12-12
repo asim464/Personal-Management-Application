@@ -89,6 +89,7 @@ export default {
             this.total = this.items.length;
             console.log(this.items);
             this.isLoad = true;
+            this.$store.dispatch("setProperties", this.items);
           }
         })
         .catch((err) => {

@@ -66,7 +66,6 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
 import { validationMixin } from "vuelidate";
 import axios from "axios";
 
@@ -115,7 +114,7 @@ export default {
           }
         })
         .catch((err) => {
-          this.$notify("Error", "Forget Email Failure", err, {
+          this.$notify("Error", "Password Reset Failure", err, {
             duration: 3000,
             permanent: false,
           });

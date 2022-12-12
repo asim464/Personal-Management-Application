@@ -126,7 +126,6 @@ export default {
               duration: 5000,
               permanent: false,
             });
-            // this.$router.push("/app/second-menu/PropertiesListing");
             window.location.reload();
           }
           if (res.status == 401) {

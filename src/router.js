@@ -58,7 +58,7 @@ const routes = [
             meta: { loginRequired: true},
           },
           {
-            path: 'propertyDetails',
+            path: 'PropertyDetails',
             component: () => import(/* webpackChunkName: "piaf" */ './views/app/second-menu/PropertyDetails'),
             meta: { loginRequired: true},
           }

@@ -2,14 +2,14 @@
 <b-card @click.prevent="toggleItem($event,data.id)" :class="{'d-flex flex-row':true,'active' : selectedItems.includes(data.id)}" no-body>
     <div class="pl-2 d-flex flex-grow-1 min-width-zero">
         <div class="card-body align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero align-items-lg-center">
-            <router-link :to="`/app/second-menu/propertyDetails?p=${data.id}`" class="w-10 text-small w-sm-100">
+            <router-link :to="`/app/second-menu/PropertyDetails?p=${data.id}`" class="w-10 text-small w-sm-100">
                 <p class="text-muted text-small mb-0 truncate">{{data.id}}</p>
             </router-link>
-            <router-link :to="`/app/second-menu/propertyDetails?p=${data.id}`" class="w-15 text-small w-sm-100">
+            <router-link :to="`/app/second-menu/PropertyDetails?p=${data.id}`" class="w-15 text-small w-sm-100">
                 <img v-if="(Array.isArray(data.image) && data.image.length)" class="card-img-top" :alt="data.title" style="height:72px; width:86px;"/>
                 <img v-else :src="data.image" class="card-img-top" :alt="data.title" style="height:72px; width:86px;"/>
             </router-link>
-            <router-link :to="`/app/second-menu/propertyDetails?p=${data.id}`" class="w-15 text-small w-sm-100">
+            <router-link :to="`/app/second-menu/PropertyDetails?p=${data.id}`" class="w-15 text-small w-sm-100">
                 <p class="text-small mb-0 truncate" style="color: #4556AC;">{{data.title}}</p>
             </router-link>
             <p class="mb-0 text-muted text-small w-15 w-sm-100">{{data.type}}</p>
