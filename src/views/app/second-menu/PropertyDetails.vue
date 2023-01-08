@@ -501,7 +501,7 @@
                         padding-top: 1rem;
                       "
                     >
-                      <i class="iconsminds-information"></i>Owner
+                      <i class="iconsminds-profile"></i>Owner
                     </h3>
                   </b-colxx>
                   <b-colxx class="d-flex justify-content-end" xxs="3">
@@ -527,7 +527,7 @@
                         padding-top: 1rem;
                       "
                     >
-                      <i class="iconsminds-information"></i>Bank Information
+                      <i class="iconsminds-bank"></i>Bank Information
                     </h3>
                   </b-colxx>
                 </b-row>
