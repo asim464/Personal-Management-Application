@@ -457,9 +457,91 @@
             </b-card>
           </b-colxx>
         </b-row>
+        <b-row>
+          <b-colxx xxs="6">
+            <b-card header-text-variant="dark" class="mb-2">
+              <template #header>
+                <b-row class="d-flex" no-gutters>
+                  <b-colxx class="d-flex justify-content-start" xxs="9">
+                    <h3
+                      style="
+                        font-family: 'Nunito', sans-serif;
+                        font-weight: 400;
+                        font-size: 18px;
+                        padding-top: 1rem;
+                      "
+                    >
+                      Status and Publication
+                    </h3>
+                  </b-colxx>
+                  <b-colxx class="d-flex justify-content-end" xxs="3">
+                    <b-button
+                      class="mt-2"
+                      style="height: min-content"
+                      variant="outline-success"
+                      v-b-modal.mainFeaturesModal
+                    >
+                      <i class="iconsminds-pen"></i>Edit</b-button
+                    >
+                  </b-colxx>
+                </b-row>
+              </template>
+            </b-card>
+          </b-colxx>
+          <b-colxx xxxs="6">
+            <b-card footer-bg-variant="white" footer-border-variant="light" header-text-variant="dark" class="mb-2">
+              <template #header>
+                <b-row class="d-flex" no-gutters>
+                  <b-colxx class="d-flex justify-content-start" xxs="9">
+                    <h3
+                      style="
+                        font-family: 'Nunito', sans-serif;
+                        font-weight: 400;
+                        font-size: 18px;
+                        padding-top: 1rem;
+                      "
+                    >
+                      <i class="iconsminds-information"></i>Owner
+                    </h3>
+                  </b-colxx>
+                  <b-colxx class="d-flex justify-content-end" xxs="3">
+                    <b-button
+                      class="mt-2"
+                      style="height: min-content"
+                      variant="outline-success"
+                      v-b-modal.mainFeaturesModal
+                    >
+                      <i class="iconsminds-pen"></i>Edit</b-button
+                    >
+                  </b-colxx>
+                </b-row>
+              </template>
+              <template #footer>
+                <b-row class="d-flex" no-gutters>
+                  <b-colxx class="d-flex justify-content-start" xxs="9">
+                    <h3
+                      style="
+                        font-family: 'Nunito', sans-serif;
+                        font-weight: 400;
+                        font-size: 18px;
+                        padding-top: 1rem;
+                      "
+                    >
+                      <i class="iconsminds-information"></i>Bank Information
+                    </h3>
+                  </b-colxx>
+                </b-row>
+                <b-row>
+                  <b-colxx class="rowsLbl" xxs="4">IBAN:</b-colxx>
+                  <b-colxx xxs="8">why</b-colxx>
+                </b-row>
+              </template>
+            </b-card>
+          </b-colxx>
+        </b-row>
       </b-colxx>
       <b-colxx cols="5">
-        <b-card header-text-variant="dark" class="mb-2" style="height: 97%">
+        <b-card header-text-variant="dark" class="mb-2" style="height: 100%">
           <template #header>
             <b-row class="d-flex" no-gutters>
               <b-colxx class="d-flex justify-content-start" xxs="9">
