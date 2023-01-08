@@ -1,5 +1,494 @@
 <template>
   <div>
+    <b-row>
+      <b-colxx xxs="12">
+        <h1>{{ details.title }}</h1>
+        <div class="top-right-button-container">
+          <b-button
+            id="ddown5"
+            size="lg"
+            variant="outline-success"
+            class="top-right-button top-right-button-single"
+            no-fade="true"
+            @click="navigateBack()"
+            ><i class="iconsminds-arrow-back" />{{ $t("pages.back") }}</b-button
+          >
+        </div>
+        <!-- <piaf-breadcrumb /> -->
+        <div class="separator mb-5"></div>
+      </b-colxx>
+    </b-row>
+    <b-row>
+      <b-colxx cols="7">
+        <b-row>
+          <b-colxx cols="6">
+            <b-card header-text-variant="dark" class="mb-2">
+              <template #header>
+                <b-row class="d-flex" no-gutters>
+                  <b-colxx class="d-flex justify-content-start" xxs="9">
+                    <h3
+                      style="
+                        font-family: 'Nunito', sans-serif;
+                        font-weight: 400;
+                        font-size: 18px;
+                        padding-top: 1rem;
+                      "
+                    >
+                      <i class="iconsminds-map-marker"></i>Main Features
+                    </h3>
+                  </b-colxx>
+                  <b-colxx class="d-flex justify-content-end" xxs="3">
+                    <b-button
+                      class="mt-2"
+                      style="height: 71%"
+                      variant="outline-success"
+                      v-b-modal.mainFeaturesModal
+                    >
+                      <i class="iconsminds-pen"></i>Edit</b-button
+                    >
+                  </b-colxx>
+                </b-row>
+              </template>
+              <b-card-text>
+                <b-row class="ml-2">
+                  <b-col class="rowsLbl" cols="6">Rooms:</b-col>
+                  <b-col
+                    v-if="
+                      details.length == 0 || details.mainFeature.length == 0
+                    "
+                    cols="6"
+                    ><p class="rowsVal">N/A</p></b-col
+                  >
+                  <b-col v-else
+                    ><p class="rowsVal">
+                      {{ details.mainFeature.Rooms }}
+                    </p></b-col
+                  >
+                </b-row>
+                <b-row class="ml-2">
+                  <b-col class="rowsLbl" cols="6">Living Space:</b-col>
+                  <b-col
+                    v-if="
+                      details.length == 0 || details.mainFeature.length == 0
+                    "
+                    cols="6"
+                    ><p class="rowsVal">N/A &#13217;</p></b-col
+                  >
+                  <b-col v-else
+                    ><p class="rowsVal">
+                      {{ details.mainFeature.LeavingSpace }}
+                    </p></b-col
+                  >
+                </b-row>
+                <b-row class="ml-2">
+                  <b-col class="rowsLbl" cols="6">Street & Nr:</b-col>
+                  <b-col
+                    v-if="
+                      details.length == 0 || details.mainFeature.length == 0
+                    "
+                    cols="6"
+                    ><p class="rowsVal">N/A</p></b-col
+                  >
+                  <b-col v-else
+                    ><p class="rowsVal">
+                      {{ details.mainFeature.Street }}
+                    </p></b-col
+                  >
+                </b-row>
+                <b-row class="ml-2">
+                  <b-col class="rowsLbl" cols="6">Zip Code & City:</b-col>
+                  <b-col
+                    v-if="
+                      details.length == 0 || details.mainFeature.length == 0
+                    "
+                    cols="6"
+                    ><p class="rowsVal">N/A</p></b-col
+                  >
+                  <b-col v-else
+                    ><p class="rowsVal">
+                      {{ details.mainFeature.ZipCodeOrCity }}
+                    </p></b-col
+                  >
+                </b-row>
+                <b-row class="ml-2">
+                  <b-col class="rowsLbl" cols="6">Available:</b-col>
+                  <b-col
+                    v-if="
+                      details.length == 0 || details.mainFeature.length == 0
+                    "
+                    cols="6"
+                    ><p class="rowsVal">N/A</p></b-col
+                  >
+                  <b-col v-else
+                    ><p class="rowsVal">
+                      {{ details.mainFeature.Availibility }}
+                    </p></b-col
+                  >
+                </b-row>
+              </b-card-text>
+            </b-card>
+            <b-card header-text-variant="dark" class="mb-2">
+              <template #header>
+                <b-row class="d-flex" no-gutters>
+                  <b-colxx class="d-flex justify-content-start" xxs="9">
+                    <h3
+                      style="
+                        font-family: 'Nunito', sans-serif;
+                        font-weight: 400;
+                        font-size: 18px;
+                        padding-top: 1rem;
+                      "
+                    >
+                      <i class="iconsminds-information"></i>Details
+                    </h3>
+                  </b-colxx>
+                  <b-colxx class="d-flex justify-content-end" xxs="3">
+                    <b-button
+                      class="mt-2"
+                      style="height: 71%"
+                      variant="outline-success"
+                      v-b-modal.detailsModal
+                    >
+                      <i class="iconsminds-pen"></i>Edit</b-button
+                    >
+                  </b-colxx>
+                </b-row>
+              </template>
+              <b-card-text>
+                <b-row class="ml-2">
+                  <b-col class="rowsLbl" cols="6">Floors:</b-col>
+                  <b-col
+                    v-if="
+                      details.length == 0 ||
+                      details.propertyDetail.length == 0 ||
+                      details.propertyDetail.Floors == 0
+                    "
+                    cols="6"
+                    ><p class="rowsVal">N/A</p></b-col
+                  >
+                  <b-col v-else
+                    ><p class="rowsVal">
+                      {{ details.propertyDetail.Floors }}
+                    </p></b-col
+                  >
+                </b-row>
+                <b-row class="ml-2">
+                  <b-col class="rowsLbl" cols="6">Number Of Floors:</b-col>
+                  <b-col
+                    v-if="
+                      details.length == 0 ||
+                      details.propertyDetail.length == 0 ||
+                      details.propertyDetail.numberOfFloors == 0
+                    "
+                    cols="6"
+                    ><p class="rowsVal">N/A</p></b-col
+                  >
+                  <b-col class="rowsVal" v-else
+                    ><p class="rowsVal">
+                      {{ details.propertyDetail.numberOfFloors }}
+                    </p></b-col
+                  >
+                </b-row>
+                <b-row class="ml-2">
+                  <b-col class="rowsLbl" cols="6"
+                    >Lot Size in (&#13217;):</b-col
+                  >
+                  <b-col
+                    v-if="
+                      details.length == 0 ||
+                      details.propertyDetail.length == 0 ||
+                      details.propertyDetail.lotDetailSizeInM2 == 0
+                    "
+                    cols="6"
+                    ><p class="rowsVal">N/A</p></b-col
+                  >
+                  <b-col class="rowsVal" v-else
+                    ><p class="rowsVal">
+                      {{ details.propertyDetail.lotDetailSizeInM2 }}
+                    </p></b-col
+                  >
+                </b-row>
+                <b-row class="ml-2">
+                  <b-col class="rowsLbl" cols="6">Room Height:</b-col>
+                  <b-col
+                    v-if="
+                      details.length == 0 ||
+                      details.propertyDetail.roomsHeight == 0 ||
+                      details.propertyDetail.length == 0
+                    "
+                    cols="6"
+                    ><p class="rowsVal">N/A</p></b-col
+                  >
+                  <b-col v-else
+                    ><p class="rowsVal">
+                      {{ details.propertyDetail.roomsHeight }}
+                    </p></b-col
+                  >
+                </b-row>
+                <b-row class="ml-2">
+                  <b-col class="rowsLbl" cols="6">Year Built:</b-col>
+                  <b-col
+                    v-if="
+                      details.length == 0 ||
+                      details.propertyDetail.length == 0 ||
+                      details.propertyDetail.yearBuilt == 0
+                    "
+                    cols="6"
+                    ><p class="rowsVal">N/A</p></b-col
+                  >
+                  <b-col v-else
+                    ><p class="rowsVal">
+                      {{ details.propertyDetail.yearBuilt }}
+                    </p></b-col
+                  >
+                </b-row>
+                <b-row class="ml-2">
+                  <b-col class="rowsLbl" cols="6"
+                    >Floor Space (&#13217;):</b-col
+                  >
+                  <b-col
+                    v-if="
+                      details.length == 0 ||
+                      details.propertyDetail.length == 0 ||
+                      details.propertyDetail.floorSpaceM2 == 0
+                    "
+                    cols="6"
+                    ><p class="rowsVal">N/A</p></b-col
+                  >
+                  <b-col v-else
+                    ><p class="rowsVal">
+                      {{ details.propertyDetail.floorSpaceM2 }}
+                    </p></b-col
+                  >
+                </b-row>
+                <b-row class="ml-2">
+                  <b-col class="rowsLbl" cols="6">Volume in (&#x33A5;):</b-col>
+                  <b-col
+                    v-if="
+                      details.length == 0 ||
+                      details.propertyDetail.length == 0 ||
+                      details.propertyDetail.volumeInM3 == 0
+                    "
+                    cols="6"
+                    ><p class="rowsVal">N/A</p></b-col
+                  >
+                  <b-col v-else
+                    ><p class="rowsVal">
+                      {{ details.propertyDetail.volumeInM3 }}
+                    </p></b-col
+                  >
+                </b-row>
+                <b-row class="ml-2">
+                  <b-col class="rowsLbl" cols="6">Last Renovation:</b-col>
+                  <b-col
+                    v-if="
+                      details.length == 0 ||
+                      details.propertyDetail.length == 0 ||
+                      details.propertyDetail.lastRenovation == 0
+                    "
+                    cols="6"
+                    ><p class="rowsVal">N/A</p></b-col
+                  >
+                  <b-col v-else
+                    ><p class="rowsVal">
+                      {{ details.propertyDetail.lastRenovation }}
+                    </p></b-col
+                  >
+                </b-row>
+              </b-card-text>
+            </b-card>
+          </b-colxx>
+          <b-colxx cols="6">
+            <b-row>
+              <b-card id="custom-row-card" header-text-variant="dark">
+                <template #header>
+                  <b-row class="d-flex">
+                    <b-colxx class="d-flex justify-content-start" xxs="9">
+                      <h3
+                        style="
+                          font-family: 'Nunito', sans-serif;
+                          font-weight: 400;
+                          font-size: 18px;
+                          padding-top: 1rem;
+                        "
+                      >
+                        <i class="iconsminds-pricing"></i>Costs
+                      </h3>
+                    </b-colxx>
+                    <b-colxx class="d-flex justify-content-end" xxs="3">
+                      <b-button
+                        class="mt-2"
+                        style="height: 71%"
+                        variant="outline-success"
+                        v-b-modal.costsModal
+                      >
+                        <i class="iconsminds-pen"></i>Edit</b-button
+                      >
+                    </b-colxx>
+                  </b-row>
+                </template>
+                <b-card-text>
+                  <b-row class="ml-2">
+                    <b-col class="rowsLbl" cols="6">Type:</b-col>
+                    <b-col
+                      v-if="details.length == 0 || details.paymentType == 0"
+                      cols="6"
+                      ><p class="rowsVal">N/A</p></b-col
+                    >
+                    <b-col v-else
+                      ><p class="rowsVal">{{ details.paymentType }}</p></b-col
+                    >
+                  </b-row>
+                  <b-row class="ml-2">
+                    <b-col class="rowsLbl" cols="6">Price:</b-col>
+                    <b-col
+                      v-if="details.length == 0 || details.price == 0"
+                      cols="6"
+                      ><p class="rowsVal">N/A</p></b-col
+                    >
+                    <b-col v-else
+                      ><p class="rowsVal">CHF {{ details.price }}</p></b-col
+                    >
+                  </b-row>
+                </b-card-text>
+              </b-card>
+              <b-card id="custom-row-card" header-text-variant="dark">
+                <template #header>
+                  <b-row class="d-flex">
+                    <b-colxx class="d-flex justify-content-start" xxs="9">
+                      <h3
+                        style="
+                          font-family: 'Nunito', sans-serif;
+                          font-weight: 400;
+                          font-size: 18px;
+                          padding-top: 1rem;
+                        "
+                      >
+                        <i class="iconsminds-project"></i>Responsible Agent
+                      </h3>
+                    </b-colxx>
+                    <b-colxx class="d-flex justify-content-end" xxs="3">
+                      <b-button
+                        class="mt-2"
+                        style="height: 71%"
+                        variant="outline-success"
+                        v-b-modal.costsModal
+                      >
+                        <i class="iconsminds-pen"></i>Edit</b-button
+                      >
+                    </b-colxx>
+                  </b-row>
+                </template>
+                <b-card-text>
+                  <b-row class="ml-2">
+                    <b-col class="rowsLbl" cols="6">Agent:</b-col>
+                    <b-col
+                      v-if="details.length == 0 || details.agentAssigned == 0"
+                      cols="6"
+                      ><p class="rowsVal">N/A</p></b-col
+                    >
+                    <b-col v-else
+                      ><p class="rowsVal">{{ details.agentAssigned }}</p></b-col
+                    >
+                  </b-row>
+                </b-card-text>
+              </b-card>
+            </b-row>
+            <b-card header-text-variant="dark" class="mb-2">
+              <template #header>
+                <b-row class="d-flex" no-gutters>
+                  <b-colxx class="d-flex justify-content-start" xxs="9">
+                    <h3
+                      style="
+                        font-family: 'Nunito', sans-serif;
+                        font-weight: 400;
+                        font-size: 18px;
+                        padding-top: 1rem;
+                      "
+                    >
+                      <i class="iconsminds-information"></i>Features and
+                      Furnishings
+                    </h3>
+                  </b-colxx>
+                  <b-colxx class="d-flex justify-content-end" xxs="3">
+                    <b-button
+                      class="mt-2"
+                      style="height: min-content"
+                      variant="outline-success"
+                      v-b-modal.mainFeaturesModal
+                    >
+                      <i class="iconsminds-pen"></i>Edit</b-button
+                    >
+                  </b-colxx>
+                </b-row>
+              </template>
+            </b-card>
+          </b-colxx>
+        </b-row>
+        <b-row>
+          <b-colxx style="min-width: 100%">
+            <b-card header-text-variant="dark" class="mb-2">
+              <template #header>
+                <b-row class="d-flex" no-gutters>
+                  <b-colxx class="d-flex justify-content-start" xxs="9">
+                    <h3
+                      style="
+                        font-family: 'Nunito', sans-serif;
+                        font-weight: 400;
+                        font-size: 18px;
+                        padding-top: 1rem;
+                      "
+                    >
+                      <i class="iconsminds-information"></i>Photos and Documents
+                    </h3>
+                  </b-colxx>
+                  <b-colxx class="d-flex justify-content-end" xxs="3">
+                    <b-button
+                      class="mt-2"
+                      style="height: min-content"
+                      variant="outline-success"
+                      v-b-modal.mainFeaturesModal
+                    >
+                      <i class="iconsminds-pen"></i>Edit</b-button
+                    >
+                  </b-colxx>
+                </b-row>
+              </template>
+            </b-card>
+          </b-colxx>
+        </b-row>
+      </b-colxx>
+      <b-colxx cols="5">
+        <b-card header-text-variant="dark" class="mb-2" style="height: 97%">
+          <template #header>
+            <b-row class="d-flex" no-gutters>
+              <b-colxx class="d-flex justify-content-start" xxs="9">
+                <h3
+                  style="
+                    font-family: 'Nunito', sans-serif;
+                    font-weight: 400;
+                    font-size: 18px;
+                    padding-top: 1rem;
+                  "
+                >
+                  <i class="iconsminds-information"></i>Description
+                </h3>
+              </b-colxx>
+              <b-colxx class="d-flex justify-content-end" xxs="3">
+                <b-button
+                  class="mt-2"
+                  style="height: 71%"
+                  variant="outline-success"
+                  v-b-modal.mainFeaturesModal
+                >
+                  <i class="iconsminds-pen"></i>Edit</b-button
+                >
+              </b-colxx>
+            </b-row>
+          </template>
+        </b-card>
+      </b-colxx>
+    </b-row>
     <!-- <b-row>
       <b-colxx xxs="12">
         <h1>Magdalena Cake</h1>
@@ -208,22 +697,23 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import $ from "jquery";
+import { mapGetters } from "vuex";
 export default {
   name: "PropertyDetails",
   mounted() {
     let uri = window.location.search.substring(1);
     let id = new URLSearchParams(uri);
     this.propertyID = id.get("p");
-    
-    this.propertiesList.forEach(element => {
+
+    this.propertiesList.forEach((element) => {
       if (element.id == this.propertyID) {
         this.details = element;
       }
     });
   },
   computed: {
-    ...mapGetters(['propertiesList'])
+    ...mapGetters(["propertiesList"]),
   },
   data() {
     return {
@@ -240,4 +730,30 @@ export default {
 </script>
 
 <style scoped>
+#custom-row-card {
+  min-width: 250px;
+  flex-grow: 1;
+  margin-bottom: 10px;
+  margin-inline: 15px;
+}
+
+.rowsLbl {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 200;
+  font-size: 12px;
+  color: #717171 !important;
+}
+
+.rowsVal {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 300;
+  font-size: 14px;
+  color: #212121 !important;
+}
+
+h1 {
+  text-transform: uppercase;
+}
 </style>

@@ -163,8 +163,12 @@
           no-caret
         >
           <template slot="button-content">
-            <span class="name mr-1">{{currentUser.title}}</span>
-            <span>
+            <span v-if="currentUser == null" class="mr-1">None</span>
+            <span v-else class="name mr-1">{{currentUser.title}}</span>
+            <span v-if="currentUser == null">
+              <img alt="None" :src="currentUser.img" />
+            </span>
+            <span v-else>
               <img :alt="currentUser.title" :src="currentUser.img" />
             </span>
           </template>

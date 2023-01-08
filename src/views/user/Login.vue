@@ -58,16 +58,16 @@
                 >Forgot Password</router-link
               >
               <b-button
-                :click="formSubmit"
+                :disabled="flag===true"
+                click="formSubmit()"
                 type="submit"
                 variant="primary"
                 size="lg"
-                :disabled="processing"
                 :class="{
                   'btn-multiple-state btn-shadow': true,
-                  'show-spinner': processing,
-                  'show-success': !processing && loginError === false,
-                  'show-fail': !processing && loginError,
+                  'show-spinner': flag===true,
+                  'show-success': !flag && loginError === false,
+                  'show-fail': !flag && loginError,
                 }"
               >
                 <span class="spinner d-inline-block">
@@ -128,7 +128,7 @@ const {
 export default {
   data() {
     return {
-      flag: Boolean,
+      flag: false,
       form: {
         email: "Admin@gmail.com",
         password: "qwerty123456",
@@ -156,9 +156,9 @@ export default {
   methods: {
     ...mapActions(["login"]),
     async formSubmit() {
+      this.flag = true;
       this.$v.$touch();
       this.$v.form.$touch();
-
       if (
         (this.form.email == "example@ex.com") &
         (this.form.password == "xxxxxxx")
@@ -177,6 +177,7 @@ export default {
           email: this.form.email,
           password: this.form.password,
         };
+        this.flag = false;
 
         await axios
           .post(apiUrl + "auth/login", payload)

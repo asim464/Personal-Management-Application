@@ -203,29 +203,31 @@ export default {
   },
   async created() {
     var user = getCurrentUser();
-    var config = {
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    };
-    await axios
-      .get(apiUrl + "agency/findAgency/" + user.agencyID, config)
-      .then((res) => {
-        this.agency = [
-          {
-            id: user.agencyID,
-            name: user.agencyName,
-            Address: {
-              street_number: res.data.Address.street_number,
-              house_number: res.data.Address.house_number,
-              city: res.data.Address.city,
-              country: res.data.Address.country,
-              postal_code: res.data.Address.postal_code,
-              co: res.data.Address.co,
+    if (user.role != UserRole.SuperAdmin) {
+      var config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      await axios
+        .get(apiUrl + "agency/findAgency/" + user.agencyID, config)
+        .then((res) => {
+          this.agency = [
+            {
+              id: user.agencyID,
+              name: user.agencyName,
+              Address: {
+                street_number: res.data.Address.street_number,
+                house_number: res.data.Address.house_number,
+                city: res.data.Address.city,
+                country: res.data.Address.country,
+                postal_code: res.data.Address.postal_code,
+                co: res.data.Address.co,
+              },
             },
-          },
-        ];
-      });
+          ];
+        });
+    }
   },
   async mounted() {
     this.setAgencies();
