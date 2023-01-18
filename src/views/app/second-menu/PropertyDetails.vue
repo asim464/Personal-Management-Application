@@ -322,7 +322,11 @@
                         variant="outline-success"
                         v-b-modal.costsModal
                       >
-                        <i class="iconsminds-pen"></i>Edit</b-button
+                        <i
+                          class="iconsminds-pen"
+                          style="-webkit-columns: 150px 2"
+                        ></i
+                        >Edit</b-button
                       >
                     </b-colxx>
                   </b-row>
@@ -422,6 +426,21 @@
                   </b-colxx>
                 </b-row>
               </template>
+              <b-card-text>
+                <b-row class="ml-2">
+                  <b-col class="rowsLbl" cols="3">Wheelchair access:</b-col>
+                  <b-col
+                    v-if="details.length == 0 || details.furnishingFeature == 0"
+                    cols="6"
+                    ><p class="rowsVal">N/A</p></b-col
+                  >
+                  <b-col v-else
+                    ><p class="rowsVal">
+                      {{ details.furnishingFeature }}
+                    </p></b-col
+                  >
+                </b-row>
+              </b-card-text>
             </b-card>
           </b-colxx>
         </b-row>
@@ -489,7 +508,12 @@
             </b-card>
           </b-colxx>
           <b-colxx xxxs="6">
-            <b-card footer-bg-variant="white" footer-border-variant="light" header-text-variant="dark" class="mb-2">
+            <b-card
+              footer-bg-variant="white"
+              footer-border-variant="light"
+              header-text-variant="dark"
+              class="mb-2"
+            >
               <template #header>
                 <b-row class="d-flex" no-gutters>
                   <b-colxx class="d-flex justify-content-start" xxs="9">
@@ -781,9 +805,13 @@
 <script>
 import $ from "jquery";
 import { mapGetters } from "vuex";
+import axios from "axios";
+import { apiUrl } from "../../../constants/config";
+import { getCurrentUser } from "../../../utils";
 export default {
   name: "PropertyDetails",
   mounted() {
+    let flag = false;
     let uri = window.location.search.substring(1);
     let id = new URLSearchParams(uri);
     this.propertyID = id.get("p");
@@ -791,8 +819,28 @@ export default {
     this.propertiesList.forEach((element) => {
       if (element.id == this.propertyID) {
         this.details = element;
+        flag = true;
       }
     });
+
+    if (flag == false) {
+      var user = getCurrentUser();
+      var config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      this.details = axios
+        .get(apiUrl + "property/" + this.propertyID, config)
+        .then((res) => {
+          if (res.status == 200) {
+            this.details = res.data;
+          }
+        })
+        .catch((err) => {
+          console.log("error");
+        });
+    }
   },
   computed: {
     ...mapGetters(["propertiesList"]),
