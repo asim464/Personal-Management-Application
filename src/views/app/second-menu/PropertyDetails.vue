@@ -803,7 +803,6 @@
 </template>
 
 <script>
-import $ from "jquery";
 import { mapGetters } from "vuex";
 import axios from "axios";
 import { apiUrl } from "../../../constants/config";
