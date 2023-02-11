@@ -22,7 +22,8 @@
       <b-colxx cols="7">
         <b-row>
           <b-colxx cols="6">
-            <b-card header-text-variant="dark" class="mb-2">
+            <property-main-feature :property="details"/>
+            <!-- <b-card header-text-variant="dark" class="mb-2">
               <template #header>
                 <b-row class="d-flex" no-gutters>
                   <b-colxx class="d-flex justify-content-start" xxs="9">
@@ -126,7 +127,7 @@
                   >
                 </b-row>
               </b-card-text>
-            </b-card>
+            </b-card> -->
             <b-card header-text-variant="dark" class="mb-2">
               <template #header>
                 <b-row class="d-flex" no-gutters>
@@ -807,8 +808,12 @@ import { mapGetters } from "vuex";
 import axios from "axios";
 import { apiUrl } from "../../../constants/config";
 import { getCurrentUser } from "../../../utils";
+import PropertyMainFeature from "../../../components/property-details/PropertyMainFeature.vue";
 export default {
   name: "PropertyDetails",
+  components:{
+    "property-main-feature": PropertyMainFeature,
+  },
   mounted() {
     let flag = false;
     let uri = window.location.search.substring(1);
