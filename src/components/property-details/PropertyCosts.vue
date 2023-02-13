@@ -27,26 +27,30 @@
         </b-col>
       </b-row>
     </template>
+    <template v-if="property.price === null">
+      <b-row class="m-1">
+        <h4 @mouseover="isHovering = true" @mouseout="isHovering = false" style="text-align: center; cursor: pointer;">
+          <i class="iconsminds-information" style="align-items:center; display: inline-flex"></i><br />No data available.<br />
+          Click edit button to add data.
+        </h4>
+      </b-row>
+    </template>
+    <template v-else>
     <b-card-text>
       <b-row class="ml-2">
         <b-col class="rowsLbl" cols="6">Type:</b-col>
-        <b-col v-if="property.length == 0 || property.paymentType == 0" cols="6"
-          ><p class="rowsVal">N/A</p></b-col
-        >
-        <b-col v-else
+        <b-col
           ><p class="rowsVal">{{ property.paymentType }}</p></b-col
         >
       </b-row>
       <b-row class="ml-2">
         <b-col class="rowsLbl" cols="6">Price:</b-col>
-        <b-col v-if="property.length == 0 || property.price == 0" cols="6"
-          ><p class="rowsVal">N/A</p></b-col
-        >
-        <b-col v-else
+        <b-col
           ><p class="rowsVal">CHF {{ property.price }}</p></b-col
         >
       </b-row>
     </b-card-text>
+  </template>
   </b-card>
 </template>
 

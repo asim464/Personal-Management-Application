@@ -32,8 +32,13 @@
           :onContextMenuAction="onContextMenuAction"
         ></list-page-listing>
       </template>
-      <template v-else>
+      <template v-else-if="!isLoad & requireReload == false">
         <div class="loading"></div>
+      </template>
+      <template v-else-if="requireReload == true">
+        <div class="loading">
+          <i class="icon-Reload" /><h3>Click here to reload!</h3>
+        </div> 
       </template>
     </b-colxx>
   </b-row>
@@ -69,6 +74,7 @@ export default {
       lastPage: 0,
       items: [],
       selectedItems: [],
+      requireReload: Boolean,
     };
   },
   methods: {
@@ -87,12 +93,33 @@ export default {
           if (res.status == 200) {
             this.items = res.data;
             this.total = this.items.length;
-            console.log(this.items);
             this.isLoad = true;
             this.$store.dispatch("setProperties", this.items);
+            this.requireReload = false;
+            this.$notify(
+              "Success",
+              "Properties listing fetched successfully.",
+              "Code:" + res.status + ", Message:" + res.statusText,
+              {
+                permanent: false,
+                duration: 1000,
+                type: "success",
+              }
+            );
           }
         })
         .catch((err) => {
+          this.$notify(
+            "Error",
+            "Properties listing not available currently.",
+            "Message:" + err,
+            {
+              permanent: false,
+              duration: 1000,
+              type: "error",
+            }
+          );
+          this.requireReload = true;
           console.log("error :", err);
         });
 
@@ -192,10 +219,7 @@ export default {
       }
     },
     onContextMenuAction(action) {
-      console.log(
-        "context menu item clicked - " + action + ": ",
-        this.selectedItems
-      );
+      console.log("context menu item clicked - " + action + ": ", this.selectedItems);
     },
     changePage(pageNum) {
       this.page = pageNum;
@@ -207,8 +231,7 @@ export default {
     },
     isAnyItemSelected() {
       return (
-        this.selectedItems.length > 0 &&
-        this.selectedItems.length < this.items.length
+        this.selectedItems.length > 0 && this.selectedItems.length < this.items.length
       );
     },
     // apiUrl() {

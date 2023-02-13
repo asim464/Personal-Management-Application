@@ -29,6 +29,14 @@
                 <b-badge v-if="(data.status == null)" pill variant="danger">OFFLINE</b-badge>
                 <b-badge v-else-if="(data.status != null)" pill variant="success">{{data.status}}</b-badge>
             </div>
+            <div class="w-15 w-sm-100">
+                <b-button
+                 v-b-modal.modalEditProp
+                 variant="primary"
+                 size="sm"
+                 ><i class="iconsminds-file-edit" style="position: relative;"></i>Edit</b-button>
+                 <edit-prop-modal :property="data" />
+            </div>
         </div>
         <div class="custom-control custom-checkbox pl-1 align-self-center pr-4">
             <b-form-checkbox :checked="selectedItems.includes(data.id)" class="itemCheck mb-0" />
@@ -38,7 +46,12 @@
 </template>
 
 <script>
+import UpdatePropertyModal from '../Form/UpdatePropertyModal.vue';
+
 export default {
+    components: {
+        "edit-prop-modal": UpdatePropertyModal,
+    },
     props: ['data', 'selectedItems'],
     methods: {
         toggleItem(event, itemId) {

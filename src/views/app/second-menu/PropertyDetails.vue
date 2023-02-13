@@ -56,7 +56,6 @@
                       class="mt-2"
                       style="height: min-content"
                       variant="outline-success"
-                      v-b-modal.mainFeaturesModal
                     >
                       <i class="iconsminds-pen"></i>Edit</b-button
                     >
@@ -88,7 +87,6 @@
                       class="mt-2"
                       style="height: min-content"
                       variant="outline-success"
-                      v-b-modal.mainFeaturesModal
                     >
                       <i class="iconsminds-pen"></i>Edit</b-button
                     >
@@ -123,7 +121,6 @@
                       class="mt-2"
                       style="height: min-content"
                       variant="outline-success"
-                      v-b-modal.mainFeaturesModal
                     >
                       <i class="iconsminds-pen"></i>Edit</b-button
                     >
@@ -146,8 +143,8 @@
                   </b-col>
                 </b-row>
                 <b-row>
-                  <b-col class="rowsLbl" xxs="4">IBAN:</b-col>
-                  <b-col xxs="8">why</b-col>
+                  <!-- <b-col class="rowsLbl" xxs="4">IBAN:</b-col>
+                  <b-col xxs="8">why</b-col> -->
                 </b-row>
               </template>
             </b-card>
@@ -175,7 +172,6 @@
                   class="mt-2"
                   style="height: 71%"
                   variant="outline-success"
-                  v-b-modal.mainFeaturesModal
                 >
                   <i class="iconsminds-pen"></i>Edit</b-button
                 >
@@ -198,6 +194,7 @@ import PropertyDetails from "../../../components/property-details/PropertyDetail
 import PropertyCosts from "../../../components/property-details/PropertyCosts.vue"
 import PropertyResponsibleAgent from "../../../components/property-details/PropertyResponsibleAgent.vue";
 import PropertyFeatureDetails from "../../../components/property-details/PropertyFeaturesDetails.vue";
+
 export default {
   name: "PropertyDetails",
   components: {

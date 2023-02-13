@@ -226,7 +226,8 @@ export default {
 
               this.flag ? this.login(item) : this.login(null);
               if (this.flag) {
-                this.$notify("Success", "Login Success", res.status, {
+                this.$notify("Success", "Login Success", "Code:" + res.status + ", Message:" + res.statusText, {
+                  type: "success",
                   duration: 5000,
                   permanent: false,
                 });
@@ -240,6 +241,7 @@ export default {
               "Login Failure! Username or Password Incorrect",
               err,
               {
+                type: "Error",
                 duration: 5000,
                 permanent: true,
               }

@@ -21,25 +21,37 @@
             variant="outline-success"
             v-b-modal.costsModal
           >
-            <i class="iconsminds-pen" ></i
-            >Edit</b-button
+            <i class="iconsminds-pen"></i>Edit</b-button
           >
         </b-col>
       </b-row>
     </template>
-    <b-card-text>
-      <b-row class="ml-2">
-        <b-col class="rowsLbl" cols="6">Agent:</b-col>
-        <b-col
-          v-if="property.length == 0 || property.agentAssigned == 0"
-          cols="6"
-          ><p class="rowsVal">N/A</p></b-col
+    <template v-if="property.price === null">
+      <b-row class="m-1">
+        <h4
+          @mouseover="isHovering = true"
+          @mouseout="isHovering = false"
+          style="text-align: center; cursor: pointer"
         >
-        <b-col v-else
-          ><p class="rowsVal">{{ property.agentAssigned }}</p></b-col
-        >
+          <i
+            class="iconsminds-information"
+            style="align-items: center; display: inline-flex"
+          ></i
+          ><br />No data available.<br />
+          Click edit button to add data.
+        </h4>
       </b-row>
-    </b-card-text>
+    </template>
+    <template v-else>
+      <b-card-text>
+        <b-row class="ml-2">
+          <b-col class="rowsLbl" cols="6">Agent:</b-col>
+          <b-col
+            ><p class="rowsVal">{{ property.agentAssigned }}</p></b-col
+          >
+        </b-row>
+      </b-card-text>
+    </template>
   </b-card>
 </template>
 
@@ -56,5 +68,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

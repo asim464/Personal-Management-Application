@@ -30,7 +30,7 @@
               >&nbsp;</span>
             </label>
             <b-dropdown-item>{{$t('pages.delete')}}</b-dropdown-item>
-            <b-dropdown-item>{{$t('pages.edit')}}</b-dropdown-item>
+            <!-- <b-dropdown-item>{{$t('pages.edit')}}</b-dropdown-item> -->
           </b-dropdown>
         </b-button-group>
       </div>
