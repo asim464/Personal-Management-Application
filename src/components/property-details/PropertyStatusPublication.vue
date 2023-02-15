@@ -14,7 +14,7 @@
             Status and Publication
           </h3>
         </b-col>
-        <b-col class="d-flex justify-content-end" xxs="3">
+        <!-- <b-col class="d-flex justify-content-end" xxs="3">
           <b-button
             class="mt-2"
             style="height: min-content"
@@ -22,7 +22,7 @@
           >
             <i class="iconsminds-pen"></i>Edit</b-button
           >
-        </b-col>
+        </b-col> -->
       </b-row>
     </template>
   </b-card>

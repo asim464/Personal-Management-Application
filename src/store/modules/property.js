@@ -33,7 +33,20 @@ const state = {
       IBAN: null,
       agencyId: 0,
     },
-    owner: null,
+    owner: {
+      id: 0,
+      email: "",
+      password: "",
+      firstName: "",
+      lastName: "",
+      userName: "",
+      roles: "",
+      description: "",
+      status: "",
+      ImageUrl: null,
+      IBAN: null,
+      agencyId: 0,
+    },
     user: {
       id: 0,
       email: "",
@@ -173,7 +186,7 @@ const actions = {
   //         commit("editMFetSelProp", data);
   //         return [
   //           "Success",
-  //           "Main features updated successfully", 
+  //           "Main features updated successfully",
   //           res.status,
   //           {
   //             type: "success",
@@ -181,7 +194,7 @@ const actions = {
   //             duration: 5000,
   //           },
   //         ];
-          
+
   //       } else {
   //         return [
   //           "Error",

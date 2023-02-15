@@ -162,40 +162,46 @@ export default {
       UserRole,
       payment_types,
       agentsList: [],
-      user: {},
+      config: {},
     };
   },
-  mounted() {
-    this.user = getCurrentUser();
+  async mounted() {
+    var user = getCurrentUser();
     this.item.agentId = this.selectedProp.agentId;
-    let tmpList;
-    var config = {
+    var tmpList;
+    var ls= [];
+    this.config = {
       headers: {
-        Authorization: `Bearer ${this.user.token}`,
+        Authorization: `Bearer ${user.token}`,
       },
     };
-    axios
-      .get(apiUrl + "users/findAllAgents", config)
-      .then((res) => {
+    await axios
+      .get(apiUrl + "users/findAllAgents", this.config)
+      .then(async (res) => {
         if (res.status == 200) {
           tmpList = res.data;
-          tmpList.forEach((el) => {
+          console.log(tmpList);
+          await tmpList.forEach((el) => {
             if (el.agencyId == this.item.agencyId) {
               let element = {
                 value: el.id,
                 text: el.firstName + " " + el.lastName,
               };
-              this.agentsList.push(element);
+              console.log(element);
+              ls.push({...element});
             }
           });
+          this.agentsList = {...ls};
+          console.log(ls)
+
           this.$notify("Success", "Fetched company agents.", res.status, {
             type: "success",
             duration: 5000,
             permanent: false,
           });
-          // window.location.reload();
+          
         }
-        if (res.status == 401) {
+        else if (res.status == 401) {
           this.$notify("Error", "Company agents unavailable.", err, {
             type: "error",
             duration: 5000,
@@ -214,15 +220,10 @@ export default {
   },
   methods: {
     updatePropertyAgent() {
-      var config = {
-        headers: {
-          Authorization: `Bearer ${this.user.token}`,
-        },
-      };
       axios
         .patch(
           apiUrl + "property/updateAgent/" + this.item.id + "/" + this.item.agentId,
-          config
+          this.config
         )
         .then((res) => {
           if (res.status == 200) {
