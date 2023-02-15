@@ -27,158 +27,28 @@
           </b-col>
           <b-col cols="6">
             <b-row>
-              <property-cost :property="details"/>
-              <property-responsible-agent :property="details"/>
+              <property-cost :property="details" />
+              <property-responsible-agent :property="details" />
             </b-row>
-            <property-feature-details :property="details"/>
-
+            <property-feature-details :property="details" />
           </b-col>
         </b-row>
         <b-row>
           <b-col style="min-width: 100%">
-            <b-card header-text-variant="dark" class="mb-2">
-              <template #header>
-                <b-row class="d-flex" no-gutters>
-                  <b-col class="d-flex justify-content-start" xxs="9">
-                    <h3
-                      style="
-                        font-family: 'Nunito', sans-serif;
-                        font-weight: 400;
-                        font-size: 18px;
-                        padding-top: 1rem;
-                      "
-                    >
-                      <i class="iconsminds-information"></i>Photos and Documents
-                    </h3>
-                  </b-col>
-                  <b-col class="d-flex justify-content-end" xxs="3">
-                    <b-button
-                      class="mt-2"
-                      style="height: min-content"
-                      variant="outline-success"
-                    >
-                      <i class="iconsminds-pen"></i>Edit</b-button
-                    >
-                  </b-col>
-                </b-row>
-              </template>
-            </b-card>
+            <property-media :property="details" />
           </b-col>
         </b-row>
         <b-row>
           <b-col xxs="6">
-            <b-card header-text-variant="dark" class="mb-2">
-              <template #header>
-                <b-row class="d-flex" no-gutters>
-                  <b-col class="d-flex justify-content-start" xxs="9">
-                    <h3
-                      style="
-                        font-family: 'Nunito', sans-serif;
-                        font-weight: 400;
-                        font-size: 18px;
-                        padding-top: 1rem;
-                      "
-                    >
-                      Status and Publication
-                    </h3>
-                  </b-col>
-                  <b-col class="d-flex justify-content-end" xxs="3">
-                    <b-button
-                      class="mt-2"
-                      style="height: min-content"
-                      variant="outline-success"
-                    >
-                      <i class="iconsminds-pen"></i>Edit</b-button
-                    >
-                  </b-col>
-                </b-row>
-              </template>
-            </b-card>
+            <property-status-publication :property="details" />
           </b-col>
           <b-col xxxs="6">
-            <b-card
-              footer-bg-variant="white"
-              footer-border-variant="light"
-              header-text-variant="dark"
-              class="mb-2"
-            >
-              <template #header>
-                <b-row class="d-flex" no-gutters>
-                  <b-col class="d-flex justify-content-start" xxs="9">
-                    <h3
-                      style="
-                        font-family: 'Nunito', sans-serif;
-                        font-weight: 400;
-                        font-size: 18px;
-                        padding-top: 1rem;
-                      "
-                    >
-                      <i class="iconsminds-profile"></i>Owner
-                    </h3>
-                  </b-col>
-                  <b-col class="d-flex justify-content-end" xxs="3">
-                    <b-button
-                      class="mt-2"
-                      style="height: min-content"
-                      variant="outline-success"
-                    >
-                      <i class="iconsminds-pen"></i>Edit</b-button
-                    >
-                  </b-col>
-                </b-row>
-              </template>
-              <template #footer>
-                <b-row class="d-flex" no-gutters>
-                  <b-col class="d-flex justify-content-start" xxs="9">
-                    <h3
-                      style="
-                        font-family: 'Nunito', sans-serif;
-                        font-weight: 400;
-                        font-size: 18px;
-                        padding-top: 1rem;
-                      "
-                    >
-                      <i class="iconsminds-bank"></i>Bank Information
-                    </h3>
-                  </b-col>
-                </b-row>
-                <b-row>
-                  <!-- <b-col class="rowsLbl" xxs="4">IBAN:</b-col>
-                  <b-col xxs="8">why</b-col> -->
-                </b-row>
-              </template>
-            </b-card>
+            <property-owner :property="details" />
           </b-col>
         </b-row>
       </b-col>
       <b-col cols="5">
-        <b-card header-text-variant="dark" class="mb-2" style="height: 100%">
-          <template #header>
-            <b-row class="d-flex" no-gutters>
-              <b-col class="d-flex justify-content-start" xxs="9">
-                <h3
-                  style="
-                    font-family: 'Nunito', sans-serif;
-                    font-weight: 400;
-                    font-size: 18px;
-                    padding-top: 1rem;
-                  "
-                >
-                  <i class="iconsminds-information"></i>Description
-                </h3>
-              </b-col>
-              <b-col class="d-flex justify-content-end" xxs="3">
-                <b-button
-                  class="mt-2"
-                  style="height: 71%"
-                  variant="outline-success"
-                >
-                  <i class="iconsminds-pen"></i>Edit</b-button
-                >
-              </b-col>
-            </b-row>
-          </template>
-        </b-card>
+        <property-description :property="details" />
       </b-col>
     </b-row>
   </div>
@@ -191,9 +61,13 @@ import { apiUrl } from "../../../constants/config";
 import { getCurrentUser } from "../../../utils";
 import PropertyMainFeature from "../../../components/property-details/PropertyMainFeature.vue";
 import PropertyDetails from "../../../components/property-details/PropertyDetails.vue";
-import PropertyCosts from "../../../components/property-details/PropertyCosts.vue"
+import PropertyCosts from "../../../components/property-details/PropertyCosts.vue";
 import PropertyResponsibleAgent from "../../../components/property-details/PropertyResponsibleAgent.vue";
 import PropertyFeatureDetails from "../../../components/property-details/PropertyFeaturesDetails.vue";
+import PropertyMedia from "../../../components/property-details/PropertyMedia.vue";
+import PropertyOwner from "../../../components/property-details/PropertyOwner.vue";
+import PropertyDescription from "../../../components/property-details/PropertyDescription.vue";
+import PropertyStatusPublication from "../../../components/property-details/PropertyStatusPublication.vue";
 
 export default {
   name: "PropertyDetails",
@@ -202,7 +76,11 @@ export default {
     "property-details": PropertyDetails,
     "property-cost": PropertyCosts,
     "property-responsible-agent": PropertyResponsibleAgent,
-    "property-feature-details":PropertyFeatureDetails,
+    "property-feature-details": PropertyFeatureDetails,
+    "property-media": PropertyMedia,
+    "property-owner": PropertyOwner,
+    "property-description": PropertyDescription,
+    "property-status-publication": PropertyStatusPublication,
   },
   mounted() {
     let flag = false;
