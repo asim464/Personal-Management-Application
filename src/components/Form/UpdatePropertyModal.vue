@@ -67,6 +67,7 @@ import { getCurrentUser } from "../../utils";
 import { apiUrl } from "../../constants/config";
 import { mapGetters } from "vuex";
 import { UserRole } from "../../utils/auth.roles";
+import { payment_types, property_types } from "../../utils/property.consts";
 
 export default {
   name: "UpdatePropertyModal",
@@ -79,8 +80,8 @@ export default {
   data() {
     return {
       UserRole,
-      property_types: [],
-      payment_types: [],
+      payment_types,
+      property_types,
     };
   },
   created() {
@@ -88,19 +89,6 @@ export default {
     if (ur.role != UserRole.SuperAdmin) {
       this.property.agencyID = ur.agencyID;
     }
-    this.property_types = [
-      { value: "House", text: "House" },
-      { value: "Apartment", text: "Apartment" },
-      { value: "Gastronomy", text: "Gastronomy" },
-      { value: "Industrial", text: "Industrial" },
-      { value: "Parking", text: "Parking" },
-      { value: "Garage", text: "Garage" },
-      { value: "Land", text: "Land" },
-    ];
-    this.payment_types = [
-      { value: "Sale", text: "Sale" },
-      { value: "Rent", text: "Rent" },
-    ];
   },
   methods: {
     updateProperty() {

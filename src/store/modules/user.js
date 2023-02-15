@@ -67,7 +67,7 @@ export default {
     signOut({ commit }) {
       setCurrentUser({
         title: "None",
-        role: "None"
+        roles: "None"
       });
       commit("setLogout");
     },

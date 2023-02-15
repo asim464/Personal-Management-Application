@@ -80,14 +80,23 @@ const actions = {
     await axios
       .post(apiUrl + 'users/signup/'+payload.agencyID, payload.user, config)
       .then((res) => {
-        if (res.status == 200) {
+        if (res.status == 201) {
           commit("setProcessingAgent", false);
           commit("createAgent", payload.user);
-          return 200;
+          this.$notify("Success", "New user created successfully", res.status, {
+            type: "success",
+            duration: 5000,
+            permanent: false,
+          });
+          return 201;
         }
       })
       .catch((err) => {
-        console.log(err);
+        this.$notify("Error", "New user could not be created", err, {
+          type: "error",
+          duration: 5000,
+          permanent: false,
+        });
         return 401;
       });
   },

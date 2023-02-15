@@ -3,15 +3,125 @@ import { apiUrl } from "../../constants/config";
 import { getCurrentUser } from "../../utils";
 const state = {
   propertiesList: [],
+  selectedProp: {
+    id: 0,
+    title: "",
+    description: null,
+    type: "",
+    paymentType: "",
+    price: null,
+    agentAssigned: null,
+    createdBy: "",
+    status: null,
+    createdDate: "",
+    updateAt: "",
+    userId: 0,
+    ownerId: null,
+    agentId: null,
+    agencyId: 0,
+    agent: {
+      id: 0,
+      email: "",
+      password: "",
+      firstName: "",
+      lastName: "",
+      userName: "",
+      roles: "",
+      description: "",
+      status: "",
+      ImageUrl: null,
+      IBAN: null,
+      agencyId: 0,
+    },
+    owner: null,
+    user: {
+      id: 0,
+      email: "",
+      password: "",
+      firstName: "",
+      lastName: "",
+      userName: "",
+      roles: "",
+      description: "",
+      status: "",
+      ImageUrl: null,
+      IBAN: null,
+      agencyId: 0,
+    },
+    Address: null,
+    agency: {
+      id: 0,
+      name: "",
+    },
+    image: [
+      {
+        id: 0,
+        url: "",
+        isMain: false,
+        propertyId: 0,
+      },
+    ],
+    mainFeature: {
+      id: 0,
+      Rooms: 0,
+      LeavingSpace: 0,
+      Street: "",
+      ZipCodeOrCity: "",
+      Availibility: "",
+      createdDate: "",
+      updateAt: "",
+      propertyId: 0,
+    },
+    furnishingFeature: {
+      id: 0,
+      wheelChairAcess: false,
+      petsAllowed: false,
+      balcony: false,
+      parkingPlace: false,
+      Fireplace: false,
+      View: false,
+      minergieConstruction: false,
+      newBuilding: false,
+      childFriendly: false,
+      smokingProhibited: false,
+      garage: false,
+      elevator: false,
+      privateWashingMachine: false,
+      quiteNeighbpurhood: false,
+      minergieCertified: false,
+      oldBuilding: false,
+      createdDate: "",
+      updateAt: "",
+      propertyId: 0,
+    },
+    propertyDetail: {
+      id: 0,
+      Floors: 0,
+      numberOfFloors: 0,
+      lotDetailSizeInM2: 0,
+      roomsHeight: 0,
+      yearBuilt: 0,
+      floorSpaceM2: 0,
+      volumeInM3: 0,
+      lastRenovation: 0,
+      createdDate: "",
+      updateAt: "",
+      propertyId: 0,
+    },
+  },
 };
 
 const getters = {
   propertiesList: (state) => state.propertiesList,
+  selectedProp: (state) => state.selectedProp,
 };
 
 const mutations = {
   setAllProperty(state, payload) {
     state.propertiesList = payload;
+  },
+  setSelectedProp(state, payload) {
+    state.selectedProp = payload;
   },
   findProperty(state, payload) {
     state.propertiesList.forEach((element) => {
@@ -20,6 +130,9 @@ const mutations = {
       }
     });
   },
+  // editMFetSelProp(state, payload) {
+  //   state.selectedProp.mainFeatures = payload;
+  // },
   //   createProperty(state, payload) {
   //     state.propertiesList = [...state.propertiesList, payload]
   //   },
@@ -35,10 +148,57 @@ const actions = {
   setProperties({ commit }, payload) {
     commit("setAllProperty", payload);
   },
+  setSelectedProp({ commit }, payload) {
+    commit("setSelectedProp", payload);
+  },
   findProperty({ commit }, payload) {
     let det = commit("findProperty", payload);
     return det;
   },
+  // async updateMFetProp({ commit }, payload) {
+  //   let user = getCurrentUser();
+  //   var config = {
+  //     headers: {
+  //       Authorization: `Bearer ${user.token}`,
+  //     },
+  //   };
+  //   await axios
+  //     .post(
+  //       apiUrl + "property/createMainFeature/" + payload.propertyId,
+  //       payload.mainFeatures,
+  //       config
+  //     )
+  //     .then((res) => {
+  //       if (res.status == 200 || res.status == 201) {
+  //         commit("editMFetSelProp", data);
+  //         return [
+  //           "Success",
+  //           "Main features updated successfully", 
+  //           res.status,
+  //           {
+  //             type: "success",
+  //             permanent: false,
+  //             duration: 5000,
+  //           },
+  //         ];
+          
+  //       } else {
+  //         return [
+  //           "Error",
+  //           "Main features could not be updated",
+  //           res.status,
+  //           {
+  //             type: "error",
+  //             permanent: false,
+  //             duration: 5000,
+  //           },
+  //         ];
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err.response.data);
+  //     })
+  // },
   //   async createProperty({commit},payload) {
   //     commit("setProcessingProperty", true);
   //     let user = getCurrentUser();

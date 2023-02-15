@@ -231,7 +231,9 @@ export default {
                   duration: 5000,
                   permanent: false,
                 });
-                this.$router.push(adminRoot);
+                this.$nextTick(()=>{
+                  this.$router.push(adminRoot);
+                });
               }
             }
           })
@@ -241,7 +243,7 @@ export default {
               "Login Failure! Username or Password Incorrect",
               err,
               {
-                type: "Error",
+                type: "error",
                 duration: 5000,
                 permanent: true,
               }

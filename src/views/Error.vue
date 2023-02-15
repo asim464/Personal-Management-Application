@@ -7,16 +7,16 @@
             <b-colxx xxs="12" md="10" class="mx-auto my-auto">
               <b-card class="auth-card" no-body>
                 <div class="position-relative image-side">
-                  <p class="text-white h2">MAGIC IS IN THE DETAILS</p>
-                  <p class="white mb-0">Yes, it is indeed!</p>
+                  <p class="text-white h2">NOTIFICATION</p>
+                  <p class="white mb-0">Unexpected Error!</p>
                 </div>
                 <div class="form-side">
                   <router-link to="/">
                     <span class="logo-single" />
                   </router-link>
-                  <h6 class="mb-4">{{ $t("pages.error-title") }}</h6>
-                  <p class="mb-0 text-muted text-small mb-0">{{ $t("pages.error-code") }}</p>
-                  <p class="display-1 font-weight-bold mb-5">404</p>
+                  <h6 class="mb-4">Ooops... something's are not where they should be.</h6>
+                  <p class="mb-0 text-muted text-small mb-0">Oops... something went wrong!<br /> Press the button to go back.</p>
+                  <p class="display-1 font-weight-bold mb-5">500</p>
                   <b-button
                     type="submit"
                     variant="primary"
@@ -34,21 +34,18 @@
   </div>
 </template>
 <script>
+import { adminRoot } from '../constants/config';
 import { getCurrentUser } from '../utils';
 import { UserRole } from '../utils/auth.roles';
 export default {
   methods: {
     goBack() {
-      // let ur = getCurrentUser();
-      // if(ur==null) {
-      //   this.$router.push("/user/login");
-      // }
-      // else if (ur.role == UserRole.SuperAdmin) {
-        this.$router.push("/app/piaf/")
-      // }
-      // else if (ur.role == UserRole.Admin) {
-      //   this.$router.push("/app/second-menu/UsersListingView")
-      // }
+      let user = getCurrentUser();
+      if (user.length > 0) {
+        this.$router.push(adminRoot);
+      } else {
+        this.$router.push("/user");
+      }
     },
   },
   mounted: function () {

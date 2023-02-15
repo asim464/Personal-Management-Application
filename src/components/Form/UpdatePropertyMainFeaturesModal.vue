@@ -14,7 +14,6 @@
             :step="1"
             placeholder="Enter the number of rooms"
             v-model="item.Rooms"
-            :formatter="format_number"
             :rows="2"
             :max-rows="2"
           />
@@ -81,11 +80,25 @@
 import axios from "axios";
 import { getCurrentUser } from "../../utils";
 import { apiUrl } from "../../constants/config";
+import { mapGetters } from "vuex";
 
 export default {
   name: "UpdatePropertyMainFeaturesModal",
+  // computed: {
+  //   ...mapGetters[("selectedProp")]
+  // },
   props: {
-    item: {},
+    item: {
+      id: 0,
+      Rooms: 0,
+      LeavingSpace: 0,
+      Street: "",
+      ZipCodeOrCity: "",
+      Availibility: "",
+      createdDate: "",
+      updateAt: "",
+      propertyId: 0,
+    },
   },
   data() {
     return {
@@ -101,72 +114,63 @@ export default {
   methods: {
     async updateFeatures() {
       var features = {
-        "Rooms": this.item.Rooms,
-        "LeavingSpace": this.item.LeavingSpace,
-        "Street": this.item.Street,
-        "ZipCodeOrCity": this.item.ZipCodeOrCity,
-        "Availibility": this.item.Availibility,
+        propertyId: this.item.propertyId,
+        mainFeatures: {
+          Rooms: Number(this.item.Rooms),
+          LeavingSpace: Number(this.item.LeavingSpace),
+          Street: this.item.Street,
+          ZipCodeOrCity: this.item.ZipCodeOrCity,
+          Availibility: this.item.Availibility,
+        },
       };
-      var user = getCurrentUser();
+      let user = getCurrentUser();
       var config = {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      console.log(this.item)
-
+      console.log(features.mainFeatures);
       await axios
-        .post(apiUrl + "property/createMainFeature/" + this.item.propertyId, features, config)
+        .post(
+          apiUrl + "property/createMainFeature/" + features.propertyId,
+          features.mainFeatures,
+          config
+        )
         .then((res) => {
-          if (res.status == 201) {
-            this.$notify(
-              "Success",
-              "Property main features updated successfully!",
-              "Code: " + res.status + ", Message:" + res.statusText,
-              {
-                permanent: false,
-                duration: 1000,
-                type: "success",
-              }
-            );
-            this.hideModal("mainFeaturesModal");
-          } else {
-            this.$notify(
-              "Error",
-              "Property main features could not be updated!",
-              "Code: " + res.status + ", Message:" + res.statusText,
-              {
-                permanent: false,
-                duration: 5000,
-                type: "error",
-              }
-            );
+          if (res.status == 200 || res.status == 201) {
+            this.$notify("Success", "Main features updated successfully", res.status, {
+              type: "success",
+              permanent: false,
+              duration: 5000,
+            });
+            this.hideModal("mainFeaturesModal")
+          } else if (res.status == 400 || res.status == 401) {
+            this.$notify("Error", "Main features could not be updated", res.status, {
+              type: "error",
+              permanent: false,
+              duration: 5000,
+            });
           }
         })
         .catch((err) => {
-          this.$notify("Error", "Property main features updation error!", err, {
-            permanent: false,
-            duration: 5000,
-            type: "error",
-          });
+          console.log(err.response.data);
         });
     },
     hideModal(refname) {
       this.$refs[refname].hide();
     },
-    format_number(e) {
-      if (e > this.validation.max) {
-        return this.validation.max;
-      } else if (e < this.validation.min) {
-        return this.validation.min;
-      } else if (Math.round(e * this.validation.decimal) / this.validation.decimal != e) {
-        return this.last_value;
-      } else {
-        this.last_value = e;
-        return e;
-      }
-    },
-    validateZipnCity() {},
+    // format_number(e) {
+    //   if (e > this.validation.max) {
+    //     return this.validation.max;
+    //   } else if (e < this.validation.min) {
+    //     return this.validation.min;
+    //   } else if (Math.round(e * this.validation.decimal) / this.validation.decimal != e) {
+    //     return this.last_value;
+    //   } else {
+    //     this.last_value = e;
+    //     return e;
+    //   }
+    // },
   },
 };
 </script>

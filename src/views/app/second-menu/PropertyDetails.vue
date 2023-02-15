@@ -2,7 +2,9 @@
   <div>
     <b-row>
       <b-col xxs="12">
-        <h1>{{ details.title }}</h1>
+        <h1>
+          {{ details.title }}
+        </h1>
         <div class="top-right-button-container">
           <b-button
             id="ddown5"
@@ -43,7 +45,7 @@
             <property-status-publication :property="details" />
           </b-col>
           <b-col xxxs="6">
-            <property-owner :property="details" />
+            <!-- <property-owner :property="details" /> -->
           </b-col>
         </b-row>
       </b-col>
@@ -60,12 +62,12 @@ import axios from "axios";
 import { apiUrl } from "../../../constants/config";
 import { getCurrentUser } from "../../../utils";
 import PropertyMainFeature from "../../../components/property-details/PropertyMainFeature.vue";
-import PropertyDetails from "../../../components/property-details/PropertyDetails.vue";
+import PropertyDetailed from "../../../components/property-details/PropertyDetailed.vue";
 import PropertyCosts from "../../../components/property-details/PropertyCosts.vue";
 import PropertyResponsibleAgent from "../../../components/property-details/PropertyResponsibleAgent.vue";
 import PropertyFeatureDetails from "../../../components/property-details/PropertyFeaturesDetails.vue";
 import PropertyMedia from "../../../components/property-details/PropertyMedia.vue";
-import PropertyOwner from "../../../components/property-details/PropertyOwner.vue";
+// import PropertyOwner from "../../../components/property-details/PropertyOwner.vue";
 import PropertyDescription from "../../../components/property-details/PropertyDescription.vue";
 import PropertyStatusPublication from "../../../components/property-details/PropertyStatusPublication.vue";
 
@@ -73,56 +75,163 @@ export default {
   name: "PropertyDetails",
   components: {
     "property-main-feature": PropertyMainFeature,
-    "property-details": PropertyDetails,
+    "property-details": PropertyDetailed,
     "property-cost": PropertyCosts,
     "property-responsible-agent": PropertyResponsibleAgent,
-    "property-feature-details": PropertyFeatureDetails,
+    "property-feature-details":  PropertyFeatureDetails,
     "property-media": PropertyMedia,
-    "property-owner": PropertyOwner,
+    // "property-owner": PropertyOwner,
     "property-description": PropertyDescription,
     "property-status-publication": PropertyStatusPublication,
-  },
-  mounted() {
-    let flag = false;
-    let uri = window.location.search.substring(1);
-    let id = new URLSearchParams(uri);
-    this.propertyID = id.get("p");
-
-    this.propertiesList.forEach((element) => {
-      if (element.id == this.propertyID) {
-        this.details = element;
-        flag = true;
-      }
-    });
-
-    if (flag == false) {
-      var user = getCurrentUser();
-      var config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-      this.details = axios
-        .get(apiUrl + "property/" + this.propertyID, config)
-        .then((res) => {
-          if (res.status == 200) {
-            this.details = res.data;
-          }
-        })
-        .catch((err) => {
-          console.log("error");
-        });
-    }
-  },
-  computed: {
-    ...mapGetters(["propertiesList"]),
   },
   data() {
     return {
       propertyID: Number,
-      details: {},
+      details: {
+        id: 0,
+        title: "",
+        description: null,
+        type: "",
+        paymentType: "",
+        price: null,
+        agentAssigned: null,
+        createdBy: "",
+        status: null,
+        createdDate: "",
+        updateAt: "",
+        userId: 0,
+        ownerId: null,
+        agentId: null,
+        agencyId: 0,
+        agent: {
+          id: 0,
+          email: "",
+          password: "",
+          firstName: "",
+          lastName: "",
+          userName: "",
+          roles: "",
+          description: "",
+          status: "",
+          ImageUrl: null,
+          IBAN: null,
+          agencyId: 0,
+        },
+        owner: null,
+        user: {
+          id: 0,
+          email: "",
+          password: "",
+          firstName: "",
+          lastName: "",
+          userName: "",
+          roles: "",
+          description: "",
+          status: "",
+          ImageUrl: null,
+          IBAN: null,
+          agencyId: 0,
+        },
+        Address: null,
+        agency: {
+          id: 0,
+          name: "",
+        },
+        image: [
+          {
+            id: 0,
+            url: "",
+            isMain: false,
+            propertyId: 0,
+          },
+        ],
+        mainFeature: {
+          id: 0,
+          Rooms: 0,
+          LeavingSpace: 0,
+          Street: "",
+          ZipCodeOrCity: "",
+          Availibility: "",
+          createdDate: "",
+          updateAt: "",
+          propertyId: 0,
+        },
+        furnishingFeature: {
+          id: 0,
+          wheelChairAcess: false,
+          petsAllowed: false,
+          balcony: false,
+          parkingPlace: false,
+          Fireplace: false,
+          View: false,
+          minergieConstruction: false,
+          newBuilding: false,
+          childFriendly: false,
+          smokingProhibited: false,
+          garage: false,
+          elevator: false,
+          privateWashingMachine: false,
+          quiteNeighbpurhood: false,
+          minergieCertified: false,
+          oldBuilding: false,
+          createdDate: "",
+          updateAt: "",
+          propertyId: 0,
+        },
+        propertyDetail: {
+          id: 0,
+          Floors: 0,
+          numberOfFloors: 0,
+          lotDetailSizeInM2: 0,
+          roomsHeight: 0,
+          yearBuilt: 0,
+          floorSpaceM2: 0,
+          volumeInM3: 0,
+          lastRenovation: 0,
+          createdDate: "",
+          updateAt: "",
+          propertyId: 0,
+        },
+      },
     };
   },
+  async mounted() {
+    let uri = window.location.search.substring(1);
+    let id = new URLSearchParams(uri);
+    this.propertyID = id.get("p");
+
+    var user = getCurrentUser();
+    var config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    this.details = await axios
+      .get(apiUrl + "property/" + this.propertyID, config)
+      .then((res) => {
+        if (res.status == 200) {
+          this.details = res.data;
+          this.$store.dispatch("setSelectedProp", this.details);
+          this.$notify("success", "Property data fetched successfully", res.status, {
+            type: "success",
+            duration: 5000,
+            permanent: false,
+          });
+        } else {
+          this.$notify("success", "Property data fetched successfully", res.status, {
+            type: "success",
+            duration: 5000,
+            permanent: false,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("error");
+      });
+  },
+  // computed: {
+  //   ...mapGetters(["selectedProp"]),
+  // },
   methods: {
     navigateBack() {
       this.$router.push("/app/second-menu/PropertiesListing");

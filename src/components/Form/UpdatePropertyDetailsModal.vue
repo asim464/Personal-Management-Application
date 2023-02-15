@@ -9,11 +9,9 @@
       <b-form>
         <b-form-group label="Floor">
           <b-form-input
+            v-model="item.Floors"
             type="number"
             min="0"
-            :step="0.5"
-            v-model="item.floor"
-            :formatter="format_number"
             :rows="2"
             :max-rows="2"
           />
@@ -94,6 +92,16 @@
           </b-input-group>
         </b-form-group>
         <b-form-group label="Last renovation">
+          <b-form-input
+            v-model="item.lastRenovation"
+            type="number"
+            min="1800"
+            step="1"
+            :rows="2"
+            :max-rows="2"
+          />
+        </b-form-group>
+        <!-- <b-form-group label="Last renovation">
           <vuejs-datepicker
             v-model="defaultDate"
             :format="DatePickerFormat"
@@ -102,7 +110,7 @@
             input-class="input-dt"
             wrapper-class="input-box"
           ></vuejs-datepicker>
-        </b-form-group>
+        </b-form-group> -->
       </b-form>
 
       <template slot="modal-footer">
@@ -126,43 +134,56 @@ import vuejsDatepicker from "vuejs-datepicker";
 export default {
   name: "UpdatePropertyDetailsModal",
   props: {
-    item: {},
+    item: {
+      id: 0,
+      Floors: 0,
+      numberOfFloors: 0,
+      lotDetailSizeInM2: 0,
+      roomsHeight: 0,
+      yearBuilt: 0,
+      floorSpaceM2: 0,
+      volumeInM3: 0,
+      lastRenovation: 0,
+      createdDate: "",
+      updateAt: "",
+      propertyId: 0,
+    },
   },
   components: {
     "vuejs-datepicker": vuejsDatepicker,
   },
   data() {
     return {
-      last_value: 0,
-      validation: [
-        {
-          min: 0,
-          max: 10,
-          decimal: 10,
-        },
-        {
-          min: 1000,
-          max: 3000,
-          decimal: 10,
-        },
-      ],
-      defaultDate: "2023-01-01",
-      DatePickerFormat: "yyyy",
+      // last_value: 0,
+      // validation: [
+      //   {
+      //     min: 0,
+      //     max: 10,
+      //     decimal: 10,
+      //   },
+      //   {
+      //     min: 1000,
+      //     max: 3000,
+      //     decimal: 10,
+      //   },
+      // ],
+      // defaultDate: "2023-01-01",
+      // DatePickerFormat: "yyyy",
     };
   },
   methods: {
     async updateDetails() {
-      let date = this.defaultDate.getFullYear();
-      this.item.lastRenovation = Number(date);
+      // let date = this.defaultDate.getFullYear();
+      // this.item.lastRenovation = Number(date);
       let features = {
-        Floors: this.item.Floors,
-        numberOfFloors: this.item.numberOfFloors,
-        lotDetailSizeInM2: this.item.lotDetailSizeInM2,
-        roomsHeight: this.item.roomsHeight,
-        yearBuilt: this.item.yearBuilt,
-        floorSpaceM2: this.item.floorSpaceM2,
-        volumeInM3: this.item.volumeInM3,
-        lastRenovation: Number(date),
+        Floors: Number(this.item.Floors),
+        numberOfFloors: Number(this.item.numberOfFloors),
+        lotDetailSizeInM2: Number(this.item.lotDetailSizeInM2),
+        roomsHeight: Number(this.item.roomsHeight),
+        yearBuilt: Number(this.item.yearBuilt),
+        floorSpaceM2: Number(this.item.floorSpaceM2),
+        volumeInM3: Number(this.item.volumeInM3),
+        lastRenovation: Number(this.item.lastRenovation),
       };
 
       var user = getCurrentUser();
@@ -172,60 +193,98 @@ export default {
         },
       };
 
-      await axios
-        .patch(apiUrl + "details/" + this.item.propertyId, features, config)
-        .then((res) => {
-          if (res.status == 201) {
-            this.$notify(
-              "Success",
-              "Property details updated successfully!",
-              "Code: " + res.status + ", Message:" + res.statusText,
-              {
-                permanent: false,
-                duration: 1000,
-                type: "success",
-              }
-            );
-            this.hideModal("propertyDetailsModal");
-          } else {
-            this.$notify(
-              "Error",
-              "Property details could not be updated!",
-              "Code: " + res.status + ", Message:" + res.statusText,
-              {
-                permanent: false,
-                duration: 5000,
-                type: "error",
-              }
-            );
-          }
-        })
-        .catch((err) => {
-          this.$notify("Error", "Property details updation error!", err, {
-            permanent: false,
-            duration: 5000,
-            type: "error",
+      if (this.item.id == 0) {
+        await axios
+          .post(apiUrl + "details/" + this.item.propertyId, features, config)
+          .then((res) => {
+            if (res.status == 200 || res.status == 201) {
+              this.$notify(
+                "Success",
+                "Property details updated successfully!",
+                "Code: " + res.status + ", Message:" + res.statusText,
+                {
+                  permanent: false,
+                  duration: 1000,
+                  type: "success",
+                }
+              );
+              this.hideModal("propertyDetailsModal");
+            } else {
+              this.$notify(
+                "Error",
+                "Property details could not be updated!",
+                "Code: " + res.status + ", Message:" + res.statusText,
+                {
+                  permanent: false,
+                  duration: 5000,
+                  type: "error",
+                }
+              );
+            }
+          })
+          .catch((err) => {
+            this.$notify("Error", "Property details updation error!", err, {
+              permanent: false,
+              duration: 5000,
+              type: "error",
+            });
           });
-        });
+      } else {
+        await axios
+          .patch(apiUrl + "details/" + this.item.propertyId, features, config)
+          .then((res) => {
+            if (res.status == 200 || res.status == 201) {
+              this.$notify(
+                "Success",
+                "Property details updated successfully!",
+                "Code: " + res.status + ", Message:" + res.statusText,
+                {
+                  permanent: false,
+                  duration: 5000,
+                  type: "success",
+                }
+              );
+              this.hideModal("propertyDetailsModal");
+            } else {
+              this.$notify(
+                "Error",
+                "Property details could not be updated!",
+                "Code: " + res.status + ", Message:" + res.statusText,
+                {
+                  permanent: false,
+                  duration: 5000,
+                  type: "error",
+                }
+              );
+            }
+          })
+          .catch((err) => {
+            this.$notify("Error", "Property details updation error!", err, {
+              permanent: false,
+              duration: 5000,
+              type: "error",
+            });
+          });
+      }
     },
     hideModal(refname) {
       this.$refs[refname].hide();
     },
-    format_number(e) {
-      if (e > this.validation[0].max) {
-        return this.validation[0].max;
-      } else if (e < this.validation[0].min) {
-        return this.validation[0].min;
-      } else if (
-        Math.round(e * this.validation[0].decimal) / this.validation[0].decimal !=
-        e
-      ) {
-        return this.last_value;
-      } else {
-        this.last_value = e;
-        return e;
-      }
-    },
+    // format_number(e) {
+    //   if (e > this.validation[0].max) {
+    //     return this.validation[0].max;
+    //   } else if (e < this.validation[0].min) {
+    //     return this.validation[0].min;
+    //   } else if (
+    //     Math.round(e * this.validation[0].decimal) / this.validation[0].decimal !=
+    //     e
+    //   ) {
+    //     return this.last_value;
+    //   } else {
+    //     this.last_value = e;
+    //     return e;
+    //   }
+    // },
   },
 };
 </script>

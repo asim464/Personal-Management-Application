@@ -8,19 +8,11 @@
     >
       <b-form>
         <b-form-group label="Agency">
-          <b-form-select
+          <b-form-input
             v-if="currentUser.role == UserRole.Admin"
-            v-model="newItem.agencyID"
+            :placeholder="currentUser.agencyName"
             disabled
-          >
-            <b-form-select-option
-              v-for="agency in agenciesList"
-              :key="agency.id"
-              :value="newItem.agencyID"
-              disabled
-              >{{ currentUser.agencyName }}</b-form-select-option
-            >
-          </b-form-select>
+          ></b-form-input>
           <b-form-select
             v-else-if="currentUser.role == UserRole.SuperAdmin"
             v-model="newItem.agencyID"
@@ -80,10 +72,21 @@
         <b-form-group label="Role">
           <b-form-select
             v-model="newItem.user.roles"
-            :options="roles"
             :rows="2"
             :max-rows="2"
-          ></b-form-select>
+          >
+          <template #first>
+              <b-form-select-option value="" default disabled
+                >-- Please select an option --</b-form-select-option
+              >
+            </template>
+            <b-form-select-option
+              v-for="role in roles"
+              :key="role.value"
+              :value="role.value"
+              >{{ role.text }}</b-form-select-option
+            >
+          </b-form-select>
         </b-form-group>
       </b-form>
 
@@ -111,6 +114,7 @@ export default {
   },
   async created() {
     let ur = getCurrentUser();
+    this.newItem.agencyID = ur.agencyID;
     if (ur.role == UserRole.SuperAdmin) {
       this.roles = [
         { value: "Admin", text: "Admin" },
