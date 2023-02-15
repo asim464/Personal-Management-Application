@@ -45,7 +45,7 @@
             <property-status-publication :property="details" />
           </b-col>
           <b-col xxxs="6">
-            <!-- <property-owner :property="details" /> -->
+            <property-owner :property="details" />
           </b-col>
         </b-row>
       </b-col>
@@ -67,7 +67,7 @@ import PropertyCosts from "../../../components/property-details/PropertyCosts.vu
 import PropertyResponsibleAgent from "../../../components/property-details/PropertyResponsibleAgent.vue";
 import PropertyFeatureDetails from "../../../components/property-details/PropertyFeaturesDetails.vue";
 import PropertyMedia from "../../../components/property-details/PropertyMedia.vue";
-// import PropertyOwner from "../../../components/property-details/PropertyOwner.vue";
+import PropertyOwner from "../../../components/property-details/PropertyOwner.vue";
 import PropertyDescription from "../../../components/property-details/PropertyDescription.vue";
 import PropertyStatusPublication from "../../../components/property-details/PropertyStatusPublication.vue";
 
@@ -80,7 +80,7 @@ export default {
     "property-responsible-agent": PropertyResponsibleAgent,
     "property-feature-details":  PropertyFeatureDetails,
     "property-media": PropertyMedia,
-    // "property-owner": PropertyOwner,
+    "property-owner": PropertyOwner,
     "property-description": PropertyDescription,
     "property-status-publication": PropertyStatusPublication,
   },
