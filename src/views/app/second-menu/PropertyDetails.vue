@@ -24,43 +24,52 @@
       <b-col cols="7">
         <b-row>
           <b-col cols="6">
-            <property-main-feature :property="details" />
-            <property-details :property="details" />
+            <property-main-feature
+              :property="details"
+              @getProperty="getProperty"
+            />
+            <property-details :property="details" @getProperty="getProperty" />
           </b-col>
           <b-col cols="6">
             <b-row>
-              <property-cost :property="details" />
-              <property-responsible-agent :property="details" />
+              <property-cost :property="details" @getProperty="getProperty" />
+              <property-responsible-agent
+                :property="details"
+                @getProperty="getProperty"
+              />
             </b-row>
-            <property-feature-details :property="details" />
+            <property-feature-details
+              :property="details"
+              @getProperty="getProperty"
+            />
           </b-col>
         </b-row>
         <b-row>
           <b-col style="min-width: 100%">
-            <property-media :property="details" />
+            <property-media :property="details" @getProperty="getProperty" />
           </b-col>
         </b-row>
         <b-row>
           <b-col xxs="6">
-            <property-status-publication :property="details" />
+            <property-status-publication
+              :property="details"
+              @getProperty="getProperty"
+            />
           </b-col>
           <b-col xxxs="6">
-            <property-owner :property="details" />
+            <property-owner :property="details" @getProperty="getProperty" />
           </b-col>
         </b-row>
       </b-col>
       <b-col cols="5">
-        <property-description :property="details" />
+        <property-description :property="details" @getProperty="getProperty" />
       </b-col>
     </b-row>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import axios from "axios";
-import { apiUrl } from "../../../constants/config";
-import { getCurrentUser } from "../../../utils";
+import { mapGetters , mapActions } from "vuex";
 import PropertyMainFeature from "../../../components/property-details/PropertyMainFeature.vue";
 import PropertyDetailed from "../../../components/property-details/PropertyDetailed.vue";
 import PropertyCosts from "../../../components/property-details/PropertyCosts.vue";
@@ -87,168 +96,46 @@ export default {
   data() {
     return {
       propertyID: Number,
-      details: {
-        id: 0,
-        title: "",
-        description: null,
-        type: "",
-        paymentType: "",
-        price: null,
-        agentAssigned: null,
-        createdBy: "",
-        status: null,
-        createdDate: "",
-        updateAt: "",
-        userId: 0,
-        ownerId: null,
-        agentId: null,
-        agencyId: 0,
-        agent: {
-          id: 0,
-          email: "",
-          password: "",
-          firstName: "",
-          lastName: "",
-          userName: "",
-          roles: "",
-          description: "",
-          status: "",
-          ImageUrl: null,
-          IBAN: null,
-          agencyId: 0,
-        },
-        owner: {
-          id: 0,
-          email: "",
-          password: "",
-          firstName: "",
-          lastName: "",
-          userName: "",
-          roles: "",
-          description: "",
-          status: "",
-          ImageUrl: null,
-          IBAN: null,
-          agencyId: 0,
-        },
-        user: {
-          id: 0,
-          email: "",
-          password: "",
-          firstName: "",
-          lastName: "",
-          userName: "",
-          roles: "",
-          description: "",
-          status: "",
-          ImageUrl: null,
-          IBAN: null,
-          agencyId: 0,
-        },
-        Address: null,
-        agency: {
-          id: 0,
-          name: "",
-        },
-        image: [
-          {
-            id: 0,
-            url: "",
-            isMain: false,
-            propertyId: 0,
-          },
-        ],
-        mainFeature: {
-          id: 0,
-          Rooms: 0,
-          LeavingSpace: 0,
-          Street: "",
-          ZipCodeOrCity: "",
-          Availibility: "",
-          createdDate: "",
-          updateAt: "",
-          propertyId: 0,
-        },
-        furnishingFeature: {
-          id: 0,
-          wheelChairAcess: false,
-          petsAllowed: false,
-          balcony: false,
-          parkingPlace: false,
-          Fireplace: false,
-          View: false,
-          minergieConstruction: false,
-          newBuilding: false,
-          childFriendly: false,
-          smokingProhibited: false,
-          garage: false,
-          elevator: false,
-          privateWashingMachine: false,
-          quiteNeighbpurhood: false,
-          minergieCertified: false,
-          oldBuilding: false,
-          createdDate: "",
-          updateAt: "",
-          propertyId: 0,
-        },
-        propertyDetail: {
-          id: 0,
-          Floors: 0,
-          numberOfFloors: 0,
-          lotDetailSizeInM2: 0,
-          roomsHeight: 0,
-          yearBuilt: 0,
-          floorSpaceM2: 0,
-          volumeInM3: 0,
-          lastRenovation: 0,
-          createdDate: "",
-          updateAt: "",
-          propertyId: 0,
-        },
-      },
+      details: {},
     };
   },
   async mounted() {
-    let uri = window.location.search.substring(1);
-    let id = new URLSearchParams(uri);
-    this.propertyID = id.get("p");
-
-    var user = getCurrentUser();
-    var config = {
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    };
-    this.details = await axios
-      .get(apiUrl + "property/" + this.propertyID, config)
-      .then((res) => {
-        if (res.status == 200) {
-          this.details = res.data;
-          this.$store.dispatch("setSelectedProp", this.details);
-          this.$notify("success", "Property data fetched successfully", res.status, {
-            type: "success",
-            duration: 5000,
-            permanent: false,
-          });
-        } else {
-          this.$notify("success", "Property data fetched successfully", res.status, {
-            type: "success",
-            duration: 5000,
-            permanent: false,
-          });
-        }
-      })
-      .catch((err) => {
-        console.log("error");
-      });
+    this.getProperty();
   },
-  // computed: {
-  //   ...mapGetters(["selectedProp"]),
-  // },
   methods: {
+    ...mapActions({
+      getPropertyById : "getPropertyById"
+    }),
     navigateBack() {
       this.$router.push("/app/second-menu/PropertiesListing");
     },
+    async getProperty() {
+      let uri = window.location.search.substring(1);
+      let id = new URLSearchParams(uri);
+      this.propertyID = id.get("p");
+
+      const res  = await this.getPropertyById({
+        pk:this.propertyID,
+        config: this.config,
+      });
+
+      if (res.status == 200) {
+            this.details = res.data;
+            this.$notify(
+              "success",
+              "Property data fetched successfully",
+              res.status,
+              {
+                type: "success",
+                duration: 5000,
+                permanent: false,
+              }
+            );
+          }
+    },
+  },
+  computed: {
+    ...mapGetters(["config"]),
   },
 };
 </script>
