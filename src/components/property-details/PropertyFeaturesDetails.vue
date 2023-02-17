@@ -23,15 +23,17 @@
           >
             <i class="iconsminds-pen"></i>Edit</b-button
           >
-          <edit-furnishing-modal
+          <!-- <edit-furnishing-modal
             :item="
-              property.furnishingFeature == null ? ffObj : property.furnishingFeature
+              property.furnishingFeature == null
+                ? ffObj
+                : property.furnishingFeature
             "
-          />
+          /> -->
         </b-col>
       </b-row>
     </template>
-    <template v-if="property.furnishingFeature === null">
+    <template v-if="!furnishingFeature">
       <b-row class="m-1">
         <h4
           @mouseover="isHovering = true"
@@ -56,9 +58,17 @@
               <i
                 class="simple-icon-check"
                 v-bind:style="[
-                  property.furnishingFeature.wheelChairAcess == true
-                    ? { color: 'green', 'font-size': 'x-large', 'font-weight': '900' }
-                    : { color: 'gray', 'font-size': 'x-large', 'font-weight': '900' },
+                  furnishingFeature.wheelChairAcess == true
+                    ? {
+                        color: 'green',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      }
+                    : {
+                        color: 'gray',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      },
                 ]"
               ></i></p
           ></b-col>
@@ -68,9 +78,17 @@
               <i
                 class="simple-icon-check"
                 v-bind:style="[
-                  property.furnishingFeature.petsAllowed == true
-                    ? { color: 'green', 'font-size': 'x-large', 'font-weight': '900' }
-                    : { color: 'gray', 'font-size': 'x-large', 'font-weight': '900' },
+                  furnishingFeature.petsAllowed == true
+                    ? {
+                        color: 'green',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      }
+                    : {
+                        color: 'gray',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      },
                 ]"
               ></i></p
           ></b-col>
@@ -82,9 +100,17 @@
               <i
                 class="simple-icon-check"
                 v-bind:style="[
-                  property.furnishingFeature.balcony == true
-                    ? { color: 'green', 'font-size': 'x-large', 'font-weight': '900' }
-                    : { color: 'gray', 'font-size': 'x-large', 'font-weight': '900' },
+                  furnishingFeature.balcony == true
+                    ? {
+                        color: 'green',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      }
+                    : {
+                        color: 'gray',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      },
                 ]"
               ></i></p
           ></b-col>
@@ -94,9 +120,17 @@
               <i
                 class="simple-icon-check"
                 v-bind:style="[
-                  property.furnishingFeature.parkingPlace == true
-                    ? { color: 'green', 'font-size': 'x-large', 'font-weight': '900' }
-                    : { color: 'gray', 'font-size': 'x-large', 'font-weight': '900' },
+                  furnishingFeature.parkingPlace == true
+                    ? {
+                        color: 'green',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      }
+                    : {
+                        color: 'gray',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      },
                 ]"
               ></i></p
           ></b-col>
@@ -108,9 +142,17 @@
               <i
                 class="simple-icon-check"
                 v-bind:style="[
-                  property.furnishingFeature.Fireplace == true
-                    ? { color: 'green', 'font-size': 'x-large', 'font-weight': '900' }
-                    : { color: 'gray', 'font-size': 'x-large', 'font-weight': '900' },
+                  furnishingFeature.Fireplace == true
+                    ? {
+                        color: 'green',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      }
+                    : {
+                        color: 'gray',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      },
                 ]"
               ></i></p
           ></b-col>
@@ -120,9 +162,17 @@
               <i
                 class="simple-icon-check"
                 v-bind:style="[
-                  property.furnishingFeature.View == true
-                    ? { color: 'green', 'font-size': 'x-large', 'font-weight': '900' }
-                    : { color: 'gray', 'font-size': 'x-large', 'font-weight': '900' },
+                  furnishingFeature.View == true
+                    ? {
+                        color: 'green',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      }
+                    : {
+                        color: 'gray',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      },
                 ]"
               ></i></p
           ></b-col>
@@ -134,9 +184,17 @@
               <i
                 class="simple-icon-check"
                 v-bind:style="[
-                  property.furnishingFeature.minergieConstruction == true
-                    ? { color: 'green', 'font-size': 'x-large', 'font-weight': '900' }
-                    : { color: 'gray', 'font-size': 'x-large', 'font-weight': '900' },
+                  furnishingFeature.minergieConstruction == true
+                    ? {
+                        color: 'green',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      }
+                    : {
+                        color: 'gray',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      },
                 ]"
               ></i></p
           ></b-col>
@@ -146,9 +204,17 @@
               <i
                 class="simple-icon-check"
                 v-bind:style="[
-                  property.furnishingFeature.newBuilding == true
-                    ? { color: 'green', 'font-size': 'x-large', 'font-weight': '900' }
-                    : { color: 'gray', 'font-size': 'x-large', 'font-weight': '900' },
+                  furnishingFeature.newBuilding == true
+                    ? {
+                        color: 'green',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      }
+                    : {
+                        color: 'gray',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      },
                 ]"
               ></i></p
           ></b-col>
@@ -160,9 +226,17 @@
               <i
                 class="simple-icon-check"
                 v-bind:style="[
-                  property.furnishingFeature.childFriendly == true
-                    ? { color: 'green', 'font-size': 'x-large', 'font-weight': '900' }
-                    : { color: 'gray', 'font-size': 'x-large', 'font-weight': '900' },
+                  furnishingFeature.childFriendly == true
+                    ? {
+                        color: 'green',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      }
+                    : {
+                        color: 'gray',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      },
                 ]"
               ></i></p
           ></b-col>
@@ -172,9 +246,17 @@
               <i
                 class="simple-icon-check"
                 v-bind:style="[
-                  property.furnishingFeature.smokingProhibited == true
-                    ? { color: 'green', 'font-size': 'x-large', 'font-weight': '900' }
-                    : { color: 'gray', 'font-size': 'x-large', 'font-weight': '900' },
+                  furnishingFeature.smokingProhibited == true
+                    ? {
+                        color: 'green',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      }
+                    : {
+                        color: 'gray',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      },
                 ]"
               ></i></p
           ></b-col>
@@ -186,9 +268,17 @@
               <i
                 class="simple-icon-check"
                 v-bind:style="[
-                  property.furnishingFeature.garage == true
-                    ? { color: 'green', 'font-size': 'x-large', 'font-weight': '900' }
-                    : { color: 'gray', 'font-size': 'x-large', 'font-weight': '900' },
+                  furnishingFeature.garage == true
+                    ? {
+                        color: 'green',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      }
+                    : {
+                        color: 'gray',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      },
                 ]"
               ></i></p
           ></b-col>
@@ -198,9 +288,17 @@
               <i
                 class="simple-icon-check"
                 v-bind:style="[
-                  property.furnishingFeature.elevator == true
-                    ? { color: 'green', 'font-size': 'x-large', 'font-weight': '900' }
-                    : { color: 'gray', 'font-size': 'x-large', 'font-weight': '900' },
+                  furnishingFeature.elevator == true
+                    ? {
+                        color: 'green',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      }
+                    : {
+                        color: 'gray',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      },
                 ]"
               ></i></p
           ></b-col>
@@ -212,9 +310,17 @@
               <i
                 class="simple-icon-check"
                 v-bind:style="[
-                  property.furnishingFeature.privateWashingMachine == true
-                    ? { color: 'green', 'font-size': 'x-large', 'font-weight': '900' }
-                    : { color: 'gray', 'font-size': 'x-large', 'font-weight': '900' },
+                  furnishingFeature.privateWashingMachine == true
+                    ? {
+                        color: 'green',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      }
+                    : {
+                        color: 'gray',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      },
                 ]"
               ></i></p
           ></b-col>
@@ -224,9 +330,17 @@
               <i
                 class="simple-icon-check"
                 v-bind:style="[
-                  property.furnishingFeature.quiteNeighbpurhood == true
-                    ? { color: 'green', 'font-size': 'x-large', 'font-weight': '900' }
-                    : { color: 'gray', 'font-size': 'x-large', 'font-weight': '900' },
+                  furnishingFeature.quiteNeighbpurhood == true
+                    ? {
+                        color: 'green',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      }
+                    : {
+                        color: 'gray',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      },
                 ]"
               ></i></p
           ></b-col>
@@ -238,9 +352,17 @@
               <i
                 class="simple-icon-check"
                 v-bind:style="[
-                  property.furnishingFeature.minergieCertified == true
-                    ? { color: 'green', 'font-size': 'x-large', 'font-weight': '900' }
-                    : { color: 'gray', 'font-size': 'x-large', 'font-weight': '900' },
+                  furnishingFeature.minergieCertified == true
+                    ? {
+                        color: 'green',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      }
+                    : {
+                        color: 'gray',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      },
                 ]"
               ></i></p
           ></b-col>
@@ -250,9 +372,17 @@
               <i
                 class="simple-icon-check"
                 v-bind:style="[
-                  property.furnishingFeature.oldBuilding == true
-                    ? { color: 'green', 'font-size': 'x-large', 'font-weight': '900' }
-                    : { color: 'gray', 'font-size': 'x-large', 'font-weight': '900' },
+                  furnishingFeature.oldBuilding == true
+                    ? {
+                        color: 'green',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      }
+                    : {
+                        color: 'gray',
+                        'font-size': 'x-large',
+                        'font-weight': '900',
+                      },
                 ]"
               ></i></p
           ></b-col>
@@ -263,154 +393,26 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import UpdatePropertyFeaturesNFurnishingModal from "../Form/UpdatePropertyFeaturesNFurnishingModal.vue";
 
 export default {
   name: "PropertyFeatureDetails",
-  computed: {
-    ...mapGetters(["selectedProp"]),
-  },
   components: {
     "edit-furnishing-modal": UpdatePropertyFeaturesNFurnishingModal,
   },
   props: {
-    property: {
-      id: 0,
-      title: "",
-      description: null,
-      type: "",
-      paymentType: "",
-      price: null,
-      agentAssigned: null,
-      createdBy: "",
-      status: null,
-      createdDate: "",
-      updateAt: "",
-      userId: 0,
-      ownerId: null,
-      agentId: null,
-      agencyId: 0,
-      agent: {
-        id: 0,
-        email: "",
-        password: "",
-        firstName: "",
-        lastName: "",
-        userName: "",
-        roles: "",
-        description: "",
-        status: "",
-        ImageUrl: null,
-        IBAN: null,
-        agencyId: 0,
-      },
-      owner: null,
-      user: {
-        id: 0,
-        email: "",
-        password: "",
-        firstName: "",
-        lastName: "",
-        userName: "",
-        roles: "",
-        description: "",
-        status: "",
-        ImageUrl: null,
-        IBAN: null,
-        agencyId: 0,
-      },
-      Address: null,
-      agency: {
-        id: 0,
-        name: "",
-      },
-      image: [
-        {
-          id: 0,
-          url: "",
-          isMain: false,
-          propertyId: 0,
-        },
-      ],
-      mainFeature: {
-        id: 0,
-        Rooms: 0,
-        LeavingSpace: 0,
-        Street: "",
-        ZipCodeOrCity: "",
-        Availibility: "",
-        createdDate: "",
-        updateAt: "",
-        propertyId: 0,
-      },
-      furnishingFeature: {
-        id: 0,
-        wheelChairAcess: false,
-        petsAllowed: false,
-        balcony: false,
-        parkingPlace: false,
-        Fireplace: false,
-        View: false,
-        minergieConstruction: false,
-        newBuilding: false,
-        childFriendly: false,
-        smokingProhibited: false,
-        garage: false,
-        elevator: false,
-        privateWashingMachine: false,
-        quiteNeighbpurhood: false,
-        minergieCertified: false,
-        oldBuilding: false,
-        createdDate: "",
-        updateAt: "",
-        propertyId: 0,
-      },
-      propertyDetail: {
-        id: 0,
-        Floors: 0,
-        numberOfFloors: 0,
-        lotDetailSizeInM2: 0,
-        roomsHeight: 0,
-        yearBuilt: 0,
-        floorSpaceM2: 0,
-        volumeInM3: 0,
-        lastRenovation: 0,
-        createdDate: "",
-        updateAt: "",
-        propertyId: 0,
-      },
-    },
+    property: Object,
   },
   data() {
     return {
       isHovering: false,
-      ffObj: {
-        id: 0,
-        wheelChairAcess: false,
-        petsAllowed: false,
-        balcony: false,
-        parkingPlace: false,
-        Fireplace: false,
-        View: false,
-        minergieConstruction: false,
-        newBuilding: false,
-        childFriendly: false,
-        smokingProhibited: false,
-        garage: false,
-        elevator: false,
-        privateWashingMachine: false,
-        quiteNeighbpurhood: false,
-        minergieCertified: false,
-        oldBuilding: false,
-        createdDate: "",
-        updateAt: "",
-        propertyId: 0,
-      },
+      furnishingFeature: {},
     };
   },
-  mounted() {
-    this.ffObj.propertyId = this.selectedProp.id;
+  watch: {
+    property(value) {
+      this.furnishingFeature = value.furnishingFeature;
+    },
   },
 };
 </script>

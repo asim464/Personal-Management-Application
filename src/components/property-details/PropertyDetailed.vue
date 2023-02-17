@@ -23,11 +23,11 @@
           >
             <i class="iconsminds-pen"></i>Edit</b-button
           >
-          <edit-det-modal
+          <!-- <edit-det-modal
             :item="
               property.propertyDetail == null ? prObj : property.propertyDetail
             "
-          />
+          /> -->
         </b-colxx>
       </b-row>
     </template>
@@ -53,7 +53,7 @@
           <b-col class="rowsLbl" cols="6">Floors:</b-col>
           <b-col
             ><p class="rowsVal">
-              {{ property.propertyDetail.Floors }}
+              {{ propertyDetail.Floors }}
             </p></b-col
           >
         </b-row>
@@ -61,7 +61,7 @@
           <b-col class="rowsLbl" cols="6">Number Of Floors:</b-col>
           <b-col class="rowsVal"
             ><p class="rowsVal">
-              {{ property.propertyDetail.numberOfFloors }}
+              {{ propertyDetail.numberOfFloors }}
             </p></b-col
           >
         </b-row>
@@ -69,7 +69,7 @@
           <b-col class="rowsLbl" cols="6">Lot Size in (&#13217;):</b-col>
           <b-col class="rowsVal"
             ><p class="rowsVal">
-              {{ property.propertyDetail.lotDetailSizeInM2 }}
+              {{ propertyDetail.lotDetailSizeInM2 }}
             </p></b-col
           >
         </b-row>
@@ -77,7 +77,7 @@
           <b-col class="rowsLbl" cols="6">Room Height:</b-col>
           <b-col
             ><p class="rowsVal">
-              {{ property.propertyDetail.roomsHeight }}
+              {{ propertyDetail.roomsHeight }}
             </p></b-col
           >
         </b-row>
@@ -85,7 +85,7 @@
           <b-col class="rowsLbl" cols="6">Year Built:</b-col>
           <b-col
             ><p class="rowsVal">
-              {{ property.propertyDetail.yearBuilt }}
+              {{ propertyDetail.yearBuilt }}
             </p></b-col
           >
         </b-row>
@@ -93,7 +93,7 @@
           <b-col class="rowsLbl" cols="6">Floor Space (&#13217;):</b-col>
           <b-col
             ><p class="rowsVal">
-              {{ property.propertyDetail.floorSpaceM2 }}
+              {{ propertyDetail.floorSpaceM2 }}
             </p></b-col
           >
         </b-row>
@@ -101,7 +101,7 @@
           <b-col class="rowsLbl" cols="6">Volume in (&#x33A5;):</b-col>
           <b-col
             ><p class="rowsVal">
-              {{ property.propertyDetail.volumeInM3 }}
+              {{ propertyDetail.volumeInM3 }}
             </p></b-col
           >
         </b-row>
@@ -109,7 +109,7 @@
           <b-col class="rowsLbl" cols="6">Last Renovation:</b-col>
           <b-col
             ><p class="rowsVal">
-              {{ property.propertyDetail.lastRenovation }}
+              {{ propertyDetail.lastRenovation }}
             </p></b-col
           >
         </b-row>
@@ -119,124 +119,12 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import UpdatePropertyDetailsModal from "../Form/UpdatePropertyDetailsModal.vue";
 
 export default {
   name: "PropertyDetailed",
-  computed: {
-    ...mapGetters(["selectedProp"])
-  },
-  mounted() {
-    this.prObj.propertyId = this.selectedProp.id;
-  },
   props: {
-    property: {
-      id: 0,
-      title: "",
-      description: null,
-      type: "",
-      paymentType: "",
-      price: null,
-      agentAssigned: null,
-      createdBy: "",
-      status: null,
-      createdDate: "",
-      updateAt: "",
-      userId: 0,
-      ownerId: null,
-      agentId: null,
-      agencyId: 0,
-      agent: {
-        id: 0,
-        email: "",
-        password: "",
-        firstName: "",
-        lastName: "",
-        userName: "",
-        roles: "",
-        description: "",
-        status: "",
-        ImageUrl: null,
-        IBAN: null,
-        agencyId: 0,
-      },
-      owner: null,
-      user: {
-        id: 0,
-        email: "",
-        password: "",
-        firstName: "",
-        lastName: "",
-        userName: "",
-        roles: "",
-        description: "",
-        status: "",
-        ImageUrl: null,
-        IBAN: null,
-        agencyId: 0,
-      },
-      Address: null,
-      agency: {
-        id: 0,
-        name: "",
-      },
-      image: [
-        {
-          id: 0,
-          url: "",
-          isMain: false,
-          propertyId: 0,
-        },
-      ],
-      mainFeature: {
-        id: 0,
-        Rooms: 0,
-        LeavingSpace: 0,
-        Street: "",
-        ZipCodeOrCity: "",
-        Availibility: "",
-        createdDate: "",
-        updateAt: "",
-        propertyId: 0,
-      },
-      furnishingFeature: {
-        id: 0,
-        wheelChairAcess: false,
-        petsAllowed: false,
-        balcony: false,
-        parkingPlace: false,
-        Fireplace: false,
-        View: false,
-        minergieConstruction: false,
-        newBuilding: false,
-        childFriendly: false,
-        smokingProhibited: false,
-        garage: false,
-        elevator: false,
-        privateWashingMachine: false,
-        quiteNeighbpurhood: false,
-        minergieCertified: false,
-        oldBuilding: false,
-        createdDate: "",
-        updateAt: "",
-        propertyId: 0,
-      },
-      propertyDetail: {
-        id: 0,
-        Floors: 0,
-        numberOfFloors: 0,
-        lotDetailSizeInM2: 0,
-        roomsHeight: 0,
-        yearBuilt: 0,
-        floorSpaceM2: 0,
-        volumeInM3: 0,
-        lastRenovation: 0,
-        createdDate: "",
-        updateAt: "",
-        propertyId: 0,
-      },
-    },
+    property: Object,
   },
   components: {
     "edit-det-modal": UpdatePropertyDetailsModal,
@@ -244,23 +132,13 @@ export default {
   data() {
     return {
       isHovering: false,
-
-      // property component object decleration in case the object is empty
-      prObj: {
-        id: 0,
-        Floors: 0,
-        numberOfFloors: 0,
-        lotDetailSizeInM2: 0,
-        roomsHeight: 0,
-        yearBuilt: 0,
-        floorSpaceM2: 0,
-        volumeInM3: 0,
-        lastRenovation: 0,
-        createdDate: "",
-        updateAt: "",
-        propertyId: 0,
-      },
+      propertyDetail: {},
     };
+  },
+  watch: {
+    property(value) {
+      this.propertyDetail = value.propertyDetail;
+    },
   },
 };
 </script>

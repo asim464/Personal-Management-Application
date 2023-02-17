@@ -26,50 +26,59 @@
           <b-col cols="6">
             <property-main-feature
               :property="details"
-              @getProperty="getProperty"
+              @fetchProperty="fetchProperty"
             />
-            <property-details :property="details" @getProperty="getProperty" />
+            <property-details
+              :property="details"
+              @fetchProperty="fetchProperty"
+            />
           </b-col>
           <b-col cols="6">
             <b-row>
-              <property-cost :property="details" @getProperty="getProperty" />
+              <property-cost
+                :property="details"
+                @fetchProperty="fetchProperty"
+              />
               <property-responsible-agent
                 :property="details"
-                @getProperty="getProperty"
+                @fetchProperty="fetchProperty"
               />
             </b-row>
             <property-feature-details
               :property="details"
-              @getProperty="getProperty"
+              @fetchProperty="fetchProperty"
             />
           </b-col>
         </b-row>
         <b-row>
           <b-col style="min-width: 100%">
-            <property-media :property="details" @getProperty="getProperty" />
+            <!-- <property-media :property="details" @fetchProperty="fetchProperty" /> -->
           </b-col>
         </b-row>
         <b-row>
           <b-col xxs="6">
-            <property-status-publication
+            <!-- <property-status-publication
               :property="details"
-              @getProperty="getProperty"
-            />
+              @fetchProperty="fetchProperty"
+            /> -->
           </b-col>
           <b-col xxxs="6">
-            <property-owner :property="details" @getProperty="getProperty" />
+            <property-owner
+              :property="details"
+              @fetchProperty="fetchProperty"
+            />
           </b-col>
         </b-row>
       </b-col>
       <b-col cols="5">
-        <property-description :property="details" @getProperty="getProperty" />
+        <!-- <property-description :property="details" @fetchProperty="fetchProperty" /> -->
       </b-col>
     </b-row>
   </div>
 </template>
 
 <script>
-import { mapGetters , mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import PropertyMainFeature from "../../../components/property-details/PropertyMainFeature.vue";
 import PropertyDetailed from "../../../components/property-details/PropertyDetailed.vue";
 import PropertyCosts from "../../../components/property-details/PropertyCosts.vue";
@@ -100,38 +109,38 @@ export default {
     };
   },
   async mounted() {
-    this.getProperty();
+    this.fetchProperty();
   },
   methods: {
     ...mapActions({
-      getPropertyById : "getPropertyById"
+      getPropertyById: "getPropertyById",
     }),
     navigateBack() {
       this.$router.push("/app/second-menu/PropertiesListing");
     },
-    async getProperty() {
+    async fetchProperty() {
       let uri = window.location.search.substring(1);
       let id = new URLSearchParams(uri);
       this.propertyID = id.get("p");
 
-      const res  = await this.getPropertyById({
-        pk:this.propertyID,
+      const res = await this.getPropertyById({
+        pk: this.propertyID,
         config: this.config,
       });
 
       if (res.status == 200) {
-            this.details = res.data;
-            this.$notify(
-              "success",
-              "Property data fetched successfully",
-              res.status,
-              {
-                type: "success",
-                duration: 5000,
-                permanent: false,
-              }
-            );
+        this.details = res.data;
+        this.$notify(
+          "success",
+          "Property data fetched successfully",
+          res.status,
+          {
+            type: "success",
+            duration: 5000,
+            permanent: false,
           }
+        );
+      }
     },
   },
   computed: {

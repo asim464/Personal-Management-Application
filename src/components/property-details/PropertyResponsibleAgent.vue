@@ -22,11 +22,11 @@
           >
             <i class="iconsminds-pen"></i>Edit</b-button
           >
-          <edit-agent-modal :item="property" />
+          <!-- <edit-agent-modal :item="property" /> -->
         </b-col>
       </b-row>
     </template>
-    <template v-if="property.agentId === null">
+    <template v-if="!agentId">
       <b-row class="m-1">
         <h4
           @mouseover="isHovering = true"
@@ -56,121 +56,12 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import UpdatePropertyAgentModal from "../Form/UpdatePropertyAgentModal.vue";
 
 export default {
   name: "PropertyResponsibleAgent",
   props: {
-    property: {
-      id: 0,
-      title: "",
-      description: null,
-      type: "",
-      paymentType: "",
-      price: null,
-      agentAssigned: null,
-      createdBy: "",
-      status: null,
-      createdDate: "",
-      updateAt: "",
-      userId: 0,
-      ownerId: null,
-      agentId: null,
-      agencyId: 0,
-      agent: {
-        id: 0,
-        email: "",
-        password: "",
-        firstName: "",
-        lastName: "",
-        userName: "",
-        roles: "",
-        description: "",
-        status: "",
-        ImageUrl: null,
-        IBAN: null,
-        agencyId: 0,
-      },
-      owner: null,
-      user: {
-        id: 0,
-        email: "",
-        password: "",
-        firstName: "",
-        lastName: "",
-        userName: "",
-        roles: "",
-        description: "",
-        status: "",
-        ImageUrl: null,
-        IBAN: null,
-        agencyId: 0,
-      },
-      Address: null,
-      agency: {
-        id: 0,
-        name: "",
-      },
-      image: [
-        {
-          id: 0,
-          url: "",
-          isMain: false,
-          propertyId: 0,
-        },
-      ],
-      mainFeature: {
-        id: 0,
-        Rooms: 0,
-        LeavingSpace: 0,
-        Street: "",
-        ZipCodeOrCity: "",
-        Availibility: "",
-        createdDate: "",
-        updateAt: "",
-        propertyId: 0,
-      },
-      furnishingFeature: {
-        id: 0,
-        wheelChairAcess: false,
-        petsAllowed: false,
-        balcony: false,
-        parkingPlace: false,
-        Fireplace: false,
-        View: false,
-        minergieConstruction: false,
-        newBuilding: false,
-        childFriendly: false,
-        smokingProhibited: false,
-        garage: false,
-        elevator: false,
-        privateWashingMachine: false,
-        quiteNeighbpurhood: false,
-        minergieCertified: false,
-        oldBuilding: false,
-        createdDate: "",
-        updateAt: "",
-        propertyId: 0,
-      },
-      propertyDetail: {
-        id: 0,
-        Floors: 0,
-        numberOfFloors: 0,
-        lotDetailSizeInM2: 0,
-        roomsHeight: 0,
-        yearBuilt: 0,
-        floorSpaceM2: 0,
-        volumeInM3: 0,
-        lastRenovation: 0,
-        createdDate: "",
-        updateAt: "",
-        propertyId: 0,
-      },
-    },
-  },
-  computed: {
-    ...mapGetters(["selectedProp"]),
+    property: Object,
   },
   components: {
     "edit-agent-modal": UpdatePropertyAgentModal,
@@ -178,13 +69,14 @@ export default {
   data() {
     return {
       agentName: "",
+      agentId: "",
     };
   },
-  mounted() {
-    if (this.selectedProp.agentId !== null) {
-      this.agentName =
-        this.selectedProp.agent.firstName + " " + this.selectedProp.agent.lastName;
-    }
+  watch: {
+    property(value) {
+      this.agentName = value.agent.firstName + " " + value.agent.lastName;
+      this.agentId = value.agentId;
+    },
   },
 };
 </script>
