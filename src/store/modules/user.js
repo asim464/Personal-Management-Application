@@ -80,5 +80,9 @@ export default {
       const res = await axios.get(apiUrl + "property/" + pk, config);
       return res;
     },
+    async updatePropertyMainFeature({ commit }, { pk, payload,  config }) {
+      const res = await axios.post(apiUrl + "property/createMainFeature/" + pk, payload, config);
+      return res;
+    },
   },
 };

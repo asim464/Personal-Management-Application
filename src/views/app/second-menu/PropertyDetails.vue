@@ -28,26 +28,26 @@
               :property="details"
               @fetchProperty="fetchProperty"
             />
-            <property-details
+            <!-- <property-details
               :property="details"
               @fetchProperty="fetchProperty"
-            />
+            /> -->
           </b-col>
           <b-col cols="6">
             <b-row>
-              <property-cost
+              <!-- <property-cost
                 :property="details"
                 @fetchProperty="fetchProperty"
-              />
-              <property-responsible-agent
+              /> -->
+              <!-- <property-responsible-agent
                 :property="details"
                 @fetchProperty="fetchProperty"
-              />
+              /> -->
             </b-row>
-            <property-feature-details
+            <!-- <property-feature-details
               :property="details"
               @fetchProperty="fetchProperty"
-            />
+            /> -->
           </b-col>
         </b-row>
         <b-row>
@@ -63,10 +63,10 @@
             /> -->
           </b-col>
           <b-col xxxs="6">
-            <property-owner
+            <!-- <property-owner
               :property="details"
               @fetchProperty="fetchProperty"
-            />
+            /> -->
           </b-col>
         </b-row>
       </b-col>

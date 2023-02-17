@@ -138,12 +138,12 @@ const router = new VueRouter({
   mode: "history",
 });
 
-router.beforeEach((to, from, next) => {
-  let user = getCurrentUser();
-  if (to.meta.loginRequired && user.title === "None") {
-    router.push("/unauthorized");
-  } else {
-    next();
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   let user = getCurrentUser();
+//   if (to.meta.loginRequired && user.title === "None") {
+//     router.push("/unauthorized");
+//   } else {
+//     next();
+//   }
+// });
 export default router;

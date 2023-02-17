@@ -23,9 +23,11 @@
           >
             <i class="iconsminds-pen"></i>Edit</b-button
           >
-          <!-- <edit-mFet-modal
-            :item="mainFeature == null ? prObj : property.mainFeature"
-          /> -->
+          <edit-mFet-modal
+            :item=mainFeature
+            :id = propertyId
+            @updateData="updateData"
+          />
         </b-colxx>
       </b-row>
     </template>
@@ -93,7 +95,6 @@
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
 import UpdatePropertyMainFeaturesModal from "../Form/UpdatePropertyMainFeaturesModal.vue";
 
 export default {
@@ -108,14 +109,23 @@ export default {
     return {
       isHovering: false,
       mainFeature: {},
+      propertyId : 0,
+
     };
   },
   watch: {
     property(value) {
       this.mainFeature = value.mainFeature;
+      this.propertyId = value.id;
     },
   },
-  methods: {},
+  methods: {
+    async updateData(){
+      this.$emit("fetchProperty");
+    }
+  },
+
+
 };
 </script>
 
