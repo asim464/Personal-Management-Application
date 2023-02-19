@@ -19,27 +19,77 @@
             class="mt-2"
             style="height: min-content"
             variant="outline-success"
+            v-b-modal.editMediaModal
           >
             <i class="iconsminds-pen"></i>Edit</b-button
           >
+          <edit-property-media
+            :item="imageList"
+            :id="propertyId"
+            @updateData="updateData"
+          />
         </b-col>
+      </b-row>
+      <b-row class="m-5">
+        <b-img
+          v-if="length > 0"
+          :src="imageList[i].url"
+          class="card-img-top m-2"
+          style="height: 150px; width: 250px"
+        />
+        <b-img
+          v-if="length > 1"
+          :src="imageList[j].url"
+          class="card-img-top m-2"
+          style="height: 150px; width: 250px"
+        />
+        <b-img
+          v-if="length > 2"
+          :src="imageList[k].url"
+          class="card-img-top m-2"
+          style="height: 150px; width: 250px"
+        />
       </b-row>
     </template>
   </b-card>
 </template>
-  
+
   <script>
+import UpdatePropertyMediaModal from "../Form/UpdatePropertyMediaModal.vue";
 export default {
   name: "PropertyMedia",
+  components: {
+    "edit-property-media": UpdatePropertyMediaModal,
+  },
   props: {
     property: Object,
   },
   data() {
-    return {};
+    return {
+      imageList: [],
+      length: 0,
+      propertyId: 0,
+      i: 0,
+      j: 1,
+      k: 2,
+    };
   },
-  mounted() {},
+  watch: {
+    property(value) {
+      this.imageList = value.image;
+      this.propertyId = value.id;
+      this.length = this.imageList.length;
+      console.log(this.imageList);
+      console.log(this.length);
+      console.log(this.propertyId);
+    },
+  },
+  methods: {
+    async updateData() {
+      this.$emit("fetchProperty");
+    },
+  },
 };
 </script>
-  
+
   <style></style>
-  
