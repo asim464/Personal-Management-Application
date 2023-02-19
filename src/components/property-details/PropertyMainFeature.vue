@@ -25,7 +25,6 @@
           >
           <edit-mFet-modal
             :item=mainFeature
-            :id = propertyId
             @updateData="updateData"
           />
         </b-colxx>
@@ -109,14 +108,12 @@ export default {
     return {
       isHovering: false,
       mainFeature: {},
-      propertyId : 0,
 
     };
   },
   watch: {
     property(value) {
       this.mainFeature = value.mainFeature;
-      this.propertyId = value.id;
     },
   },
   methods: {
