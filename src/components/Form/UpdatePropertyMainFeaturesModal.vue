@@ -135,7 +135,6 @@ export default {
             duration: 5000,
           }
         );
-
          this.$emit("updateData");
         this.hideModal("mainFeaturesModal");
       }
