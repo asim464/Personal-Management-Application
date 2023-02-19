@@ -7,16 +7,12 @@
       modal-class="modal-right"
     >
       <b-form class="av-tooltip tooltip-label-bottom">
-        <b-form-group label="Rooms">
-          <b-form-input
-            type="number"
-            min="0"
-            :step="1"
-            placeholder="Enter the number of rooms"
-            v-model="Rooms"
-            :rows="2"
-            :max-rows="2"
-          />
+        <b-form-group>
+          <b-form-checkbox-group>
+            <b-form-checkbox>
+              isMain
+            </b-form-checkbox>
+          </b-form-checkbox-group>
         </b-form-group>
         <b-form-group label="Living space">
           <b-input-group>

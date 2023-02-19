@@ -52,7 +52,7 @@
         </b-row>
         <b-row>
           <b-col style="min-width: 100%">
-            <!-- <property-media :property="details" @fetchProperty="fetchProperty" /> -->
+            <property-media :property="details" @fetchProperty="fetchProperty" />
           </b-col>
         </b-row>
         <b-row>

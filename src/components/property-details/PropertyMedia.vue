@@ -30,7 +30,11 @@
           />
         </b-col>
       </b-row>
-      <b-row class="m-5">
+      <b-row>
+        <b-button>
+          <i class="iconsminds-arrow-back"></i>
+        </b-button>
+
         <b-img
           v-if="length > 0"
           :src="imageList[i].url"
@@ -38,17 +42,21 @@
           style="height: 150px; width: 250px"
         />
         <b-img
-          v-if="length > 1"
-          :src="imageList[j].url"
+          v-if="length > 0"
+          :src="imageList[i].url"
           class="card-img-top m-2"
           style="height: 150px; width: 250px"
         />
         <b-img
-          v-if="length > 2"
-          :src="imageList[k].url"
+          v-if="length > 0"
+          :src="imageList[i].url"
           class="card-img-top m-2"
           style="height: 150px; width: 250px"
         />
+        <b-button>
+          <i class="iconsminds-arrow-forward"></i>
+        </b-button>
+
       </b-row>
     </template>
   </b-card>
