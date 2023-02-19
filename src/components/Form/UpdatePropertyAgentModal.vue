@@ -79,15 +79,12 @@ export default {
       let id = new URLSearchParams(uri);
       let propertyID = id.get("p");
 
-      let agent = {
-        agentId: this.item.agentId,
-        propertyId: propertyID,
-      };
-      console.log(agent);
+        let agentId= this.item.agentId;
 
       const res = await this.updatePropAgent({
-        payload: agent,
-        config: this.config,
+        pk:propertyID,
+        ps:agentId,
+        config: this.config
       });
 
       if (res.status == 200 || res.status == 201) {

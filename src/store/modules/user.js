@@ -144,11 +144,9 @@ export default {
       );
       return res;
     },
-    async updatePropertyAgent({ commit }, {payload, config }) {
-      console.log(payload);
-      console.log(config);
+    async updatePropertyAgent({ commit }, {pk,ps, config }) {
       const res = await axios.patch(
-        apiUrl + "property/updateAgent/" + payload.propertyId + "/" + payload.agentId,
+        apiUrl + "property/updateAgent/" + pk + "/" + ps,{},
         config
       );
       return res;
