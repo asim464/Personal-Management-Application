@@ -13,6 +13,7 @@ export default {
     loginError: null,
     forgotMailSuccess: null,
     resetPasswordSuccess: null,
+    isLogin: false,
     config: {},
   },
   getters: {
@@ -50,37 +51,39 @@ export default {
   },
   actions: {
     async loginAuth({ commit }, { payload }) {
-      const res = await axios.get(apiUrl + "auth/login/", payload);
+      const res = await axios.post(apiUrl + "auth/login/", payload);
       let data = jwt_decode(res.data.access_token);
       let id = data.id;
       let role = null;
+      let token = res.data.access_token;
       if (data.roles == "SuperAdmin") {
         role = UserRole.SuperAdmin;
       } else if (data.roles == "Admin") {
         role = UserRole.SuperAdmin;
       } else if (data.roles == "Agent") {
-        role: UserRole.SuperAdmin;
+        role= UserRole.SuperAdmin;
       } else if (data.roles == "Customer") {
         role = UserRole.SuperAdmin;
       }
-     let config = {
-        headers: {
-          Authorization: `Bearer ${payload.token}`,
-        }
-      };
-      const res1 = await axios.get(apiUrl + "users/findUser/"+id, config);
-      let agencyId = res1.data.agencyId;
-      const res2 = await axios.get(apiUrl + "agency/findAgency/"+id, config);
-      let agencyName = res2.data.name;
-
       let item = {
         id: data.id,
         role: role,
-        token: res.data.access_token,
-        agencyID: agencyId,
-        agencyName: agencyName,
+        token: token,
         ...data,
       };
+      if(item.role == UserRole.Admin){
+        let config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        };
+        const res1 = await axios.get(apiUrl + "users/findUser/"+id, config);
+        let agencyId = res1.data.agencyId;
+        const res2 = await axios.get(apiUrl + "agency/findAgency/"+id,config);
+        let agencyName = res2.data.name;
+        item["agencyId"] = agencyId;
+        item["agencyName"] = agencyName;
+      }
       setCurrentUser(item);
       commit("setUser", item);
       return res;

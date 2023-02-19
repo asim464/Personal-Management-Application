@@ -155,9 +155,10 @@ export default {
   },
   methods: {
     ...mapActions({
-      loginApi: "login",
       loginAuthApi: "loginAuth",
     }),
+
+
     async formSubmit() {
       this.flag = true;
       this.$v.$touch();
@@ -182,7 +183,7 @@ export default {
         };
         this.flag = false;
 
-        const res = this.loginAuthApi({
+        const res = await this.loginAuthApi({
           payload: payload,
         });
         if (res.status == 201) {
