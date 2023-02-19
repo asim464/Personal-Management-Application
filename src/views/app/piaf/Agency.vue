@@ -203,6 +203,7 @@ export default {
   },
   async created() {
     var user = getCurrentUser();
+    console.log(user);
     if (user.role != UserRole.SuperAdmin) {
       var config = {
         headers: {
@@ -210,12 +211,12 @@ export default {
         },
       };
       await axios
-        .get(apiUrl + "agency/findAgency/" + user.agencyID, config)
+        .get(apiUrl + "agency/findAgency/" + user.agencyId, config)
         .then((res) => {
           this.agency = [
             {
-              id: user.agencyID,
-              name: user.agencyName,
+              id: user.agencyId,
+              name: res.data.name,
               Address: {
                 street_number: res.data.Address.street_number,
                 house_number: res.data.Address.house_number,

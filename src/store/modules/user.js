@@ -59,11 +59,11 @@ export default {
       if (data.roles == "SuperAdmin") {
         role = UserRole.SuperAdmin;
       } else if (data.roles == "Admin") {
-        role = UserRole.SuperAdmin;
+        role = UserRole.Admin;
       } else if (data.roles == "Agent") {
-        role= UserRole.SuperAdmin;
+        role = UserRole.Agent;
       } else if (data.roles == "Customer") {
-        role = UserRole.SuperAdmin;
+        role = UserRole.Customer;
       }
       let item = {
         id: data.id,
@@ -74,12 +74,12 @@ export default {
       if(item.role == UserRole.Admin){
         let config = {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${item.token}`,
           }
         };
         const res1 = await axios.get(apiUrl + "users/findUser/"+id, config);
         let agencyId = res1.data.agencyId;
-        const res2 = await axios.get(apiUrl + "agency/findAgency/"+id,config);
+        const res2 = await axios.get(apiUrl + "agency/findAgency/"+agencyId,config);
         let agencyName = res2.data.name;
         item["agencyId"] = agencyId;
         item["agencyName"] = agencyName;

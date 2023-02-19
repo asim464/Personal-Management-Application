@@ -3,8 +3,8 @@
     <div
       v-if="
         (currentUser.role != null) &
-        (currentUser != UserRole.Agent) &
-        (currentUser != UserRole.Customer)
+        (currentUser.role != UserRole.Agent) &
+        (currentUser.role != UserRole.Customer)
       "
     >
       <b-row>

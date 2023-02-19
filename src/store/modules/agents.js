@@ -59,7 +59,7 @@ const actions = {
         } else if (user.role == UserRole.Admin) {
           let ls = [];
           res.data.forEach((element) => {
-            if (element.agencyId == user.agencyID) {
+            if (element.agencyId == user.agencyId) {
               ls.push(element);
             }
           });
