@@ -3,6 +3,7 @@ import createPersistedState from "vuex-persistedstate";
 import { UserRole } from "../../utils/auth.roles";
 import { apiUrl } from "../../constants/config";
 import axios from "axios";
+import jwt_decode from "jwt-decode";
 
 export default {
   plugins: [createPersistedState()],
@@ -48,27 +49,63 @@ export default {
     },
   },
   actions: {
-    async login({ commit }, payload) {
-      if (payload != null) {
-        if (payload.role == UserRole.Admin) {
-          await axios
-            .get(apiUrl + "users/findUser/" + payload.id, getters.config)
-            .then(async (res) => {
-              Object.assign(payload, { agencyID: res.data.agencyId });
-              await axios
-                .get(
-                  apiUrl + "agency/findAgency/" + payload.agencyID,
-                  getters.config
-                )
-                .then((res) => {
-                  Object.assign(payload, { agencyName: res.data.name });
-                });
-            });
-        }
+    async loginAuth({ commit }, { payload }) {
+      const res = await axios.get(apiUrl + "auth/login/", payload);
+      let data = jwt_decode(res.data.access_token);
+      let id = data.id;
+      let role = null;
+      if (data.roles == "SuperAdmin") {
+        role = UserRole.SuperAdmin;
+      } else if (data.roles == "Admin") {
+        role = UserRole.SuperAdmin;
+      } else if (data.roles == "Agent") {
+        role: UserRole.SuperAdmin;
+      } else if (data.roles == "Customer") {
+        role = UserRole.SuperAdmin;
       }
-      setCurrentUser(payload);
-      commit("setUser", payload);
+     let config = {
+        headers: {
+          Authorization: `Bearer ${payload.token}`,
+        }
+      };
+      const res1 = await axios.get(apiUrl + "users/findUser/"+id, config);
+      let agencyId = res1.data.agencyId;
+      const res2 = await axios.get(apiUrl + "agency/findAgency/"+id, config);
+      let agencyName = res2.data.name;
+
+      let item = {
+        id: data.id,
+        role: role,
+        token: res.data.access_token,
+        agencyID: agencyId,
+        agencyName: agencyName,
+        ...data,
+      };
+      setCurrentUser(item);
+      commit("setUser", item);
+      return res;
     },
+    // async login({ commit }, { payload, config }) {
+    //   if (payload != null) {
+    //     if (payload.role == UserRole.Admin) {
+    //       await axios
+    //         .get(apiUrl + "users/findUser/" + payload.id, getters.config)
+    //         .then(async (res) => {
+    //           Object.assign(payload, { agencyID: res.data.agencyId });
+    //           await axios
+    //             .get(
+    //               apiUrl + "agency/findAgency/" + payload.agencyID,
+    //               getters.config
+    //             )
+    //             .then((res) => {
+    //               Object.assign(payload, { agencyName: res.data.name });
+    //             });
+    //         });
+    //     }
+    //   }
+    //   setCurrentUser(payload);
+    //   commit("setUser", payload);
+    // },
     signOut({ commit }) {
       setCurrentUser({
         title: "None",
@@ -80,8 +117,12 @@ export default {
       const res = await axios.get(apiUrl + "property/" + pk, config);
       return res;
     },
-    async updatePropertyMainFeature({ commit }, { pk, payload,  config }) {
-      const res = await axios.post(apiUrl + "property/createMainFeature/" + pk, payload, config);
+    async updatePropertyMainFeature({ commit }, { pk, payload, config }) {
+      const res = await axios.post(
+        apiUrl + "property/createMainFeature/" + pk,
+        payload,
+        config
+      );
       return res;
     },
   },

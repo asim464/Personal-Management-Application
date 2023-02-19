@@ -58,14 +58,14 @@
                 >Forgot Password</router-link
               >
               <b-button
-                :disabled="flag===true"
+                :disabled="flag === true"
                 click="formSubmit()"
                 type="submit"
                 variant="primary"
                 size="lg"
                 :class="{
                   'btn-multiple-state btn-shadow': true,
-                  'show-spinner': flag===true,
+                  'show-spinner': flag === true,
                   'show-success': !flag && loginError === false,
                   'show-fail': !flag && loginError,
                 }"
@@ -154,7 +154,10 @@ export default {
     ...mapGetters(["loginError", "isAuthGuardActive"]),
   },
   methods: {
-    ...mapActions(["login"]),
+    ...mapActions({
+      loginApi: "login",
+      loginAuthApi: "loginAuth",
+    }),
     async formSubmit() {
       this.flag = true;
       this.$v.$touch();
@@ -179,76 +182,27 @@ export default {
         };
         this.flag = false;
 
-        await axios
-          .post(apiUrl + "auth/login", payload)
-          .then((res) => {
-            if (res.status == 201) {
-              var data = jwt_decode(res.data.access_token);
-              if (data.roles == "SuperAdmin") {
-                this.flag = true;
-                var item = {
-                  id: data.id,
-                  role: UserRole.SuperAdmin,
-                  token: res.data.access_token,
-                  ...data,
-                };
-              } else if (data.roles == "Admin") {
-                this.flag = true;
-                var item = {
-                  id: data.id,
-                  role: UserRole.Admin,
-                  token: res.data.access_token,
-                  ...data,
-                };
-              } else if (data.roles == "Agent") {
-                this.flag = true;
-                var item = {
-                  id: data.id,
-                  role: UserRole.Agent,
-                  token: res.data.access_token,
-                  ...data,
-                };
-              } else if (data.roles == "Customer") {
-                this.flag = true;
-                var item = {
-                  id: data.id,
-                  role: UserRole.Customer,
-                  token: res.data.access_token,
-                  ...data,
-                };
-              } else {
-                this.flag = false;
-                this.errorNotification(
-                  "User Registered but not activated",
-                  "Error 405!"
-                );
-              }
-
-              this.flag ? this.login(item) : this.login(null);
-              if (this.flag) {
-                this.$notify("Success", "Login Success", "Code:" + res.status + ", Message:" + res.statusText, {
-                  type: "success",
-                  duration: 5000,
-                  permanent: false,
-                });
-                this.$nextTick(()=>{
-                  this.$router.push(adminRoot);
-                });
-              }
-            }
-          })
-          .catch((err) => {
+        const res = this.loginAuthApi({
+          payload: payload,
+        });
+        if (res.status == 201) {
+          this.flag = true;
+          if (this.flag) {
             this.$notify(
-              "Error",
-              "Login Failure! Username or Password Incorrect",
-              err,
+              "Success",
+              "Login Success",
+              "Code:" + res.status + ", Message:" + res.statusText,
               {
-                type: "error",
+                type: "success",
                 duration: 5000,
-                permanent: true,
+                permanent: false,
               }
             );
-          });
+            this.$nextTick(() => {
+              this.$router.push(adminRoot);
+            });
+          }
+        }
       }
     },
   },
