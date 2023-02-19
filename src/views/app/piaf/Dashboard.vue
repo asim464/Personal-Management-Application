@@ -13,7 +13,7 @@
         </b-colxx>
       </b-row>
     </div>
-    <div class="card" v-else>
+    <!-- <div class="card" v-else>
       <img
         src="https://cdn.svgator.com/images/2022/01/404-page-animation-example.gif"
         class="kg-image lightense-target image-fluid"
@@ -23,7 +23,7 @@
       <h1 class="d-flex justify-content-center" style="color: red">
         Access Not Allowed!
       </h1>
-    </div>
+    </div> -->
   </div>
 </template>
 

@@ -23,11 +23,10 @@
           >
             <i class="iconsminds-pen"></i>Edit</b-button
           >
-          <!-- <edit-det-modal
-            :item="
-              property.propertyDetail == null ? prObj : property.propertyDetail
-            "
-          /> -->
+          <edit-det-modal
+            :item="propertyDetail"
+            @updateData="updateData"
+          />
         </b-colxx>
       </b-row>
     </template>
@@ -139,6 +138,11 @@ export default {
     property(value) {
       this.propertyDetail = value.propertyDetail;
     },
+  },
+  methods: {
+    async updateData(){
+      this.$emit("fetchProperty");
+    }
   },
 };
 </script>

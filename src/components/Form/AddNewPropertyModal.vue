@@ -9,7 +9,6 @@
       <b-form>
         <b-form-group v-if="currentUser.role == UserRole.SuperAdmin" label="Agency">
           <b-form-select
-            v-if="currentUser.role == UserRole.SuperAdmin"
             v-model="newItem.agencyID"
           >
             <template #first>

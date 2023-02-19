@@ -13,7 +13,7 @@
             min="0"
             :step="1"
             placeholder="Enter the number of rooms"
-            v-model="Rooms"
+            v-model="item.Rooms"
             :rows="2"
             :max-rows="2"
           />
@@ -24,7 +24,7 @@
               <b-input-group-text>&#13217;</b-input-group-text>
             </template>
             <b-form-input
-              v-model="LeavingSpace"
+              v-model="item.LeavingSpace"
               placeholder="Enter the total living space size"
               type="number"
               min="1"
@@ -35,7 +35,7 @@
         </b-form-group>
         <b-form-group label="Street &amp; Nr" class="has-float-label">
           <b-form-input
-            v-model="Street"
+            v-model="item.Street"
             placeholder="Enter your street number"
             type="text"
             :rows="2"
@@ -44,7 +44,7 @@
         </b-form-group>
         <b-form-group label="Zip code &amp; City" class="has-float-label">
           <b-form-input
-            v-model="ZipCodeOrCity"
+            v-model="item.ZipCodeOrCity"
             placeholder="Enter your zip code followed by your city name"
             type="text"
             :rows="2"
@@ -58,21 +58,17 @@
           <b-form-radio-group
             stacked
             class="pt-2"
-            v-model="Availibility"
+            v-model="item.Availibility"
             :options="availList"
           />
         </b-form-group>
       </b-form>
 
       <template slot="modal-footer">
-        <b-button
-          variant="outline-secondary"
-          @click="hideModal('mainFeaturesModal')"
+        <b-button variant="outline-secondary" @click="hideModal('mainFeaturesModal')"
           >Cancel</b-button
         >
-        <b-button variant="primary" @click.prevent="update()" class="mr-1"
-          >Save</b-button
-        >
+        <b-button variant="primary" @click.prevent="update()" class="mr-1">Save</b-button>
       </template>
     </b-modal>
   </div>
@@ -80,11 +76,11 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+
 export default {
   name: "UpdatePropertyMainFeaturesModal",
   props: {
     item: Object,
-    id: Number,
   },
   data() {
     return {
@@ -94,11 +90,6 @@ export default {
         max: 10,
         decimal: 10,
       },
-      Rooms: 0,
-      LeavingSpace:0,
-      Street: '',
-      ZipCodeOrCity: '',
-      Availibility: '',
 
       availList: ["Immediatly", "By Agreement", "Date"],
     };
@@ -108,34 +99,28 @@ export default {
       updatePropertyFeatures: "updatePropertyMainFeature",
     }),
     async update() {
-
       let mainFeatures = {
-        Rooms: Number(this.Rooms),
-        LeavingSpace: Number(this.LeavingSpace),
-        Street: this.Street,
-        ZipCodeOrCity: this.ZipCodeOrCity,
-        Availibility: this.Availibility,
+        Rooms: Number(this.item.Rooms),
+        LeavingSpace: Number(this.item.LeavingSpace),
+        Street: this.item.Street,
+        ZipCodeOrCity: this.item.ZipCodeOrCity,
+        Availibility: this.item.Availibility,
       };
       console.log(mainFeatures);
 
       const res = await this.updatePropertyFeatures({
-        pk: this.id,
+        pk: this.item.propertyId,
         payload: mainFeatures,
         config: this.config,
       });
 
       if (res.status == 200 || res.status == 201) {
-        this.$notify(
-          "Success",
-          "Main features updated successfully",
-          res.status,
-          {
-            type: "success",
-            permanent: false,
-            duration: 5000,
-          }
-        );
-         this.$emit("updateData");
+        this.$notify("Success", "Main features updated successfully", res.status, {
+          type: "success",
+          permanent: false,
+          duration: 5000,
+        });
+        this.$emit("updateData");
         this.hideModal("mainFeaturesModal");
       }
     },

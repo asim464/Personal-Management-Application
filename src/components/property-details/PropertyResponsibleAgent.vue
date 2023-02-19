@@ -4,12 +4,7 @@
       <b-row class="d-flex">
         <b-col class="d-flex justify-content-start" xxs="9">
           <h3
-            style="
-              font-family: 'Nunito', sans-serif;
-              font-weight: 400;
-              font-size: 18px;
-              padding-top: 1rem;
-            "
+            style="font-family: 'Nunito', sans-serif;font-weight: 400;font-size: 18px;padding-top: 1rem;"
           >
             <i class="iconsminds-project"></i>Responsible Agent
           </h3>
@@ -22,11 +17,11 @@
           >
             <i class="iconsminds-pen"></i>Edit</b-button
           >
-          <!-- <edit-agent-modal :item="property" /> -->
+          <edit-agent-modal :item="agentItem" @updateData="updateData" />
         </b-col>
       </b-row>
     </template>
-    <template v-if="!agentId">
+    <template v-if="!agentItem.agentId">
       <b-row class="m-1">
         <h4
           @mouseover="isHovering = true"
@@ -47,7 +42,7 @@
         <b-row class="ml-2">
           <b-col class="rowsLbl" cols="6">Agent:</b-col>
           <b-col
-            ><p class="rowsVal">{{ agentName }}</p></b-col
+            ><p class="rowsVal">{{ agentItem.agentName }}</p></b-col
           >
         </b-row>
       </b-card-text>
@@ -68,15 +63,26 @@ export default {
   },
   data() {
     return {
-      agentName: "",
-      agentId: "",
+      agentItem: {
+        propertyId: 0,
+        agentName: "",
+        agentId: null
+      }
     };
   },
   watch: {
     property(value) {
-      this.agentName = value.agent.firstName + " " + value.agent.lastName;
-      this.agentId = value.agentId;
+      if(value.agent != null){
+        this.agentItem.agentName = value.agent.firstName + " " + value.agent.lastName;
+      }
+      this.agentItem.agentId = value.agentId;
+      this.agentItem.propertyId = value.id;
     },
+  },
+  methods: {
+    async updateData(){
+      this.$emit("fetchProperty");
+    }
   },
 };
 </script>

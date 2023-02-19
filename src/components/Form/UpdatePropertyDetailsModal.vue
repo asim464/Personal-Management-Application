@@ -126,28 +126,13 @@
 </template>
 
 <script>
-import axios from "axios";
-import { getCurrentUser } from "../../utils";
-import { apiUrl } from "../../constants/config";
+import { mapActions, mapGetters } from "vuex";
 import vuejsDatepicker from "vuejs-datepicker";
 
 export default {
   name: "UpdatePropertyDetailsModal",
   props: {
-    item: {
-      id: 0,
-      Floors: 0,
-      numberOfFloors: 0,
-      lotDetailSizeInM2: 0,
-      roomsHeight: 0,
-      yearBuilt: 0,
-      floorSpaceM2: 0,
-      volumeInM3: 0,
-      lastRenovation: 0,
-      createdDate: "",
-      updateAt: "",
-      propertyId: 0,
-    },
+    item: Object,
   },
   components: {
     "vuejs-datepicker": vuejsDatepicker,
@@ -172,6 +157,9 @@ export default {
     };
   },
   methods: {
+    ...mapActions({
+      updatePropertyDetails: "updatePropertyDetails",
+    }),
     async updateDetails() {
       // let date = this.defaultDate.getFullYear();
       // this.item.lastRenovation = Number(date);
@@ -185,86 +173,39 @@ export default {
         volumeInM3: Number(this.item.volumeInM3),
         lastRenovation: Number(this.item.lastRenovation),
       };
+      console.log(features);
 
-      var user = getCurrentUser();
-      var config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
+      const res = await this.updatePropertyDetails({
+        pk: this.item.propertyId,
+        payload: features,
+        config: this.config,
+      });
 
-      if (this.item.id == 0) {
-        await axios
-          .post(apiUrl + "details/" + this.item.propertyId, features, config)
-          .then((res) => {
-            if (res.status == 200 || res.status == 201) {
-              this.$notify(
-                "Success",
-                "Property details updated successfully!",
-                "Code: " + res.status + ", Message:" + res.statusText,
-                {
-                  permanent: false,
-                  duration: 1000,
-                  type: "success",
-                }
-              );
-              this.hideModal("propertyDetailsModal");
-            } else {
-              this.$notify(
-                "Error",
-                "Property details could not be updated!",
-                "Code: " + res.status + ", Message:" + res.statusText,
-                {
-                  permanent: false,
-                  duration: 5000,
-                  type: "error",
-                }
-              );
-            }
-          })
-          .catch((err) => {
-            this.$notify("Error", "Property details updation error!", err, {
-              permanent: false,
-              duration: 5000,
-              type: "error",
-            });
-          });
+      if (res.status == 200 || res.status == 201) {
+        this.$notify(
+          "Success",
+          "Property details updated successfully!",
+          "Code: " + res.status + ", Message:" + res.statusText,
+          {
+            permanent: false,
+            duration: 1000,
+            type: "success",
+          }
+        );
+        this.$emit("updateData");
+        this.hideModal("propertyDetailsModal");
       } else {
-        await axios
-          .patch(apiUrl + "details/" + this.item.propertyId, features, config)
-          .then((res) => {
-            if (res.status == 200 || res.status == 201) {
-              this.$notify(
-                "Success",
-                "Property details updated successfully!",
-                "Code: " + res.status + ", Message:" + res.statusText,
-                {
-                  permanent: false,
-                  duration: 5000,
-                  type: "success",
-                }
-              );
-              this.hideModal("propertyDetailsModal");
-            } else {
-              this.$notify(
-                "Error",
-                "Property details could not be updated!",
-                "Code: " + res.status + ", Message:" + res.statusText,
-                {
-                  permanent: false,
-                  duration: 5000,
-                  type: "error",
-                }
-              );
-            }
-          })
-          .catch((err) => {
-            this.$notify("Error", "Property details updation error!", err, {
-              permanent: false,
-              duration: 5000,
-              type: "error",
-            });
-          });
+        this.$notify(
+          "Error",
+          "Property details could not be updated!",
+          "Code: " + res.status + ", Message:" + res.statusText,
+          {
+            permanent: false,
+            duration: 5000,
+            type: "error",
+          }
+        );
+        this.$emit("updateData");
       }
     },
     hideModal(refname) {
@@ -285,6 +226,9 @@ export default {
     //     return e;
     //   }
     // },
+  },
+  computed: {
+    ...mapGetters(["config"]),
   },
 };
 </script>

@@ -4,12 +4,7 @@
       <b-row class="d-flex">
         <b-col class="d-flex justify-content-start" xxs="9">
           <h3
-            style="
-              font-family: 'Nunito', sans-serif;
-              font-weight: 400;
-              font-size: 18px;
-              padding-top: 1rem;
-            "
+            style="font-family: 'Nunito', sans-serif;font-weight: 400;font-size: 18px;padding-top: 1rem;"
           >
             <i class="iconsminds-pricing"></i>Costs
           </h3>
@@ -23,11 +18,11 @@
           >
             <i class="iconsminds-pen"></i>Edit</b-button
           >
-          <!-- <edit-cost-modal :item="property" /> -->
+          <edit-cost-modal :item="costItem" @updateData="updateData" />
         </b-col>
       </b-row>
     </template>
-    <template v-if="!price || !paymentType">
+    <template v-if="!costItem.price">
       <b-row class="m-1">
         <h4
           @mouseover="isHovering = true"
@@ -48,14 +43,13 @@
         <b-row class="ml-2">
           <b-col class="rowsLbl" cols="6">Type:</b-col>
           <b-col
-            ><p class="rowsVal">{{ paymentType }}</p></b-col
+            ><p class="rowsVal">{{ costItem.paymentType }}</p></b-col
           >
         </b-row>
         <b-row class="ml-2">
           <b-col class="rowsLbl" cols="6">Price:</b-col>
           <b-col>
-            <p v-if="price" class="rowsVal">CHF {{ price }}</p>
-            <p v-else class="d-flex justify-content-center w-25">-</p>
+            <p class="rowsVal">CHF {{ costItem.price }}</p>
           </b-col>
         </b-row>
       </b-card-text>
@@ -77,18 +71,27 @@ export default {
   },
   data() {
     return {
-      price: "",
-      paymentType: "",
+      isHovering: false,
+      costItem: {
+        propertyId: 0,
+        price: null,
+        paymentType: "",
+      },
     };
   },
   watch: {
     property(value) {
-      this.price = value.price;
-      this.paymentType = value.paymentType;
+      this.costItem.price = value.price;
+      this.costItem.paymentType = value.paymentType;
+      this.costItem.propertyId = value.id;
     },
+  },
+  methods: {
+    async updateData() {
+      this.$emit("fetchProperty");
+    }
   },
 };
 </script>
 
-<style>
-</style>
+<style></style>
