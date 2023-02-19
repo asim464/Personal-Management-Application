@@ -63,6 +63,7 @@ export default {
   },
   data() {
     return {
+      isHovering:false,
       agentItem: {
         propertyId: 0,
         agentName: "",

@@ -150,6 +150,29 @@ export default {
         config
       );
       return res;
-    }
+    },
+    async updatePropertyOwner({ commit }, {pk,pc, config }) {
+      const res = await axios.patch(
+        apiUrl + "property/updateOwner/" + pk + "/" + pc,{},
+        config
+      );
+      return res;
+    },
+    async updatePropertyFeatureNFurnishing({ commit }, { pk, payload, config }) {
+      const res = await axios.post(
+        apiUrl + "property/createFurnishingFeature/" + pk,
+        payload,
+        config
+      );
+      return res;
+    },
+    async updatePropertyDescription({ commit }, { pk, payload, config }) {
+      const res = await axios.patch(
+        apiUrl + "property/updateDescription/" + pk,
+        payload,
+        config
+      );
+      return res;
+    },
   },
 };

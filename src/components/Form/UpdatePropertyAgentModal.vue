@@ -79,7 +79,7 @@ export default {
       let id = new URLSearchParams(uri);
       let propertyID = id.get("p");
 
-        let agentId= this.item.agentId;
+      let agentId= this.item.agentId;
 
       const res = await this.updatePropAgent({
         pk:propertyID,
@@ -93,6 +93,7 @@ export default {
           duration: 5000,
           permanent: false,
         });
+        this.$emit("updateData");
         this.hideModal("propAgentEditModal");
       } else {
         this.$notify("Error", "Agent could not be assigned.", err, {

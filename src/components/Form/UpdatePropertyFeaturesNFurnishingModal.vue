@@ -245,47 +245,19 @@
           @click="hideModal('propFurnishingEditModal')"
           >Cancel</b-button
         >
-        <b-button
-          variant="primary"
-          @click.prevent="updateFurnishingFeatures()"
-          class="mr-1"
-          >Save</b-button
-        >
+        <b-button variant="primary" @click.prevent="update()" class="mr-1">Save</b-button>
       </template>
     </b-modal>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-import { getCurrentUser } from "../../utils";
-import { apiUrl } from "../../constants/config";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "UpdatePropertyFurnishingNFeaturesModal",
   props: {
-    item: {
-      id: 0,
-      wheelChairAcess: false,
-      petsAllowed: false,
-      balcony: false,
-      parkingPlace: false,
-      Fireplace: false,
-      View: false,
-      minergieConstruction: false,
-      newBuilding: false,
-      childFriendly: false,
-      smokingProhibited: false,
-      garage: false,
-      elevator: false,
-      privateWashingMachine: false,
-      quiteNeighbpurhood: false,
-      minergieCertified: false,
-      oldBuilding: false,
-      createdDate: "",
-      updateAt: "",
-      propertyId: 0,
-    },
+    item: Object,
   },
   data() {
     return {
@@ -296,8 +268,11 @@ export default {
     };
   },
   methods: {
-    async updateFurnishingFeatures() {
-      var features = {
+    ...mapActions({
+      updatePropFurnishing: "updatePropertyFeatureNFurnishing",
+    }),
+    async update() {
+      let features = {
         wheelChairAcess: this.item.wheelChairAcess,
         petsAllowed: this.item.petsAllowed,
         balcony: this.item.balcony,
@@ -315,91 +290,46 @@ export default {
         minergieCertified: this.item.minergieCertified,
         oldBuilding: this.item.oldBuilding,
       };
-      var user = getCurrentUser();
-      var config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
+      console.log(features);
 
-      await axios
-        .post(
-          apiUrl + "property/createFurnishingFeature/" + this.item.propertyId,
-          features,
-          config
-        )
-        .then((res) => {
-          if (res.status == 201) {
-            this.$notify(
-              "Success",
-              "Property furnishing features updated successfully!",
-              "Code: " + res.status + ", Message:" + res.statusText,
-              {
-                permanent: false,
-                duration: 1000,
-                type: "success",
-              }
-            );
-            this.updateView();
-            this.hideModal("propFurnishingEditModal");
-          } else {
-            this.$notify(
-              "Error",
-              "Property furnishing features could not be updated!",
-              "Code: " + res.status + ", Message:" + res.statusText,
-              {
-                permanent: false,
-                duration: 5000,
-                type: "error",
-              }
-            );
+      const res = await this.updatePropFurnishing({
+        pk: this.item.propertyId,
+        payload: features,
+        config: this.config,
+      });
+
+      if (res.status == 201 || res.status == 200) {
+        this.$notify(
+          "Success",
+          "Property furnishing features updated successfully!",
+          "Code: " + res.status + ", Message:" + res.statusText,
+          {
+            permanent: false,
+            duration: 1000,
+            type: "success",
           }
-        })
-        .catch((err) => {
-          this.$notify("Error", "Property furnishing features updation error!", err, {
+        );
+        this.$emit("updateData");
+        this.hideModal("propFurnishingEditModal");
+      } else {
+        this.$notify(
+          "Error",
+          "Property furnishing features could not be updated!",
+          "Code: " + res.status + ", Message:" + res.statusText,
+          {
             permanent: false,
             duration: 5000,
             type: "error",
-          });
-        });
-    },
-    async updateView() {
-      let uri = window.location.search.substring(1);
-      let id = new URLSearchParams(uri);
-      var propertyID = id.get("p");
-
-      var user = getCurrentUser();
-      var config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-      this.details = await axios
-        .get(apiUrl + "property/" + propertyID, config)
-        .then((res) => {
-          if (res.status == 200) {
-            this.details = res.data;
-            this.$store.dispatch("setSelectedProp", this.details);
-            this.$notify("success", "Property data fetched successfully", res.status, {
-              type: "success",
-              duration: 5000,
-              permanent: false,
-            });
-          } else {
-            this.$notify("success", "Property data could not be fetched", res.status, {
-              type: "success",
-              duration: 5000,
-              permanent: false,
-            });
           }
-        })
-        .catch((err) => {
-          console.log("error");
-        });
+        );
+      }
     },
     hideModal(refname) {
       this.$refs[refname].hide();
     },
+  },
+  computed: {
+    ...mapGetters(["config"]),
   },
 };
 </script>

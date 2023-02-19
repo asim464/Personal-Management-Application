@@ -23,13 +23,10 @@
           >
             <i class="iconsminds-pen"></i>Edit</b-button
           >
-          <!-- <edit-furnishing-modal
-            :item="
-              property.furnishingFeature == null
-                ? ffObj
-                : property.furnishingFeature
-            "
-          /> -->
+          <edit-furnishing-modal
+            :item="furnishingFeature"
+            @updateData="updateData"
+          />
         </b-col>
       </b-row>
     </template>
@@ -413,6 +410,11 @@ export default {
     property(value) {
       this.furnishingFeature = value.furnishingFeature;
     },
+  },
+  methods: {
+    async updateData(){
+      this.$emit("fetchProperty");
+    }
   },
 };
 </script>

@@ -13,8 +13,7 @@
               font-family: 'Nunito', sans-serif;
               font-weight: 400;
               font-size: 18px;
-              padding-top: 1rem;
-            "
+              padding-top: 1rem;"
           >
             <i class="iconsminds-profile"></i>Owner
           </h3>
@@ -24,13 +23,15 @@
             class="mt-2"
             style="height: min-content"
             variant="outline-success"
+            v-b-modal.propOwnerEditModal
           >
             <i class="iconsminds-pen"></i>Edit</b-button
           >
+          <edit-owner-modal :item="ownerItem" @updateData="updateData" />
         </b-col>
       </b-row>
     </template>
-    <template v-if="property.owner === null">
+    <template v-if="ownerItem.ownerId === null">
       <b-row class="m-1">
         <h4
           @mouseover="isHovering = true"
@@ -52,7 +53,7 @@
           <b-col class="rowsLbl" cols="6">First Name:</b-col>
           <b-col
             ><p class="rowsVal">
-              {{ property.owner.firstName }}
+              {{ ownerItem.firstName }}
             </p></b-col
           >
         </b-row>
@@ -60,7 +61,7 @@
           <b-col class="rowsLbl" cols="6">Last Name:</b-col>
           <b-col
             ><p class="rowsVal">
-              {{ property.owner.lastName }} &#13217;
+              {{ ownerItem.lastName }} &#13217;
             </p></b-col
           >
         </b-row>
@@ -68,7 +69,7 @@
           <b-col class="rowsLbl" cols="6">Email:</b-col>
           <b-col
             ><p class="rowsVal">
-              {{ property.owner.email }}
+              {{ ownerItem.email }}
             </p></b-col
           >
         </b-row>
@@ -92,37 +93,54 @@
       <b-row>
         <b-col>
           <p class="rowsVal pl-5" style="text-decoration: underline solid gray">
-            {{ property.owner.IBAN == null ? N / A : property.owner.IBAN }}
+            {{ ownerItem.IBAN == "" ? null : ownerItem.IBAN }}
           </p>
         </b-col>
-      </b-row>
-      <b-row>
-        <!-- <b-col class="rowsLbl" xxs="4">IBAN:</b-col>
-                  <b-col xxs="8">why</b-col> -->
       </b-row>
     </template>
   </b-card>
 </template>
 
 <script>
+import UpdatePropertyOwnerModal from '../Form/UpdatePropertyOwnerModal.vue';
+
 export default {
   name: "PropertyOwner",
-  // computed: {
-  //   ...mapGetters(["propertiesList"])
-  // },
   props: {
     property: Object,
   },
+  components: {
+    "edit-owner-modal": UpdatePropertyOwnerModal,
+  },
   data() {
     return {
-      owner: {},
+      isHovering:false,
+      ownerItem: {
+        firstName: "",
+        lastName: "",
+        email: "",
+        IBAN: "",
+        propertyId: 0,
+        ownerId: null,
+      },
     };
   },
   watch: {
     property(value) {
-      console.log(value);
-      this.owner = value.owner;
+      this.ownerItem.propertyId = value.id;
+      this.ownerItem.ownerId = value.ownerId;
+      if(this.property.owner != null) {
+        this.ownerItem.firstName = value.owner.firstName;
+        this.ownerItem.lastName = value.owner.lastName;
+        this.ownerItem.email = value.owner.email;
+        this.ownerItem.IBAN = value.owner.IBAN;
+      }
     },
+  },
+  methods: {
+    async updateData(){
+      this.$emit("fetchProperty");
+    }
   },
 };
 </script>

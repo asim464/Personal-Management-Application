@@ -44,10 +44,10 @@
                 @fetchProperty="fetchProperty"
               />
             </b-row>
-            <!-- <property-feature-details
+            <property-feature-details
               :property="details"
               @fetchProperty="fetchProperty"
-            /> -->
+            />
           </b-col>
         </b-row>
         <b-row>
@@ -63,15 +63,15 @@
             /> -->
           </b-col>
           <b-col xxxs="6">
-            <!-- <property-owner
+            <property-owner
               :property="details"
               @fetchProperty="fetchProperty"
-            /> -->
+            />
           </b-col>
         </b-row>
       </b-col>
       <b-col cols="5">
-        <!-- <property-description :property="details" @fetchProperty="fetchProperty" /> -->
+        <property-description :property="details" @fetchProperty="fetchProperty" />
       </b-col>
     </b-row>
   </div>
