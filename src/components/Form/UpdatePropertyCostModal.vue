@@ -10,7 +10,7 @@
         <b-form-group label="Payment type">
           <b-form-select
             class="pt-2"
-            :options="payment_types"
+            :options="paymentTypes"
             v-model="item.paymentType"
             :rows="2"
             :max-rows="2"
@@ -21,7 +21,7 @@
             <template #append>
               <b-input-group-text>CHF</b-input-group-text>
             </template>
-            <b-form-input v-model="item.price" />
+            <b-form-input v-model="item.price" placeholder="Enter the price of the property" type="number" min="0" :rows="2" :max-rows="2" />
           </b-input-group>
         </b-form-group>
       </b-form>
@@ -30,7 +30,7 @@
         <b-button variant="outline-secondary" @click="hideModal('propCostEditModal')"
           >Cancel</b-button
         >
-        <b-button variant="primary" @click="updatePropertyCost()" class="mr-1"
+        <b-button variant="primary" @click.prevent="updatePropertyCost()" class="mr-1"
           >SAVE</b-button
         >
       </template>
@@ -39,182 +39,58 @@
 </template>
 
 <script>
-import axios from "axios";
-import { getCurrentUser } from "../../utils";
-import { apiUrl } from "../../constants/config";
-import { mapGetters } from "vuex";
-import { UserRole } from "../../utils/auth.roles";
+import { mapActions, mapGetters } from "vuex";
 import { payment_types } from "../../utils/property.consts";
 
 export default {
   name: "UpdatePropertyCostModal",
-  computed: {
-    ...mapGetters(["currentUser", "agenciesList"]),
-  },
   props: {
-    item: {
-      id: 0,
-      title: "",
-      description: null,
-      type: "",
-      paymentType: "",
-      price: null,
-      agentAssigned: null,
-      createdBy: "",
-      status: null,
-      createdDate: "",
-      updateAt: "",
-      userId: 0,
-      ownerId: null,
-      agentId: null,
-      agencyId: 0,
-      agent: {
-        id: 0,
-        email: "",
-        password: "",
-        firstName: "",
-        lastName: "",
-        userName: "",
-        roles: "",
-        description: "",
-        status: "",
-        ImageUrl: null,
-        IBAN: null,
-        agencyId: 0,
-      },
-      owner: null,
-      user: {
-        id: 0,
-        email: "",
-        password: "",
-        firstName: "",
-        lastName: "",
-        userName: "",
-        roles: "",
-        description: "",
-        status: "",
-        ImageUrl: null,
-        IBAN: null,
-        agencyId: 0,
-      },
-      Address: null,
-      agency: {
-        id: 0,
-        name: "",
-      },
-      image: [
-        {
-          id: 0,
-          url: "",
-          isMain: false,
-          propertyId: 0,
-        },
-      ],
-      mainFeature: {
-        id: 0,
-        Rooms: 0,
-        LeavingSpace: 0,
-        Street: "",
-        ZipCodeOrCity: "",
-        Availibility: "",
-        createdDate: "",
-        updateAt: "",
-        propertyId: 0,
-      },
-      furnishingFeature: {
-        id: 0,
-        wheelChairAcess: false,
-        petsAllowed: false,
-        balcony: false,
-        parkingPlace: false,
-        Fireplace: false,
-        View: false,
-        minergieConstruction: false,
-        newBuilding: false,
-        childFriendly: false,
-        smokingProhibited: false,
-        garage: false,
-        elevator: false,
-        privateWashingMachine: false,
-        quiteNeighbpurhood: false,
-        minergieCertified: false,
-        oldBuilding: false,
-        createdDate: "",
-        updateAt: "",
-        propertyId: 0
-      },
-      propertyDetail: {
-        id: 0,
-        Floors: 0,
-        numberOfFloors: 0,
-        lotDetailSizeInM2: 0,
-        roomsHeight: 0,
-        yearBuilt: 0,
-        floorSpaceM2: 0,
-        volumeInM3: 0,
-        lastRenovation: 0,
-        createdDate: "",
-        updateAt: "",
-        propertyId: 0,
-      }
-    },
+    item: Object,
   },
   data() {
     return {
-      UserRole,
-      payment_types,
+      paymentTypes: payment_types,
     };
   },
-  created() {
-    this.item.id = this.selectedProp.id;
-  },
-  computed: {
-    ...mapGetters(["selectedProp"])
-  },
   methods: {
-    updatePropertyCost() {
+    ...mapActions({
+      updatePropCost: "updatePropertyCost",
+    }),
+    async updatePropertyCost() {
       let cost = {
         paymentType: this.item.paymentType,
         price: Number(this.item.price),
       };
-      let user = getCurrentUser();
 
-      var config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-      axios
-        .patch(apiUrl + "property/updateCost/" + this.item.id, cost, config)
-        .then((res) => {
-          if (res.status == 200) {
-            this.$notify("Success", "Property cost edited succesfully", res.status, {
-              type: "success",
-              duration: 5000,
-              permanent: false,
-            });
-          }
-          if (res.status == 401) {
-            this.$notify("Error", "Property cost could not be edited.", err, {
-              type: "error",
-              duration: 5000,
-              permanent: false,
-            });
-          }
-        })
-        .catch((err) => {
-          this.$notify("Error", "Network Error Occured", err, {
-            type: "error",
-            duration: 5000,
-            permanent: false,
-          });
-          console.log(err);
+      const res = await this.updatePropCost({
+        pk: this.item.propertyId,
+        payload: cost,
+        config: this.config,
+      });
+
+      if (res.status == 200 || res.status == 201) {
+        this.$notify("Success", "Property cost edited succesfully", res.status, {
+          type: "success",
+          duration: 5000,
+          permanent: false,
         });
-      this.hideModal("propCostEditModal");
+        this.$emit("updateData");
+        this.hideModal("propCostEditModal");
+      } else {
+        this.$notify("Error", "Property cost could not be edited", res.status, {
+          type: "error",
+          duration: 5000,
+          permanent: false,
+        });
+      }
     },
     hideModal(refname) {
       this.$refs[refname].hide();
     },
+
+  },
+  computed: {
+    ...mapGetters(["config"]),
   },
 };
 </script>

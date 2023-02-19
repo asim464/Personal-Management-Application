@@ -65,14 +65,10 @@
       </b-form>
 
       <template slot="modal-footer">
-        <b-button
-          variant="outline-secondary"
-          @click="hideModal('mainFeaturesModal')"
+        <b-button variant="outline-secondary" @click="hideModal('mainFeaturesModal')"
           >Cancel</b-button
         >
-        <b-button variant="primary" @click.prevent="update()" class="mr-1"
-          >Save</b-button
-        >
+        <b-button variant="primary" @click.prevent="update()" class="mr-1">Save</b-button>
       </template>
     </b-modal>
   </div>
@@ -80,6 +76,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+
 export default {
   name: "UpdatePropertyMainFeaturesModal",
   props: {
@@ -102,7 +99,6 @@ export default {
       updatePropertyFeatures: "updatePropertyMainFeature",
     }),
     async update() {
-
       let mainFeatures = {
         Rooms: Number(this.item.Rooms),
         LeavingSpace: Number(this.item.LeavingSpace),
@@ -119,17 +115,12 @@ export default {
       });
 
       if (res.status == 200 || res.status == 201) {
-        this.$notify(
-          "Success",
-          "Main features updated successfully",
-          res.status,
-          {
-            type: "success",
-            permanent: false,
-            duration: 5000,
-          }
-        );
-         this.$emit("updateData");
+        this.$notify("Success", "Main features updated successfully", res.status, {
+          type: "success",
+          permanent: false,
+          duration: 5000,
+        });
+        this.$emit("updateData");
         this.hideModal("mainFeaturesModal");
       }
     },

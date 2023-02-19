@@ -128,5 +128,30 @@ export default {
       );
       return res;
     },
+    async updatePropertyDetails({ commit }, { pk, payload, config }) {
+      const res = await axios.patch(
+        apiUrl + "details/" + pk,
+        payload,
+        config
+      );
+      return res;
+    },
+    async updatePropertyCost({ commit }, { pk, payload, config }) {
+      const res = await axios.patch(
+        apiUrl + "property/updateCost/" + pk,
+        payload,
+        config
+      );
+      return res;
+    },
+    async updatePropertyAgent({ commit }, {payload, config }) {
+      console.log(payload);
+      console.log(config);
+      const res = await axios.patch(
+        apiUrl + "property/updateAgent/" + payload.propertyId + "/" + payload.agentId,
+        config
+      );
+      return res;
+    }
   },
 };
