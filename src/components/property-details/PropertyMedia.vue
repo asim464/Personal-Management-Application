@@ -33,9 +33,9 @@
       <b-row>
         <div class="m-5">
           <b-card-group deck>
-            <b-card :img-src="imageList[0].url" no-body />
-            <b-card :img-src="imageList[1].url" no-body />
-            <b-card :img-src="imageList[1].url" no-body />
+            <b-card v-for="im in imageList" :key="im.id" :img-src="im.url" no-body />
+            <!-- <b-card v-if="imageList[1] == null" :img-src="imageList[1].url" no-body />
+            <b-card v-if="imageList[2] == null" :img-src="imageList[2].url" no-body /> -->
             <!-- <b-card-img> </b-card-img> -->
           </b-card-group>
           <div class="m-2 d-flex justify-content-center">

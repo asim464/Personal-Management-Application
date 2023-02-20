@@ -92,7 +92,7 @@ export default {
   created() {
     let ur = getCurrentUser();
     if (ur.role != UserRole.SuperAdmin) {
-      this.newItem.agencyID = ur.agencyID;
+      this.newItem.agencyID = ur.agencyId;
     }
     this.property_types = [
       { value: "House", text: "House" },
@@ -143,7 +143,7 @@ export default {
             duration: 5000,
             permanent: false,
           });
-          window.location.reload();
+          // window.location.reload();
           console.log(err);
         });
       this.hideModal("modalAddProp");
