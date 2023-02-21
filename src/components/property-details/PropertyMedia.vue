@@ -41,7 +41,12 @@
             <b-button pill :disabled="i == 0" @click="getBackword"
               ><i class="iconsminds-arrow-back"></i
             ></b-button>
-            <b-button pill class="ml-2" :disabled="length == k+1" @click="getForward">
+            <b-button
+              pill
+              class="ml-2"
+              :disabled="length == k + 1"
+              @click="getForward"
+            >
               <i class="iconsminds-arrow-forward"></i
             ></b-button>
           </div>

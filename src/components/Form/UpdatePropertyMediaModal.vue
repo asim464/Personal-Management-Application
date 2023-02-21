@@ -11,18 +11,40 @@
           <b-form-checkbox v-model="isMain"> isMain </b-form-checkbox>
         </b-form-group>
         <b-form-group label="Drop Image or Document Here">
-          <b-card border-variant="dark">
-            <b-form-file v-model="file" ref="file-input"></b-form-file>
-          </b-card>
+          <b-form-file v-model="file" ref="file-input"></b-form-file>
         </b-form-group>
-        <!-- <b-form-group label="Image Position">
-          <b-form-input
-            v-model="Street"
-            placeholder="Enter your street number"
-            type="text"
-          />
-        </b-form-group> -->
-        <!-- <b-form-group label="Zip code &amp; City" class="has-float-label">
+      </b-form>
+      <b-form-group label="Image Position">
+        <b-row>
+          <b-col md="6">
+            <b-form-input v-model="position" type="Number" size="sm" />
+          </b-col>
+        </b-row>
+      </b-form-group>
+      <div v-if="listImages.length > 0">
+        <h6>Uploaded Images and Documents</h6>
+        <div v-for="(image, index) in listImages" :key="index">
+          <b-row no-gutters>
+            <b-col md="6">
+              <b-card class="m-3" :img-src="image.url" img-left />
+            </b-col>
+            <b-col md="6">
+              <b-card-body>
+                <b-form class="av-tooltip tooltip-label-bottom">
+                  <b-form-group>
+                    <b-form-checkbox v-model="isMain"> isMain </b-form-checkbox>
+                    <b-form-checkbox v-model="isActive">
+                      isActive
+                    </b-form-checkbox>
+                  </b-form-group>
+                </b-form>
+              </b-card-body>
+            </b-col>
+          </b-row>
+        </div>
+      </div>
+
+      <!-- <b-form-group label="Zip code &amp; City" class="has-float-label">
           <b-form-input
             v-model="ZipCodeOrCity"
             placeholder="Enter your zip code followed by your city name"
@@ -33,7 +55,7 @@
           <b-form-invalid-feedback>
             Data entry format example:0000 Brussels (i.e.,zip_code city).
           </b-form-invalid-feedback> -->
-        <!-- </b-form-group> 
+      <!-- </b-form-group> 
         <b-form-group label="Available">
           <b-form-radio-group
             stacked
@@ -42,7 +64,6 @@
             :options="availList"
           />
         </b-form-group> -->
-      </b-form>
 
       <template slot="modal-footer">
         <b-button
@@ -68,10 +89,21 @@ export default {
   },
   data() {
     return {
-      last_value: 0,
+      listImages: [],
+      propertyId: 0,
       isMain: false,
+      isActive: false,
       file: null,
+      position: 0,
     };
+  },
+  watch: {
+    item(value) {
+      this.listImages = value;
+    },
+    id(value) {
+      this.propertyId = value;
+    },
   },
   methods: {
     ...mapActions({
