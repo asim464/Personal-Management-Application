@@ -17,6 +17,7 @@
     "core-js": "^3.23.3",
     "jquery": "^1.12.4",
     "jwt-decode": "^3.1.2",
+    "lodash": "^4.17.21",
     "v-contextmenu": "^2.9.0",
     "video.js": "^7.12.3",
     "vue": "^2.6.14",

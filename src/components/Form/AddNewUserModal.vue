@@ -34,32 +34,16 @@
           <b-form-input v-model="newItem.user.email" :rows="2" :max-rows="2" />
         </b-form-group>
         <b-form-group label="First Name">
-          <b-form-input
-            v-model="newItem.user.firstName"
-            :rows="2"
-            :max-rows="2"
-          />
+          <b-form-input v-model="newItem.user.firstName" :rows="2" :max-rows="2" />
         </b-form-group>
         <b-form-group label="Last Name">
-          <b-form-input
-            v-model="newItem.user.lastName"
-            :rows="2"
-            :max-rows="2"
-          />
+          <b-form-input v-model="newItem.user.lastName" :rows="2" :max-rows="2" />
         </b-form-group>
         <b-form-group label="Username">
-          <b-form-input
-            v-model="newItem.user.userName"
-            :rows="2"
-            :max-rows="2"
-          />
+          <b-form-input v-model="newItem.user.userName" :rows="2" :max-rows="2" />
         </b-form-group>
         <b-form-group label="Description">
-          <b-textarea
-            v-model="newItem.user.description"
-            :rows="2"
-            :max-rows="2"
-          />
+          <b-textarea v-model="newItem.user.description" :rows="2" :max-rows="2" />
         </b-form-group>
         <b-form-group label="Status">
           <b-form-radio-group
@@ -70,12 +54,8 @@
           />
         </b-form-group>
         <b-form-group label="Role">
-          <b-form-select
-            v-model="newItem.user.roles"
-            :rows="2"
-            :max-rows="2"
-          >
-          <template #first>
+          <b-form-select v-model="newItem.user.roles" :rows="2" :max-rows="2">
+            <template #first>
               <b-form-select-option value="" default disabled
                 >-- Please select an option --</b-form-select-option
               >
@@ -94,15 +74,13 @@
         <b-button variant="outline-secondary" @click="hideModal('modalright')"
           >Cancel</b-button
         >
-        <b-button variant="primary" @click="addUser()" class="mr-1"
-          >Create</b-button
-        >
+        <b-button variant="primary" @click="addUser()" class="mr-1">Create</b-button>
       </template>
     </b-modal>
   </div>
 </template>
-  
-  <script>
+
+<script>
 import { mapGetters } from "vuex";
 import { getCurrentUser } from "../../utils";
 import { UserRole } from "../../utils/auth.roles";
@@ -110,11 +88,11 @@ import { UserRole } from "../../utils/auth.roles";
 export default {
   name: "AddNewUserModal",
   computed: {
-    ...mapGetters(["currentUser", "agenciesList"]),
+    ...mapGetters(["currentUser", "agenciesList", "responseAG"]),
   },
-  async created() {
+  async mounted() {
     let ur = getCurrentUser();
-    this.newItem.agencyID = ur.agencyID;
+    this.newItem.agencyID = ur.agencyId;
     if (ur.role == UserRole.SuperAdmin) {
       this.roles = [
         { value: "Admin", text: "Admin" },
@@ -152,6 +130,26 @@ export default {
       this.$store.dispatch("createAgent", this.newItem);
       this.hideModal("modalright");
       this.$store.dispatch("setAgents");
+      this.$nextTick(() => {
+        if (this.responseAG.status == 200 || this.responseAG.status == 201) {
+          this.$notify(
+            "Success",
+            "New user created successfully",
+            this.responseAG.status,
+            {
+              type: "success",
+              duration: 5000,
+              permanent: false,
+            }
+          );
+        } else {
+          this.$notify("Error", "New user could not be created", this.responseAG.status, {
+            type: "error",
+            duration: 5000,
+            permanent: false,
+          });
+        }
+      });
     },
     hideModal(refname) {
       this.$refs[refname].hide();
@@ -159,5 +157,3 @@ export default {
   },
 };
 </script>
-    
-    

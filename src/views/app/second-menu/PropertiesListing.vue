@@ -10,7 +10,6 @@
         :displayMode="displayMode"
         :changeDisplayMode="changeDisplayMode"
         :changeOrderBy="changeOrderBy"
-        :changePageSize="changePageSize"
         :sort="sort"
         :searchChange="searchChange"
         :from="from"
@@ -21,24 +20,25 @@
       <template v-if="isLoad">
         <list-page-listing
           :displayMode="displayMode"
-          :items="items"
+          :items="paginatedItems"
           :selectedItems="selectedItems"
           :toggleItem="toggleItem"
-          :lastPage="lastPage"
           :perPage="perPage"
           :page="page"
-          :changePage="changePage"
+          :changePage="onPageChanged"
           :handleContextMenu="handleContextMenu"
           :onContextMenuAction="onContextMenuAction"
+          :total="total"
         ></list-page-listing>
       </template>
-      <template v-else-if="!isLoad & requireReload == false">
+      <template v-else-if="!isLoad && requireReload == false">
         <div class="loading"></div>
       </template>
       <template v-else-if="requireReload == true">
         <div class="loading">
-          <i class="icon-Reload" /><h3>Click here to reload!</h3>
-        </div> 
+          <i class="icon-Reload" />
+          <h3>Click here to reload!</h3>
+        </div>
       </template>
     </b-colxx>
   </b-row>
@@ -62,24 +62,28 @@ export default {
       isLoad: false,
       displayMode: "list",
       sort: {
-        key: "id",
-        label: "ID",
+        column: "title",
+        label: "Title",
       },
-      page: 2,
-      perPage: 2,
+      page: 1,
+      perPage: 4,
       search: "",
-      from: 1,
-      to: 2,
+      from: 0,
+      to: 0,
       total: 0,
       lastPage: 0,
       items: [],
+      paginatedItems: [],
       selectedItems: [],
-      requireReload: Boolean,
+      requireReload: false,
+      totalRows: 0,
     };
   },
   methods: {
     async loadItems() {
+      var _ = require("lodash");
       this.isLoad = false;
+
       var user = getCurrentUser();
       var config = {
         headers: {
@@ -90,12 +94,24 @@ export default {
       await axios
         .get(apiUrl + "property", config)
         .then((res) => {
-          if (res.status == 200) {
-            this.items = res.data;
+          if (res.status == 200 || res.status == 201) {
+            let propLst = _.sortBy(res.data, this.sort.column);
+            this.items = propLst;
             this.total = this.items.length;
-            this.isLoad = true;
             this.$store.dispatch("setProperties", this.items);
-            this.requireReload = false;
+            // if (this.total > 5 && this.total <= 10) {
+            //   this.lastPage = 2;
+            // }
+            // console.log(this.items);
+            // this.from = 1;
+            // if (this.total == 1) {
+            //   this.to = 1;
+            // } else if (this.total >= 1 && this.total <= 5) {
+            //   this.to = this.total;
+            // } else {
+            //   this.to = 5;
+            // }
+            this.selectedItems = [];
             this.$notify(
               "Success",
               "Properties listing fetched successfully.",
@@ -104,6 +120,22 @@ export default {
                 permanent: false,
                 duration: 1000,
                 type: "success",
+              }
+            );
+            this.paginate(this.perPage, 0);
+            this.requireReload = false;
+            this.isLoad = true;
+          } else {
+            this.isLoad = false;
+            this.requireReload = true;
+            this.$notify(
+              "Error",
+              "Properties list could not be fetched.",
+              "Code:" + res.status + ", Message:" + res.status,
+              {
+                permanent: false,
+                duration: 1000,
+                type: "error",
               }
             );
           }
@@ -119,45 +151,32 @@ export default {
               type: "error",
             }
           );
+          this.isLoad = false;
           this.requireReload = true;
           console.log("error :", err);
         });
-
-      /*
-
-      axios
-        .get("https://api.coloredstrategies.com/cakes/fordatatable")
-        .then(response => {
-          return response.data;
-        })
-        .then(res => {
-          this.total = res.total;
-          this.from = res.from;
-          this.to = res.to;
-          this.items = res.data.map(x => {
-            return {
-              ...x,
-              img: x.img.replace("/img/", "/img/products/")
-            };
-          });
-          this.perPage = res.per_page;
-          this.selectedItems = [];
-          this.lastPage = res.last_page;
-          this.isLoad = true;
-        });
-        */
     },
-
+    async paginate(page_size, page_number) {
+      let itemsToParse = this.items;
+      this.paginatedItems = itemsToParse.slice(
+        page_number * page_size,
+        (page_number + 1) * page_size
+      );
+    },
+    onPageChanged(page) {
+      this.paginate(this.perPage, page - 1);
+    },
     changeDisplayMode(displayType) {
       this.displayMode = displayType;
-      console.log(this.displayMode);
     },
-    changePageSize(perPage) {
-      this.page = 1;
-      this.perPage = perPage;
-    },
+    // changePageSize(perPage) {
+    //   this.page = 1;
+    //   this.perPage = perPage;
+    // },
     changeOrderBy(sort) {
       this.sort = sort;
+      let propLst = _.sortBy(this.items, this.sort.column);
+      this.items = propLst;
     },
     searchChange(val) {
       this.search = val;
@@ -234,16 +253,16 @@ export default {
         this.selectedItems.length > 0 && this.selectedItems.length < this.items.length
       );
     },
-    // apiUrl() {
-    //   return `${this.apiBase}?sort=${this.sort.column}&page=${this.page}&per_page=${this.perPage}&search=${this.search}`;
-    // }
   },
   watch: {
-    search() {
-      this.page = 1;
-    },
+    // search() {
+    //   this.page = 1;
+    // },
     apiUrl() {
       this.loadItems();
+    },
+    isLoad() {
+      this.isLoad = true;
     },
   },
   mounted() {

@@ -33,13 +33,11 @@
             v-if="data.image.length"
             :src="imageUrl"
             class="card-img-top"
-            :alt="data.title"
             style="height: 72px; width: 86px"
           />
           <img
             v-else
             class="card-img-top"
-            :alt="data.title"
             style="height: 72px; width: 86px"
           />
         </router-link>
@@ -119,7 +117,7 @@
         </p>
 
         <div class="w-15 w-sm-100">
-          <b-badge v-if="data.status == null" pill variant="danger"
+          <b-badge v-if="data.status == null || data.status == 'Offline' " pill variant="danger"
             >OFFLINE</b-badge
           >
           <b-badge v-else-if="data.status != null" pill variant="success">{{

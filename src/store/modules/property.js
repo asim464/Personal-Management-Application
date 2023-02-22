@@ -158,7 +158,8 @@ const mutations = {
 };
 
 const actions = {
-  setProperties({ commit }, payload) {
+  async setProperties({ commit }, {payload}) {
+    
     commit("setAllProperty", payload);
   },
   setSelectedProp({ commit }, payload) {

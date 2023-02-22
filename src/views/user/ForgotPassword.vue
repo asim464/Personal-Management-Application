@@ -106,6 +106,7 @@ export default {
               "Forget Email Success",
               "Changed Password Successfully",
               {
+                type: "success",
                 duration: 3000,
                 permanent: false,
               }
@@ -115,6 +116,7 @@ export default {
         })
         .catch((err) => {
           this.$notify("Error", "Password Reset Failure", err, {
+            type: "error",
             duration: 3000,
             permanent: false,
           });

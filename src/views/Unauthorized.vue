@@ -37,29 +37,24 @@
   </div>
 </template>
 <script>
-import { adminRoot } from '../constants/config';
-import { getCurrentUser } from '../utils';
+import { adminRoot } from "../constants/config";
+import { mapGetters } from "vuex";
 
 export default {
   methods: {
     goBack() {
-      let user = getCurrentUser();
-      if (user.length > 0) {
-        this.$router.push(adminRoot);
+      if (this.currentUser != null) {
+        this.$router.push(`${adminRoot}/piaf/Dashboard`);
       } else {
         this.$router.push("/user");
       }
-      
     },
+  },
+  computed: {
+    ...mapGetters(["currentUser"]),
   },
   mounted() {
     document.body.classList.add("background");
-    // let user = getCurrentUser();
-    // this.$nextTick(() => {
-    //   if (user.role != "None") {
-    //     this.$router.push("/piaf/Dashboard");
-    //   }
-    // });
   },
   beforeDestroy() {
     document.body.classList.remove("background");

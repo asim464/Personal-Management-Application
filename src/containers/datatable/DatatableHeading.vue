@@ -3,14 +3,8 @@
     <b-colxx xxs="12">
       <h1>{{ title }}</h1>
       <div class="top-right-button-container">
-       <b-button
-         v-b-modal.modalAddProp
-         variant="primary"
-         size="lg"
-         class="top-right-button newPropBtn"
-       ><i class="iconsminds-add" style="position: relative; margin-right:5px;" />ADD NEW</b-button>
         <b-button-group>
-          <b-dropdown split right @click="selectAll(true)" class="check-button ml-2" variant="primary">
+          <b-dropdown split right @click="selectAll(true)" class="check-button" variant="primary">
             <label
               class="custom-control custom-checkbox pl-4 mb-0 d-inline-block"
               slot="button-content"
@@ -30,11 +24,10 @@
               >&nbsp;</span>
             </label>
             <b-dropdown-item>{{$t('pages.delete')}}</b-dropdown-item>
-            <!-- <b-dropdown-item>{{$t('pages.edit')}}</b-dropdown-item> -->
+            <b-dropdown-item>{{$t('pages.another-action')}}</b-dropdown-item>
           </b-dropdown>
         </b-button-group>
       </div>
-     <add-new-property-modal></add-new-property-modal>
       <piaf-breadcrumb />
       <div class="mb-2 mt-2">
         <b-button
@@ -46,48 +39,14 @@
           <i class="simple-icon-arrow-down align-middle" />
         </b-button>
         <b-collapse id="displayOptions" class="d-md-block">
-          <span class="mr-3 d-inline-block float-md-left">
-            <a
-              :class="{'mr-2 view-icon':true,'active': displayMode==='list'}"
-              @click="changeDisplayMode('list')"
-            >
-              <data-list-icon />
-            </a>
-            <a
-              :class="{'mr-2 view-icon':true,'active': displayMode==='thumb'}"
-              @click="changeDisplayMode('thumb')"
-            >
-              <thumb-list-icon />
-            </a>
-            <a
-              :class="{'mr-2 view-icon':true,'active': displayMode==='image'}"
-              @click="changeDisplayMode('image')"
-            >
-              <image-list-icon />
-            </a>
-          </span>
           <div class="d-block d-md-inline-block pt-1">
-            <b-dropdown
-              id="ddown1"
-              :text="`${$t('pages.orderby')} ${sort.label}`"
-              variant="outline-dark"
-              class="mr-1 float-md-left btn-group"
-              size="xs"
-            >
-              <b-dropdown-item
-                v-for="(order,index) in sortOptions"
-                :key="index"
-                @click="changeOrderBy(order)"
-              >{{ order.label }}</b-dropdown-item>
-            </b-dropdown>
-
             <div class="search-sm d-inline-block float-md-left mr-1 align-top">
               <b-input :placeholder="$t('menu.search')"  @input="(val) => searchChange(val)" />
             </div>
           </div>
           <div class="float-md-right pt-1">
             <span class="text-muted text-small mr-1 mb-2">{{from}}-{{to}} of {{ total }}</span>
-            <!-- <b-dropdown
+            <b-dropdown
               id="ddown2"
               right
               :text="`${perPage}`"
@@ -100,7 +59,7 @@
                 :key="index"
                 @click="changePageSize(size)"
               >{{ size }}</b-dropdown-item>
-            </b-dropdown> -->
+            </b-dropdown>
           </div>
         </b-collapse>
       </div>
@@ -109,30 +68,17 @@
   </b-row>
 </template>
 <script>
-import {
-  DataListIcon,
-  ThumbListIcon,
-  ImageListIcon
-} from "../../components/Svg";
-import AddNewPropertyModal from "../../components/Form/AddNewPropertyModal.vue";
+
 
 export default {
-  components: {
-    "data-list-icon": DataListIcon,
-    "thumb-list-icon": ThumbListIcon,
-    "image-list-icon": ImageListIcon,
-    "add-new-property-modal": AddNewPropertyModal
-  },
+
   props: [
     "title",
     "selectAll",
     "isSelectedAll",
     "isAnyItemSelected",
     "keymap",
-    "displayMode",
-    "changeDisplayMode",
-    "changeOrderBy",
-    "sort",
+    "changePageSize",
     "searchChange",
     "from",
     "to",
@@ -141,26 +87,42 @@ export default {
   ],
   data() {
     return {
+      categories: [
+        {
+          label: "Cakes",
+          value: "Cakes"
+        },
+        {
+          label: "Cupcakes",
+          value: "Cupcakes"
+        },
+        {
+          label: "Desserts",
+          value: "Desserts"
+        }
+      ],
+      statuses: [
+        {
+          text: "ON HOLD",
+          value: "ON HOLD"
+        },
+        {
+          text: "PROCESSED",
+          value: "PROCESSED"
+        }
+      ],
       sortOptions: [
         {
-          column: "id",
-          label: "ID"
-        },
-        {
           column: "title",
-          label: "Title"
+          label: "Product Name"
         },
         {
-          column: "updateAt",
-          label: "Last Updated"
+          column: "category",
+          label: "Category"
         },
         {
           column: "status",
           label: "Status"
-        },
-        {
-          column: "price",
-          label: "Price"
         }
       ],
       pageSizes: [4, 8, 12]
@@ -168,6 +130,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-</style>

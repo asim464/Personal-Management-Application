@@ -5,11 +5,13 @@ import { UserRole } from "../../utils/auth.roles";
 const state = {
   agentsList: [],
   processingAgent: false,
+  responseAG: {},
 };
 
 const getters = {
   agentsList: (state) => state.agentsList,
   processingAgent: (state) => state.processingAgent,
+  responseAG: (state) => state.responseAG,
 };
 
 const mutations = {
@@ -40,6 +42,11 @@ const mutations = {
   setProcessingAgent(state, payload) {
     state.processingAgent = payload;
   },
+  setResponseAG(state, payload) {
+    state.responseAG = payload;
+    console.log(state.responseAG);
+    state.processingAgent = false;
+  }
 };
 
 const actions = {
@@ -83,21 +90,14 @@ const actions = {
         if (res.status == 201) {
           commit("setProcessingAgent", false);
           commit("createAgent", payload.user);
-          this.$notify("Success", "New user created successfully", res.status, {
-            type: "success",
-            duration: 5000,
-            permanent: false,
-          });
-          return 201;
+          commit("setResponseAG", res);
+        } else {
+          commit("setResponseAG", res);
         }
       })
       .catch((err) => {
-        this.$notify("Error", "New user could not be created", err, {
-          type: "error",
-          duration: 5000,
-          permanent: false,
-        });
-        return 401;
+        console.log(err);
+        commit("setResponseAG", err);
       });
   },
   async deleteAgent({ commit }, payload) {

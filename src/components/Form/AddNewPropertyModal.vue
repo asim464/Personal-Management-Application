@@ -126,13 +126,15 @@ export default {
         .then((res) => {
           if (res.status == 201) {
             this.$notify("Success", "New Property Added", res.status, {
+              type: "success",
               duration: 5000,
               permanent: false,
             });
             window.location.reload();
           }
           if (res.status == 401) {
-            this.$notify("Error", "New Property could not be added", err, {
+            this.$notify("Error", "New Property could not be added", res.status, {
+              type: "error",
               duration: 5000,
               permanent: false,
             });
@@ -140,6 +142,7 @@ export default {
         })
         .catch((err) => {
           this.$notify("Error", "Unexpected Error Occured", err, {
+            type: "error",
             duration: 5000,
             permanent: false,
           });

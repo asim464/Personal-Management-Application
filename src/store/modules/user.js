@@ -8,7 +8,6 @@ import jwt_decode from "jwt-decode";
 export default {
   plugins: [createPersistedState()],
   state: {
-    isAuthGuardActive: false,
     currentUser: {},
     loginError: null,
     forgotMailSuccess: null,
@@ -17,7 +16,6 @@ export default {
     config: {},
   },
   getters: {
-    isAuthGuardActive: (state) => state.isAuthGuardActive,
     currentUser: (state) => state.currentUser,
     loginError: (state) => state.loginError,
     forgotMailSuccess: (state) => state.forgotMailSuccess,
@@ -52,40 +50,45 @@ export default {
   actions: {
     async loginAuth({ commit }, { payload }) {
       const res = await axios.post(apiUrl + "auth/login/", payload);
-      let data = jwt_decode(res.data.access_token);
-      let id = data.id;
-      let role = null;
-      let token = res.data.access_token;
-      if (data.roles == "SuperAdmin") {
-        role = UserRole.SuperAdmin;
-      } else if (data.roles == "Admin") {
-        role = UserRole.Admin;
-      } else if (data.roles == "Agent") {
-        role = UserRole.Agent;
-      } else if (data.roles == "Customer") {
-        role = UserRole.Customer;
-      }
-      let item = {
-        id: data.id,
-        role: role,
-        token: token,
-        ...data,
-      };
-      if(item.role == UserRole.Admin){
-        let config = {
-          headers: {
-            Authorization: `Bearer ${item.token}`,
-          }
+      if (res.status == 200 || res.status == 201) {
+        let data = jwt_decode(res.data.access_token);
+        let id = data.id;
+        let role = null;
+        let token = res.data.access_token;
+        if (data.roles == "SuperAdmin") {
+          role = UserRole.SuperAdmin;
+        } else if (data.roles == "Admin") {
+          role = UserRole.Admin;
+        } else if (data.roles == "Agent") {
+          role = UserRole.Agent;
+        } else if (data.roles == "Customer") {
+          role = UserRole.Customer;
+        }
+        let item = {
+          id: data.id,
+          role: role,
+          token: token,
+          ...data,
         };
-        const res1 = await axios.get(apiUrl + "users/findUser/"+id, config);
-        let agencyId = res1.data.agencyId;
-        const res2 = await axios.get(apiUrl + "agency/findAgency/"+agencyId,config);
-        let agencyName = res2.data.name;
-        item["agencyId"] = agencyId;
-        item["agencyName"] = agencyName;
-      }
-      setCurrentUser(item);
-      commit("setUser", item);
+        if (item.role == UserRole.Admin) {
+          let config = {
+            headers: {
+              Authorization: `Bearer ${item.token}`,
+            },
+          };
+          const res1 = await axios.get(apiUrl + "users/findUser/" + id, config);
+          let agencyId = res1.data.agencyId;
+          const res2 = await axios.get(
+            apiUrl + "agency/findAgency/" + agencyId,
+            config
+          );
+          let agencyName = res2.data.name;
+          item["agencyId"] = agencyId;
+          item["agencyName"] = agencyName;
+        }
+        setCurrentUser({...item});
+        commit("setUser", item);
+      } 
       return res;
     },
     // async login({ commit }, { payload, config }) {
@@ -129,11 +132,7 @@ export default {
       return res;
     },
     async updatePropertyDetails({ commit }, { pk, payload, config }) {
-      const res = await axios.patch(
-        apiUrl + "details/" + pk,
-        payload,
-        config
-      );
+      const res = await axios.patch(apiUrl + "details/" + pk, payload, config);
       return res;
     },
     async updatePropertyCost({ commit }, { pk, payload, config }) {
@@ -144,21 +143,26 @@ export default {
       );
       return res;
     },
-    async updatePropertyAgent({ commit }, {pk,ps, config }) {
+    async updatePropertyAgent({ commit }, { pk, ps, config }) {
       const res = await axios.patch(
-        apiUrl + "property/updateAgent/" + pk + "/" + ps,{},
+        apiUrl + "property/updateAgent/" + pk + "/" + ps,
+        {},
         config
       );
       return res;
     },
-    async updatePropertyOwner({ commit }, {pk,pc, config }) {
+    async updatePropertyOwner({ commit }, { pk, pc, config }) {
       const res = await axios.patch(
-        apiUrl + "property/updateOwner/" + pk + "/" + pc,{},
+        apiUrl + "property/updateOwner/" + pk + "/" + pc,
+        {},
         config
       );
       return res;
     },
-    async updatePropertyFeatureNFurnishing({ commit }, { pk, payload, config }) {
+    async updatePropertyFeatureNFurnishing(
+      { commit },
+      { pk, payload, config }
+    ) {
       const res = await axios.post(
         apiUrl + "property/createFurnishingFeature/" + pk,
         payload,

@@ -1,9 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-// import AuthGuard from "./utils/auth.guard";
+import AuthGuard from "./utils/auth.guard";
 import { adminRoot } from "./constants/config";
-import { getCurrentUser } from "./utils";
-import store from "@/store/";
+import { UserRole } from "./utils/auth.roles";
 
 Vue.use(VueRouter);
 
@@ -17,7 +16,7 @@ const routes = [
     path: adminRoot,
     component: () => import(/* webpackChunkName: "app" */ "./views/app"),
     redirect: `${adminRoot}/piaf`,
-    meta: { loginRequired: true },
+    meta: { loginRequired: true, roles: [UserRole.SuperAdmin, UserRole.Admin, UserRole.Agent, UserRole.Customer] },
     /*
    define with Authorization :
    meta: { loginRequired: true, roles: [UserRole.Admin, UserRole.Editor] },
@@ -28,7 +27,7 @@ const routes = [
         component: () =>
           import(/* webpackChunkName: "piaf" */ "./views/app/piaf"),
         redirect: `${adminRoot}/piaf/Dashboard`,
-        meta: { loginRequired: true },
+        meta: { loginRequired: true, roles: [UserRole.SuperAdmin, UserRole.Admin, UserRole.Agent, UserRole.Customer] },
         children: [
           {
             path: "Dashboard",
@@ -36,13 +35,13 @@ const routes = [
               import(
                 /* webpackChunkName: "piaf" */ "./views/app/piaf/Dashboard"
               ),
-            meta: { loginRequired: true },
+            meta: { loginRequired: true, roles: [UserRole.SuperAdmin, UserRole.Admin, UserRole.Agent, UserRole.Customer] },
           },
           {
             path: "Agency",
             component: () =>
               import(/* webpackChunkName: "piaf" */ "./views/app/piaf/Agency"),
-            meta: { loginRequired: true },
+            meta: { loginRequired: true, roles: [UserRole.SuperAdmin, UserRole.Admin, UserRole.Agent] },
           },
           {
             path: "UsersListingView",
@@ -50,7 +49,7 @@ const routes = [
               import(
                 /* webpackChunkName: "piaf" */ "./views/app/piaf/UsersListingView"
               ),
-            meta: { loginRequired: true },
+            meta: { loginRequired: true, roles: [UserRole.SuperAdmin, UserRole.Admin, UserRole.Agent] },
           },
         ],
       },
@@ -61,6 +60,7 @@ const routes = [
             /* webpackChunkName: "second-menu" */ "./views/app/second-menu"
           ),
         redirect: `${adminRoot}/second-menu/PropertiesListing`,
+        meta: { loginRequired: true, roles: [UserRole.SuperAdmin, UserRole.Admin, UserRole.Agent, UserRole.Customer] },
         children: [
           {
             path: "PropertiesListing",
@@ -68,7 +68,7 @@ const routes = [
               import(
                 /* webpackChunkName: "PropertiesListing" */ "./views/app/second-menu/PropertiesListing"
               ),
-            meta: { loginRequired: true },
+            meta: { loginRequired: true, roles: [UserRole.SuperAdmin, UserRole.Admin, UserRole.Agent, UserRole.Customer] },
           },
           {
             path: "PropertyDetails",
@@ -76,12 +76,15 @@ const routes = [
               import(
                 /* webpackChunkName: "piaf" */ "./views/app/second-menu/PropertyDetails"
               ),
-            meta: { loginRequired: true },
+            meta: { loginRequired: true, roles: [UserRole.SuperAdmin, UserRole.Admin, UserRole.Agent, UserRole.Customer] },
           },
         ],
-        meta: { loginRequired: true },
       },
-
+      {
+        path: "settings",
+        component: () => import(/* webpackChunkName: "settings" */ "./views/app/settings"),
+        meta: { loginRequired: true, roles: [UserRole.SuperAdmin, UserRole.Admin, UserRole.Agent] },
+      },
       {
         path: "single",
         component: () =>
@@ -89,15 +92,6 @@ const routes = [
         meta: { loginRequired: true },
       },
     ],
-  },
-  {
-    path: "/error",
-    component: () => import(/* webpackChunkName: "error" */ "./views/Error"),
-  },
-  {
-    path: "/unauthorized",
-    component: () =>
-      import(/* webpackChunkName: "error" */ "./views/Unauthorized.vue"),
   },
   {
     path: "/user",
@@ -127,6 +121,15 @@ const routes = [
     ],
   },
   {
+    path: "/error",
+    component: () => import(/* webpackChunkName: "error" */ "./views/Error"),
+  },
+  {
+    path: "/unauthorized",
+    component: () =>
+      import(/* webpackChunkName: "error" */ "./views/Unauthorized.vue"),
+  },
+  {
     path: "*",
     component: () => import(/* webpackChunkName: "error" */ "./views/Error"),
   },
@@ -138,12 +141,5 @@ const router = new VueRouter({
   mode: "history",
 });
 
-// router.beforeEach((to, from, next) => {
-//   let user = getCurrentUser();
-//   if (to.meta.loginRequired && user.title === "None") {
-//     router.push("/unauthorized");
-//   } else {
-//     next();
-//   }
-// });
+router.beforeEach(AuthGuard);
 export default router;

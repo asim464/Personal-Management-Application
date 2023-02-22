@@ -24,7 +24,7 @@
   "menu": {
     "home": "Home",
     "app": "Home",
-    "property": "Properties List",
+    "property": "Properties",
     "dashboard": "Dashboard",
     "Dashboard": "Dashboard",
     "default": "Default",
@@ -119,16 +119,18 @@
     "divided-table": "Divided Table",
     "scrollable": "Scrollable",
     "responsive": "Responsive",
-    "piaf": "SU Panel",
+    "piaf": "Main Information",
     "piaf_lbl": "Super Admin",
     "second-menu": "Property",
     "UsersListingView": "Users Listing View",
     "second": "Users List",
     "single": "Single",
     "agency": "Agency",
-    "Agency": "Agency",
+    "Agency": "Agency Details",
     "admin": "Company Admin",
-    "user": "Users"
+    "user": "Users",
+    "user-list": "Users Available",
+    "settings": "Settings"
   },
   "dashboards": {
     "pending-orders": "Pending Orders",

@@ -6,18 +6,14 @@
           <p class="white mb-0">
             Please use your credentials to login.
             <br />If you are not a member, please
-            <router-link to="/user/register" class="white">register</router-link
-            >.
+            <router-link to="/user/register" class="white">register</router-link>.
           </p>
         </div>
         <div class="form-side">
           <i class="simple-icon-login" style="font-size: 2rem"></i>
           <h6 class="mb-4">Login</h6>
 
-          <b-form
-            @submit.prevent="formSubmit"
-            class="av-tooltip tooltip-label-bottom"
-          >
+          <b-form @submit.prevent="formSubmit" class="av-tooltip tooltip-label-bottom">
             <b-form-group label="E-mail" class="has-float-label mb-4">
               <b-form-input
                 type="text"
@@ -31,8 +27,7 @@
                 >Please enter a valid email address
               </b-form-invalid-feedback>
               <b-form-invalid-feedback v-else-if="!$v.form.email.minLength"
-                >Your email must be minimum 4
-                characters</b-form-invalid-feedback
+                >Your email must be minimum 4 characters</b-form-invalid-feedback
               >
             </b-form-group>
 
@@ -46,31 +41,21 @@
                 >Please enter your password
               </b-form-invalid-feedback>
               <b-form-invalid-feedback
-                v-else-if="
-                  !$v.form.password.minLength || !$v.form.password.maxLength
-                "
+                v-else-if="!$v.form.password.minLength || !$v.form.password.maxLength"
                 >Your password must be between 4 and 16
                 characters</b-form-invalid-feedback
               >
             </b-form-group>
             <div class="d-flex justify-content-between align-items-center">
-              <router-link to="/user/forgot-password"
-                >Forgot Password</router-link
-              >
+              <router-link to="/user/forgot-password">Forgot Password</router-link>
               <b-button
                 :disabled="flag === true"
-                click="formSubmit()"
+                @click="formSubmit()"
                 type="submit"
                 variant="primary"
                 size="lg"
-                :class="{
-                  'btn-multiple-state btn-shadow': true,
-                  'show-spinner': flag === true,
-                  'show-success': !flag && loginError === false,
-                  'show-fail': !flag && loginError,
-                }"
               >
-                <span class="spinner d-inline-block">
+                <!-- <span class="spinner d-inline-block">
                   <span class="bounce1"></span>
                   <span class="bounce2"></span>
                   <span class="bounce3"></span>
@@ -80,7 +65,7 @@
                 </span>
                 <span class="icon fail">
                   <i class="simple-icon-exclamation"></i>
-                </span>
+                </span> -->
                 <span class="label">LOGIN</span>
               </b-button>
             </div>
@@ -94,6 +79,12 @@
               "
               style="font-weight: 400px; font-size: medium"
             >
+            :class="{
+                  'btn-multiple-state btn-shadow': true,
+                  'show-spinner': flag === true,
+                  'show-success': !flag && loginError === false,
+                  'show-fail': !flag && loginError,
+                }"
               <router-link to="/user/register"
                 ><u
                   >Not a member. Click here to Register<i
@@ -113,17 +104,12 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import { validationMixin } from "vuelidate";
-import axios from "axios";
-import jwt_decode from "jwt-decode";
-import { apiUrl } from "../../constants/config";
+// import axios from "axios";
+// import jwt_decode from "jwt-decode";
+// import { apiUrl } from "../../constants/config";
 import { adminRoot } from "../../constants/config";
-import { UserRole } from "../../utils/auth.roles";
-const {
-  required,
-  maxLength,
-  minLength,
-  email,
-} = require("vuelidate/lib/validators");
+// import { UserRole } from "../../utils/auth.roles";
+const { required, maxLength, minLength, email } = require("vuelidate/lib/validators");
 
 export default {
   data() {
@@ -158,22 +144,19 @@ export default {
       loginAuthApi: "loginAuth",
     }),
 
-
     async formSubmit() {
       this.flag = true;
       this.$v.$touch();
       this.$v.form.$touch();
-      if (
-        (this.form.email == "example@ex.com") &
-        (this.form.password == "xxxxxxx")
-      ) {
-        this.$bvToast.toast(
-          "Kindly change default credentials and try again.",
+      if ((this.form.email == "example@ex.com") & (this.form.password == "xxxxxxx")) {
+        this.$notify(
+          "Error",
+          "Kindly change default credentials to login",
+          "Code:" + res.status + ", Message:" + res.statusText,
           {
-            title: "Invalid Credentials",
-            variant: "warning",
-            solid: true,
-            toaster: "b-toaster-top-center",
+            type: "error",
+            duration: 5000,
+            permanent: false,
           }
         );
       } else {
@@ -181,28 +164,36 @@ export default {
           email: this.form.email,
           password: this.form.password,
         };
-        this.flag = false;
 
         const res = await this.loginAuthApi({
           payload: payload,
         });
+
         if (res.status == 201) {
-          this.flag = true;
-          if (this.flag) {
-            this.$notify(
-              "Success",
-              "Login Success",
-              "Code:" + res.status + ", Message:" + res.statusText,
-              {
-                type: "success",
-                duration: 5000,
-                permanent: false,
-              }
-            );
-            this.$nextTick(() => {
-              this.$router.push(adminRoot);
-            });
-          }
+          this.$notify(
+            "Success",
+            "Login Success",
+            "Code:" + res.status + ", Message:" + res.statusText,
+            {
+              type: "success",
+              duration: 5000,
+              permanent: false,
+            }
+          );
+          this.$nextTick(() => {
+            this.$router.push(adminRoot);
+          });
+        } else {
+          this.$notify(
+            "Error",
+            "Username or Password Incorrect",
+            "Code:" + res.status + ", Message:" + res.statusText,
+            {
+              type: "error",
+              duration: 5000,
+              permanent: false,
+            }
+          );
         }
       }
     },

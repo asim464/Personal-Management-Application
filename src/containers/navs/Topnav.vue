@@ -168,8 +168,11 @@
             <span v-if="currentUser == null">
               <img alt="None" :src="currentUser.img" />
             </span>
-            <span v-else>
+            <span v-else-if="currentUser.img != null">
               <img :alt="currentUser.title" :src="currentUser.img" />
+            </span>
+            <span v-else>
+              <i class="iconsminds-administrator user-img" />
             </span>
           </template>
           <b-dropdown-item>Account</b-dropdown-item>
@@ -346,3 +349,12 @@ export default {
   }
 };
 </script>
+
+<style>
+.user-img{
+  display: inline-block;
+  border-radius: 60px;
+  box-shadow: 0 0 2px grey;
+  padding: 0.5em 0.6em;
+}
+</style>
