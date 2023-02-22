@@ -31,13 +31,13 @@
         </b-col>
       </b-row>
       <b-row>
-        <div class="m-5">
+        <div class="m-1">
           <b-card-group deck v-if="length > 0">
             <b-card :img-src="imageList[i].url" no-body />
             <b-card v-if="length > 1" :img-src="imageList[j].url" no-body />
             <b-card v-if="length > 2" :img-src="imageList[k].url" no-body />
           </b-card-group>
-          <div class="m-2 d-flex justify-content-center" v-if="length > 0">
+          <div class="mt-2 d-flex justify-content-center" v-if="length > 0">
             <b-button pill :disabled="i == 0" @click="getBackword"
               ><i class="iconsminds-arrow-back"></i
             ></b-button>
