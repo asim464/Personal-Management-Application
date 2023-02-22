@@ -20,11 +20,9 @@
       <template v-if="isLoad">
         <list-page-listing
           :displayMode="displayMode"
-          :items="paginatedItems"
           :selectedItems="selectedItems"
           :toggleItem="toggleItem"
           :perPage="perPage"
-          :page="page"
           :changePage="onPageChanged"
           :handleContextMenu="handleContextMenu"
           :onContextMenuAction="onContextMenuAction"
@@ -66,7 +64,7 @@ export default {
         label: "Title",
       },
       page: 1,
-      perPage: 4,
+      perPage: 10,
       search: "",
       from: 0,
       to: 0,
@@ -99,18 +97,6 @@ export default {
             this.items = propLst;
             this.total = this.items.length;
             this.$store.dispatch("setProperties", this.items);
-            // if (this.total > 5 && this.total <= 10) {
-            //   this.lastPage = 2;
-            // }
-            // console.log(this.items);
-            // this.from = 1;
-            // if (this.total == 1) {
-            //   this.to = 1;
-            // } else if (this.total >= 1 && this.total <= 5) {
-            //   this.to = this.total;
-            // } else {
-            //   this.to = 5;
-            // }
             this.selectedItems = [];
             this.$notify(
               "Success",
@@ -162,6 +148,11 @@ export default {
         page_number * page_size,
         (page_number + 1) * page_size
       );
+      let data = {
+        properties: this.paginatedItems,
+        currentPage: this.page,
+      };
+      this.$store.dispatch("onPaginationChange", data);
     },
     onPageChanged(page) {
       this.paginate(this.perPage, page - 1);
@@ -177,6 +168,7 @@ export default {
       this.sort = sort;
       let propLst = _.sortBy(this.items, this.sort.column);
       this.items = propLst;
+      this.paginate(this.perPage, this.page-1);
     },
     searchChange(val) {
       this.search = val;

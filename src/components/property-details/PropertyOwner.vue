@@ -61,7 +61,7 @@
           <b-col class="rowsLbl" cols="6">Last Name:</b-col>
           <b-col
             ><p class="rowsVal">
-              {{ ownerItem.lastName }} &#13217;
+              {{ ownerItem.lastName }}
             </p></b-col
           >
         </b-row>

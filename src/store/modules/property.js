@@ -3,6 +3,10 @@ import { apiUrl } from "../../constants/config";
 import { getCurrentUser } from "../../utils";
 const state = {
   propertiesList: [],
+  paginatedList: {
+    properties: [],
+    currentPage: 1,
+  },
   selectedProp: {
     id: 0,
     title: "",
@@ -126,12 +130,16 @@ const state = {
 
 const getters = {
   propertiesList: (state) => state.propertiesList,
+  paginatedList: (state) => state.paginatedList,
   selectedProp: (state) => state.selectedProp,
 };
 
 const mutations = {
   setAllProperty(state, payload) {
     state.propertiesList = payload;
+  },
+  setPaginatedList(state, payload) {
+    state.paginatedList = payload
   },
   setSelectedProp(state, payload) {
     state.selectedProp = payload;
@@ -159,8 +167,10 @@ const mutations = {
 
 const actions = {
   async setProperties({ commit }, {payload}) {
-    
     commit("setAllProperty", payload);
+  },
+  onPaginationChange({ commit }, payload) {
+    commit("setPaginatedList", payload);
   },
   setSelectedProp({ commit }, payload) {
     commit("setSelectedProp", payload);

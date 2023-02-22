@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-if="items.length == 0">
+    <template v-if="paginatedList.properties.length == 0">
       <b-card align="center">
         <template #header>
           <b-row class="p-1">
@@ -22,7 +22,7 @@
           lg="4"
           xl="3"
           class="mb-3"
-          v-for="(item, index) in items"
+          v-for="(item, index) in paginatedList.properties"
           :key="index"
           :id="item.id"
         >
@@ -39,7 +39,7 @@
         <b-colxx
           xxs="12"
           class="mb-3"
-          v-for="(item, index) in items"
+          v-for="(item, index) in paginatedList.properties"
           :key="index"
           :id="item.id"
         >
@@ -56,7 +56,7 @@
         <b-colxx
           xxs="12"
           class="mb-3"
-          v-for="(item, index) in items"
+          v-for="(item, index) in paginatedList.properties"
           :key="index"
           :id="item.id"
         >
@@ -69,7 +69,7 @@
           />
         </b-colxx>
       </b-row>
-      <b-row v-if="total > 4">
+      <b-row v-if="total > 10">
         <b-colxx xxs="12">
           <!-- <b-pagination-nav
             :number-of-pages="lastPage"
@@ -96,7 +96,7 @@
             @change="changePage"
             :total-rows="total"
             :per-page="perPage"
-            v-model="page"
+            v-model="paginatedList.currentPage"
             align="center"
           >
             <template v-slot:next-text>
@@ -136,6 +136,8 @@
 import ImageListItem from "../../components/Listing/ImageListItem";
 import ThumbListItem from "../../components/Listing/ThumbListItem";
 import DataListItem from "../../components/Listing/DataListItem";
+import { mapGetters } from "vuex";
+
 export default {
   components: {
     "image-list-item": ImageListItem,
@@ -144,20 +146,21 @@ export default {
   },
   props: [
     "displayMode",
-    "items",
     "selectedItems",
     "toggleItem",
     "perPage",
-    "page",
     "changePage",
     "handleContextMenu",
     "onContextMenuAction",
     "total"
   ],
   methods: {
-    linkGen(pageNum) {
-      return "#page-" + pageNum;
-    },
+    // linkGen(pageNum) {
+    //   return "#page-" + pageNum;
+    // },
   },
+  computed: {
+    ...mapGetters(["paginatedList"])
+  }
 };
 </script>
