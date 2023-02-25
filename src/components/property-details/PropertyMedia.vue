@@ -44,7 +44,7 @@
             <b-button
               pill
               class="ml-2"
-              :disabled="length == k + 1"
+              :disabled="length == k + 1 || length <= 3"
               @click="getForward"
             >
               <i class="iconsminds-arrow-forward"></i

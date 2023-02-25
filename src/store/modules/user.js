@@ -88,7 +88,7 @@ export default {
         }
         setCurrentUser({...item});
         commit("setUser", item);
-      } 
+      }
       return res;
     },
     // async login({ commit }, { payload, config }) {
@@ -173,6 +173,15 @@ export default {
     async updatePropertyDescription({ commit }, { pk, payload, config }) {
       const res = await axios.patch(
         apiUrl + "property/updateDescription/" + pk,
+        payload,
+        config
+      );
+      return res;
+    },
+    async createImage({ commit }, { pk, payload, config }) {
+      config.headers["Content-Type"]="multipart/form-data";
+      const res = await axios.post(
+        apiUrl + "images/uploadMultipleFiles/" + pk,
         payload,
         config
       );
