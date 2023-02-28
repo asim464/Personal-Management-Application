@@ -194,6 +194,10 @@ const actions = {
       return res;
     }
   },
+  async updatePublicationStatus({commit}, {pk, ps, config}) {
+    const res = await axios.patch(apiUrl + "property/updatePublicationStatus/" + pk + "/" + ps, {}, config);
+    return res;
+  }
   // async updateMFetProp({ commit }, payload) {
   //   let user = getCurrentUser();
   //   var config = {

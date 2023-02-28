@@ -125,11 +125,10 @@
           }}</b-badge>
         </div>
         <div class="w-15 w-sm-100">
-          <b-button v-b-modal.modalEditProp variant="primary" size="sm"
+          <b-button v-b-modal.modalEditProp variant="primary" size="sm" 
             ><i class="iconsminds-file-edit" style="position: relative"></i
             >Edit</b-button
           >
-          <edit-prop-modal :property="data" />
         </div>
       </div>
       <div class="custom-control custom-checkbox pl-1 align-self-center pr-4">
@@ -139,6 +138,7 @@
         />
       </div>
     </div>
+    <edit-prop-modal @shown="focusMyElement" :property="data" />
   </b-card>
 </template>
 

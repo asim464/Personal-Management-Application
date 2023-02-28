@@ -57,10 +57,10 @@
         </b-row>
         <b-row>
           <b-col xxs="6">
-            <!-- <property-status-publication
+            <property-status-publication
               :property="details"
               @fetchProperty="fetchProperty"
-            /> -->
+            />
           </b-col>
           <b-col xxxs="6">
             <property-owner

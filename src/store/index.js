@@ -7,6 +7,7 @@ import user from './modules/user'
 import agency from './modules/agency'
 import agents from './modules/agents'
 import property from './modules/property'
+import publication from './modules/publication'
 import { setCurrentLanguage } from '../utils'
 import createPersistedState from "vuex-persistedstate";
 
@@ -32,6 +33,7 @@ export default new Vuex.Store({
     user,
     agency,
     agents,
-    property
+    property,
+    publication
   }
 })

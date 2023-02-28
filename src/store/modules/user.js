@@ -86,7 +86,7 @@ export default {
           item["agencyId"] = agencyId;
           item["agencyName"] = agencyName;
         }
-        setCurrentUser({...item});
+        setCurrentUser({ ...item });
         commit("setUser", item);
       }
       return res;
@@ -179,7 +179,7 @@ export default {
       return res;
     },
     async createImage({ commit }, { pk, payload, config }) {
-      config.headers["Content-Type"]="multipart/form-data";
+      config.headers["Content-Type"] = "multipart/form-data";
       const res = await axios.post(
         apiUrl + "images/uploadMultipleFiles/" + pk,
         payload,
