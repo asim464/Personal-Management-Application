@@ -8,9 +8,7 @@
     >
       <b-form>
         <b-form-group v-if="currentUser.role == UserRole.SuperAdmin" label="Agency">
-          <b-form-select
-            v-model="newItem.agencyID"
-          >
+          <b-form-select v-model="newItem.agencyID">
             <template #first>
               <b-form-select-option value="" default disabled
                 >-- Please select an option --</b-form-select-option
@@ -25,7 +23,8 @@
           </b-form-select>
         </b-form-group>
         <b-form-group label="Title">
-          <b-form-input v-model="newItem.prop.title" />
+          <b-form-input class="prop-title" v-model="newItem.prop.title" /> 
+          <!-- @click.native="transformName" -->
         </b-form-group>
         <b-form-group label="Type">
           <b-form-select
@@ -54,16 +53,15 @@
         <b-button variant="outline-secondary" @click="hideModal('modalAddProp')"
           >Cancel</b-button
         >
-        <b-button variant="primary" @click="addNewProperty()" class="mr-1"
-          >SAVE</b-button
-        >
+        <b-button variant="primary" @click="addNewProperty()" class="mr-1">SAVE</b-button>
       </template>
     </b-modal>
   </div>
 </template>
-  
+
 <script>
 import axios from "axios";
+import $ from "jquery";
 import { getCurrentUser } from "../../utils";
 import { apiUrl } from "../../constants/config";
 import { mapGetters } from "vuex";
@@ -109,6 +107,17 @@ export default {
     ];
   },
   methods: {
+    // transformName() {
+    //   $(".prop-title").on("change keydown paste", function (e) {
+    //     if ((this.value.length = 1)) {
+    //     }
+    //     var $this_val = $(this).val();
+    //     this_val = $this_val.toLowerCase().replace(/\b[a-z]/g, function (char) {
+    //       return char.toUpperCase();
+    //     });
+    //     $(this).val(this_val);
+    //   });
+    // },
     addNewProperty() {
       let user = getCurrentUser();
 

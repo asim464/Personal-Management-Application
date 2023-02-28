@@ -3,14 +3,22 @@
     <b-colxx xxs="12">
       <h1>{{ title }}</h1>
       <div class="top-right-button-container">
-       <b-button
-         v-b-modal.modalAddProp
-         variant="primary"
-         size="lg"
-         class="top-right-button newPropBtn"
-       ><i class="iconsminds-add" style="position: relative; margin-right:5px;" />ADD NEW</b-button>
+        <b-button
+          v-b-modal.modalAddProp
+          variant="primary"
+          size="lg"
+          class="top-right-button newPropBtn"
+          ><i class="iconsminds-add" style="position: relative; margin-right: 5px" />ADD
+          NEW</b-button
+        >
         <b-button-group>
-          <b-dropdown split right @click="selectAll(true)" class="check-button ml-2" variant="primary">
+          <b-dropdown
+            split
+            right
+            @click="selectAll(true)"
+            class="check-button ml-2"
+            variant="primary"
+          >
             <label
               class="custom-control custom-checkbox pl-4 mb-0 d-inline-block"
               slot="button-content"
@@ -19,22 +27,26 @@
                 class="custom-control-input"
                 type="checkbox"
                 :checked="isSelectedAll"
-                v-shortkey="{select: ['ctrl','a'], undo: ['ctrl','d']}"
+                v-shortkey="{ select: ['ctrl', 'a'], undo: ['ctrl', 'd'] }"
                 @shortkey="keymap"
               />
               <span
                 :class="{
-                'custom-control-label' :true,
-                'indeterminate' : isAnyItemSelected
+                  'custom-control-label': true,
+                  indeterminate: isAnyItemSelected,
                 }"
-              >&nbsp;</span>
+                >&nbsp;</span
+              >
             </label>
-            <b-dropdown-item>{{$t('pages.delete')}}</b-dropdown-item>
+            <b-dropdown-item v-b-modal.deletePropertyModal>{{
+              $t("pages.delete")
+            }}</b-dropdown-item>
             <!-- <b-dropdown-item>{{$t('pages.edit')}}</b-dropdown-item> -->
           </b-dropdown>
         </b-button-group>
       </div>
-     <add-new-property-modal></add-new-property-modal>
+      <add-new-property-modal />
+      <delete-property-modal :selectedItems="items" @updateList="updateList" />
       <piaf-breadcrumb />
       <div class="mb-2 mt-2">
         <b-button
@@ -42,25 +54,25 @@
           class="pt-0 pl-0 d-inline-block d-md-none"
           v-b-toggle.displayOptions
         >
-          {{ $t('pages.display-options') }}
+          {{ $t("pages.display-options") }}
           <i class="simple-icon-arrow-down align-middle" />
         </b-button>
         <b-collapse id="displayOptions" class="d-md-block">
           <span class="mr-3 d-inline-block float-md-left">
             <a
-              :class="{'mr-2 view-icon':true,'active': displayMode==='list'}"
+              :class="{ 'mr-2 view-icon': true, active: displayMode === 'list' }"
               @click="changeDisplayMode('list')"
             >
               <data-list-icon />
             </a>
             <a
-              :class="{'mr-2 view-icon':true,'active': displayMode==='thumb'}"
+              :class="{ 'mr-2 view-icon': true, active: displayMode === 'thumb' }"
               @click="changeDisplayMode('thumb')"
             >
               <thumb-list-icon />
             </a>
             <a
-              :class="{'mr-2 view-icon':true,'active': displayMode==='image'}"
+              :class="{ 'mr-2 view-icon': true, active: displayMode === 'image' }"
               @click="changeDisplayMode('image')"
             >
               <image-list-icon />
@@ -75,18 +87,24 @@
               size="xs"
             >
               <b-dropdown-item
-                v-for="(order,index) in sortOptions"
+                v-for="(order, index) in sortOptions"
                 :key="index"
                 @click="changeOrderBy(order)"
-              >{{ order.label }}</b-dropdown-item>
+                >{{ order.label }}</b-dropdown-item
+              >
             </b-dropdown>
 
             <div class="search-sm d-inline-block float-md-left mr-1 align-top">
-              <b-input :placeholder="$t('menu.search')"  @input="(val) => searchChange(val)" />
+              <b-input
+                :placeholder="$t('menu.search')"
+                @input="(val) => searchChange(val)"
+              />
             </div>
           </div>
           <div class="float-md-right pt-1">
-            <span class="text-muted text-small mr-1 mb-2">{{from}}-{{to}} of {{ total }}</span>
+            <span class="text-muted text-small mr-1 mb-2"
+              >{{ from }}-{{ to }} of {{ total }}</span
+            >
             <!-- <b-dropdown
               id="ddown2"
               right
@@ -109,25 +127,24 @@
   </b-row>
 </template>
 <script>
-import {
-  DataListIcon,
-  ThumbListIcon,
-  ImageListIcon
-} from "../../components/Svg";
+import { DataListIcon, ThumbListIcon, ImageListIcon } from "../../components/Svg";
 import AddNewPropertyModal from "../../components/Form/AddNewPropertyModal.vue";
+import DeletePropertyModal from "../../components/Form/DeletePropertyModal.vue";
 
 export default {
   components: {
     "data-list-icon": DataListIcon,
     "thumb-list-icon": ThumbListIcon,
     "image-list-icon": ImageListIcon,
-    "add-new-property-modal": AddNewPropertyModal
+    "add-new-property-modal": AddNewPropertyModal,
+    "delete-property-modal": DeletePropertyModal,
   },
   props: [
     "title",
     "selectAll",
     "isSelectedAll",
     "isAnyItemSelected",
+    "selectedItems",
     "keymap",
     "displayMode",
     "changeDisplayMode",
@@ -137,37 +154,48 @@ export default {
     "from",
     "to",
     "total",
-    "perPage"
+    "perPage",
   ],
   data() {
     return {
       sortOptions: [
         {
           column: "id",
-          label: "ID"
+          label: "ID",
         },
         {
           column: "title",
-          label: "Title"
+          label: "Title",
         },
         {
           column: "updateAt",
-          label: "Last Updated"
+          label: "Last Updated",
         },
         {
           column: "status",
-          label: "Status"
+          label: "Status",
         },
         {
           column: "price",
-          label: "Price"
-        }
+          label: "Price",
+        },
       ],
-      pageSizes: [4, 8, 12]
+      items: [],
+      // pageSizes: [4, 8, 12],
     };
-  }
+  },
+  watch: {
+    selectedItems(value){
+      console.log(value);
+      this.items = value;
+    }
+  },
+  methods: {
+    async updateList(){
+      this.$emit("fetchList");
+    }
+  },
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -6,6 +6,7 @@
         :selectAll="selectAll"
         :isSelectedAll="isSelectedAll"
         :isAnyItemSelected="isAnyItemSelected"
+        :selectedItems="selectedItems"
         :keymap="keymap"
         :displayMode="displayMode"
         :changeDisplayMode="changeDisplayMode"
@@ -16,6 +17,7 @@
         :to="to"
         :total="total"
         :perPage="perPage"
+        @fetchList="loadItems"
       ></list-page-heading>
       <template v-if="isLoad">
         <list-page-listing
@@ -166,7 +168,8 @@ export default {
     // },
     changeOrderBy(sort) {
       this.sort = sort;
-      let propLst = _.sortBy(this.items, this.sort.column);
+      let propLst = _.sortBy(this.items.ignoreCase, sort.column);
+      console.log(sort.column);
       this.items = propLst;
       this.paginate(this.perPage, this.page-1);
     },
@@ -231,6 +234,9 @@ export default {
     },
     onContextMenuAction(action) {
       console.log("context menu item clicked - " + action + ": ", this.selectedItems);
+      if(action === 'delete') {
+        this.$root.$emit('bv::show::modal', 'deletePropertyModal');
+      }
     },
     changePage(pageNum) {
       this.page = pageNum;

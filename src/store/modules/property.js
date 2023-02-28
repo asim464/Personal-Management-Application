@@ -179,6 +179,21 @@ const actions = {
     let det = commit("findProperty", payload);
     return det;
   },
+  async deletePropertyById({ commit }, { pk, config }) {
+    if(pk.length === 1) {
+      const res = await axios.delete(apiUrl + "property/" + pk[0], config);
+
+      return res;
+    } else if (pk.length > 1 && pk.length <=10) {
+      const res = []
+      pk.forEach(async (item) => {
+        tmp = await axios.delete(apiUrl + "property/" + item, config);
+        res.push({ ...tmp });
+      })
+      
+      return res;
+    }
+  },
   // async updateMFetProp({ commit }, payload) {
   //   let user = getCurrentUser();
   //   var config = {
