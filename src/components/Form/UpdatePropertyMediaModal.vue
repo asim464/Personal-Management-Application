@@ -1,11 +1,6 @@
 <template>
   <div>
-    <b-modal
-      id="editMediaModal"
-      ref="editPropertyMedia"
-      title="Edit Property Media"
-      modal-class="modal-right"
-    >
+    <b-modal id="editMediaModal" ref="editPropertyMedia" title="Edit Property Media" modal-class="modal-right">
       <b-form class="av-tooltip tooltip-label-bottom">
         <b-form-group>
           <b-form-checkbox v-model="isMain" @change="clearAll">
@@ -13,17 +8,8 @@
           </b-form-checkbox>
         </b-form-group>
         <b-form-group label="Drop Image or Document Here">
-          <b-form-file
-            v-if="isMain"
-            v-model="file"
-            ref="file-input"
-          ></b-form-file>
-          <b-form-file
-            v-else
-            multiple
-            v-model="files"
-            ref="file-input"
-          ></b-form-file>
+          <b-form-file v-if="isMain" v-model="file" ref="file-input"></b-form-file>
+          <b-form-file v-else multiple v-model="files" ref="file-input"></b-form-file>
         </b-form-group>
 
         <b-form-group label="Image Position">
@@ -33,9 +19,7 @@
             </b-col>
           </b-row>
         </b-form-group>
-        <b-button class="mb-1" variant="primary" @click="addMedia"
-          >ADD</b-button
-        >
+        <b-button class="mb-1" variant="primary" @click="addMedia">ADD</b-button>
       </b-form>
       <div v-if="listImages.length > 0">
         <h6>Uploaded Images and Documents</h6>
@@ -52,11 +36,11 @@
                   <span>{{ timeFormat(image.uploadTime) }}</span>
                 </b-row>
                 <b-row>
-                  <span>IsMain :  </span>
-                  <span><b-form-checkbox disabled v-model="image.isMain"  /></span>
+                  <span>IsMain : </span>
+                  <span><b-form-checkbox disabled v-model="image.isMain" /></span>
                 </b-row>
                 <b-row>
-                  <span>IsActive :  </span>
+                  <span>IsActive : </span>
                   <b-form-checkbox disabled v-model="image.isActive" text-field="IsActive" />
                 </b-row>
                 <!-- <b-form class="av-tooltip tooltip-label-bottom">
@@ -72,7 +56,8 @@
             </b-col>
           </b-row>
           <div class="d-flex flex-row-reverse">
-            <b-button variant="outline-danger" size="sm" class="mb-2 ml-2" @click="deleteMedia(image.id)" > <i class="simple-icon-trash"></i></b-button>
+            <b-button variant="outline-danger" size="sm" class="mb-2 ml-2" @click="deleteMedia(image.id)"> <i
+                class="simple-icon-trash"></i></b-button>
             <!-- <b-button variant="outline-danger" size="sm" class="mb-2"  > <i class="simple-icon-trash"></i></b-button> -->
           </div>
 
@@ -80,14 +65,8 @@
         </div>
       </div>
       <template slot="modal-footer">
-        <b-button
-          variant="outline-secondary"
-          @click="hideModal('editPropertyMedia')"
-          >Cancel</b-button
-        >
-        <b-button variant="primary" @click.prevent="update()" class="mr-1"
-          >Save</b-button
-        >
+        <b-button variant="outline-secondary" @click="hideModal('editPropertyMedia')">Cancel</b-button>
+        <b-button variant="primary" @click.prevent="update()" class="mr-1">Save</b-button>
       </template>
     </b-modal>
   </div>
@@ -123,17 +102,17 @@ export default {
   },
   methods: {
     ...mapActions({
-      addImage: "createImage",
+      addPropertyImages: "createPropertyImages",
+      addMainImage: "createMainImage",
+      deleteImage: "deletePropertyImage",
     }),
     async addMedia() {
       let formData = new FormData();
-      this.files.forEach((file) => {
-        formData.append("propertyImages", file);
-      });
-      formData.append("mainImage", this.files[0]);
+
 
       if (this.isMain) {
-        const res = await this.addImage({
+        formData.append("file", this.file);
+        const res = await this.addMainImage({
           pk: this.propertyId,
           config: this.config,
           payload: formData,
@@ -145,12 +124,14 @@ export default {
             duration: 5000,
           });
           this.$emit("updateData");
+          this.clearAll;
           // this.hideModal("editPropertyMedia");
         }
       } else {
-        formData.append("mainImage", files);
-        formData.append("propertyImages", files);
-        const res = await this.addImage({
+        this.files.forEach((file) => {
+          formData.append("propertyImages", file);
+        });
+        const res = await this.addPropertyImages({
           pk: this.propertyId,
           config: this.config,
           payload: formData,
@@ -162,50 +143,27 @@ export default {
             duration: 5000,
           });
           this.$emit("updateData");
+          this.clearAll;
           // this.hideModal("editPropertyMedia");
         }
       }
     },
     async deleteMedia(imageId) {
-      // let formData = new FormData();
-      // this.files.forEach((file) => {
-      //   formData.append("propertyImages", file);
-      // });
-      // formData.append("mainImage", this.files[0]);
-
-      // if (this.isMain) {
-      //   const res = await this.addImage({
-      //     pk: this.propertyId,
-      //     config: this.config,
-      //     payload: formData,
-      //   });
-      //   if (res.status == 201) {
-      //     this.$notify("Success", "Media Added successfully", res.status, {
-      //       type: "success",
-      //       permanent: false,
-      //       duration: 5000,
-      //     });
-      //     this.$emit("updateData");
-      //     // this.hideModal("editPropertyMedia");
-      //   }
-      // } else {
-      //   formData.append("mainImage", files);
-      //   formData.append("propertyImages", files);
-      //   const res = await this.addImage({
-      //     pk: this.propertyId,
-      //     config: this.config,
-      //     payload: formData,
-      //   });
-      //   if (res.status == 201) {
-      //     this.$notify("Success", "Media Added successfully", res.status, {
-      //       type: "success",
-      //       permanent: false,
-      //       duration: 5000,
-      //     });
-      //     this.$emit("updateData");
-      //     // this.hideModal("editPropertyMedia");
-      //   }
-      // }
+      const res = await this.deleteImage({
+        pk: imageId,
+        config: this.config,
+      });
+      console.log(res);
+      if (res.status == 200) {
+        this.$notify("Success", "Media deleted successfully", res.status, {
+          type: "success",
+          permanent: false,
+          duration: 5000,
+        });
+        this.$emit("updateData");
+        this.clearAll;
+        // this.hideModal("editPropertyMedia");
+      }
     },
     hideModal(refname) {
       this.$refs[refname].hide();

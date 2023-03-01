@@ -166,7 +166,7 @@ const mutations = {
 };
 
 const actions = {
-  async setProperties({ commit }, {payload}) {
+  async setProperties({ commit }, { payload }) {
     commit("setAllProperty", payload);
   },
   onPaginationChange({ commit }, payload) {
@@ -179,22 +179,22 @@ const actions = {
     let det = commit("findProperty", payload);
     return det;
   },
-  async editPropertyById({commit}, {pk, payload, config}) {
+  async editPropertyById({ commit }, { pk, payload, config }) {
     const res = await axios.patch(apiUrl + "property/" + pk, payload, config);
     return res;
   },
   async deletePropertyById({ commit }, { pk, config }) {
-    if(pk.length === 1) {
+    if (pk.length === 1) {
       const res = await axios.delete(apiUrl + "property/" + pk[0], config);
 
       return res;
-    } else if (pk.length > 1 && pk.length <=10) {
+    } else if (pk.length > 1 && pk.length <= 10) {
       const res = []
       pk.forEach(async (item) => {
         tmp = await axios.delete(apiUrl + "property/" + item, config);
         res.push({ ...tmp });
       })
-      
+
       return res;
     }
   },
@@ -265,16 +265,32 @@ const actions = {
     );
     return res;
   },
-  async createImage({ commit }, { pk, payload, config }) {
+  async createMainImage({ commit }, { pk, payload, config }) {
     config.headers["Content-Type"] = "multipart/form-data";
     const res = await axios.post(
-      apiUrl + "images/uploadMultipleFiles/" + pk,
+      apiUrl + "images/updateMainImage/" + pk,
       payload,
       config
     );
     return res;
   },
-  async updatePublicationStatus({commit}, {pk, ps, config}) {
+  async createPropertyImages({ commit }, { pk, payload, config }) {
+    config.headers["Content-Type"] = "multipart/form-data";
+    const res = await axios.post(
+      apiUrl + "images/uploadMultiplePropertyFiles/" + pk,
+      payload,
+      config
+    );
+    return res;
+  },
+  async deletePropertyImage({ commit }, { pk, payload, config }) {
+    const res = await axios.delete(
+      apiUrl + "images/deleteByImageId/" + pk,
+      config
+    );
+    return res;
+  },
+  async updatePublicationStatus({ commit }, { pk, ps, config }) {
     const res = await axios.patch(apiUrl + "property/updatePublicationStatus/" + pk + "/" + ps, {}, config);
     return res;
   }
