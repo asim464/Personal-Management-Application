@@ -53,16 +53,17 @@
                     >&nbsp;</span
                   >
                 </label>
-                <b-dropdown-item v-b-modal.deletePropertyModal>{{
+                <b-dropdown-item v-b-modal.deletePropertyModal disabled>{{
                   $t("pages.delete")
                 }}</b-dropdown-item>
-                <!-- <b-dropdown-item>{{$t('pages.edit')}}</b-dropdown-item> -->
+                <b-dropdown-item v-b-modal.modalEditProp disabled>{{$t('pages.edit')}}</b-dropdown-item>
               </b-dropdown>
             </b-button-group>
           </div>
         </b-col>
         <add-new-property-modal />
         <delete-property-modal :selectedItems="items" @updateList="updateList" />
+        <edit-property-modal :item="items" @updateList="updateList" />
       </b-row>
       <piaf-breadcrumb />
       <div class="mb-2 mt-2">
@@ -147,6 +148,7 @@
 import { DataListIcon, ThumbListIcon, ImageListIcon } from "../../components/Svg";
 import AddNewPropertyModal from "../../components/Form/AddNewPropertyModal.vue";
 import DeletePropertyModal from "../../components/Form/DeletePropertyModal.vue";
+import UpdatePropertyModal from "../../components/Form/UpdatePropertyModal.vue";
 import { getCurrentUser } from '../../utils';
 import { mapActions, mapGetters } from 'vuex';
 
@@ -157,6 +159,7 @@ export default {
     "image-list-icon": ImageListIcon,
     "add-new-property-modal": AddNewPropertyModal,
     "delete-property-modal": DeletePropertyModal,
+    "edit-property-modal": UpdatePropertyModal,
   },
   props: [
     "title",

@@ -116,17 +116,17 @@
       </b-row>
 
       <v-contextmenu @contextmenu="handleContextMenu" ref="contextmenu">
-        <v-contextmenu-item @click="onContextMenuAction('copy')">
+        <v-contextmenu-item @click="onContextMenuAction('edit')">
           <i class="simple-icon-docs" />
-          <span>Copy</span>
-        </v-contextmenu-item>
-        <v-contextmenu-item @click="onContextMenuAction('move-to-archive')">
-          <i class="simple-icon-drawer" />
-          <span>Move to archive</span>
+          <span>Edit</span>
         </v-contextmenu-item>
         <v-contextmenu-item @click="onContextMenuAction('delete')">
           <i class="simple-icon-trash" />
           <span>Delete</span>
+        </v-contextmenu-item>
+        <v-contextmenu-item @click="onContextMenuAction('cancel')">
+          <i class="simple-icon-minus" />
+          <span>Cancel Selection</span>
         </v-contextmenu-item>
       </v-contextmenu>
     </template>

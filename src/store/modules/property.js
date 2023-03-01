@@ -179,6 +179,10 @@ const actions = {
     let det = commit("findProperty", payload);
     return det;
   },
+  async editPropertyById({commit}, {pk, payload, config}) {
+    const res = await axios.patch(apiUrl + "property/" + pk, payload, config);
+    return res;
+  },
   async deletePropertyById({ commit }, { pk, config }) {
     if(pk.length === 1) {
       const res = await axios.delete(apiUrl + "property/" + pk[0], config);

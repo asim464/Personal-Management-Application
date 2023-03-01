@@ -124,12 +124,12 @@
             data.status
           }}</b-badge>
         </div>
-        <div class="w-15 w-sm-100">
+        <!-- <div class="w-15 w-sm-100">
           <b-button v-b-modal.modalEditProp variant="primary" size="sm" 
             ><i class="iconsminds-file-edit" style="position: relative"></i
             >Edit</b-button
           >
-        </div>
+        </div> -->
       </div>
       <div class="custom-control custom-checkbox pl-1 align-self-center pr-4">
         <b-form-checkbox
@@ -138,16 +138,16 @@
         />
       </div>
     </div>
-    <edit-prop-modal @shown="focusMyElement" :property="data" />
+    <!-- <edit-prop-modal :property="data" /> -->
   </b-card>
 </template>
 
 <script>
-import UpdatePropertyModal from "../Form/UpdatePropertyModal.vue";
+// import UpdatePropertyModal from "../Form/UpdatePropertyModal.vue";
 
 export default {
   components: {
-    "edit-prop-modal": UpdatePropertyModal,
+    // "edit-prop-modal": UpdatePropertyModal,
   },
   props: ["data", "selectedItems"],
   data() {

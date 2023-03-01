@@ -236,6 +236,25 @@ export default {
       console.log("context menu item clicked - " + action + ": ", this.selectedItems);
       if(action === 'delete') {
         this.$root.$emit('bv::show::modal', 'deletePropertyModal');
+      } else if (action === 'edit') {
+        if (this.selectedItems.length === 1) {
+          this.$root.$emit('bv::show::modal', 'modalEditProp');
+        } else if (this.selectedItems.length === 0) {
+          this.$notify("Error", "Select an item on right click to edit", "400", {
+            type: "error",
+            duration: 5000,
+            permanent: false,
+          });
+        } else if (this.selectedItems.length > 1) {
+          this.$notify("Error", "Select only one item on right click to edit", "400", {
+            type: "error",
+            duration: 5000,
+            permanent: false,
+          });
+          this.selectedItems = [];
+        }
+      } else if (action === 'cancel') {
+        this.selectedItems = [];
       }
     },
     changePage(pageNum) {
