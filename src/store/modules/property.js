@@ -198,6 +198,82 @@ const actions = {
       return res;
     }
   },
+  async getPropertyById({ commit }, { pk, config }) {
+    const res = await axios.get(apiUrl + "property/" + pk, config);
+    return res;
+  },
+  async updatePropertyMainFeature({ commit }, { pk, payload, config }) {
+    const res = await axios.post(
+      apiUrl + "property/createMainFeature/" + pk,
+      payload,
+      config
+    );
+    return res;
+  },
+  async updatePropertyDetails({ commit }, { pk, payload, config }) {
+    const res = await axios.patch(apiUrl + "details/" + pk, payload, config);
+    return res;
+  },
+  async updatePropertyCost({ commit }, { pk, payload, config }) {
+    const res = await axios.patch(
+      apiUrl + "property/updateCost/" + pk,
+      payload,
+      config
+    );
+    return res;
+  },
+  async updatePropertyAgent({ commit }, { pk, ps, config }) {
+    const res = await axios.patch(
+      apiUrl + "property/updateAgent/" + pk + "/" + ps,
+      {},
+      config
+    );
+    return res;
+  },
+  async updatePropertyExistingOwner({ commit }, { pk, pc, payload, config }) {
+    const res = await axios.patch(
+      apiUrl + "property/addExistingOwner/" + pk + "/" + pc,
+      payload,
+      config
+    );
+    return res;
+  },
+  async updatePropertyNewOwner({ commit }, { pk, payload, config }) {
+    const res = await axios.patch(
+      apiUrl + "property/addNewOwner/" + pk,
+      payload,
+      config
+    );
+    return res;
+  },
+  async updatePropertyFeatureNFurnishing(
+    { commit },
+    { pk, payload, config }
+  ) {
+    const res = await axios.post(
+      apiUrl + "property/createFurnishingFeature/" + pk,
+      payload,
+      config
+    );
+    return res;
+  },
+  async updatePropertyDescription({ commit }, { pk, payload, config }) {
+    const res = await axios.patch(
+      apiUrl + "property/updateDescription/" + pk,
+      payload,
+      config
+    );
+    return res;
+  },
+  async createImage({ commit }, { pk, payload, config }) {
+    config.headers["Content-Type"] = "multipart/form-data";
+    const res = await axios.post(
+      apiUrl + "images/uploadMultipleFiles/" + pk,
+      payload,
+      config
+    );
+    return res;
+  },
   async updatePublicationStatus({commit}, {pk, ps, config}) {
     const res = await axios.patch(apiUrl + "property/updatePublicationStatus/" + pk + "/" + ps, {}, config);
     return res;

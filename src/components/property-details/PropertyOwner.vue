@@ -47,10 +47,10 @@
         </h4>
       </b-row>
     </template>
-    <template v-else>
+    <template v-else-if="ownerItem.propertyId != null">
       <b-card-text>
         <b-row class="ml-2">
-          <b-col class="rowsLbl" cols="6">First Name:</b-col>
+          <b-col class="rowsLbl" cols="6">Name:</b-col>
           <b-col
             ><p class="rowsVal">
               {{ ownerItem.firstName }}
@@ -58,10 +58,10 @@
           >
         </b-row>
         <b-row class="ml-2">
-          <b-col class="rowsLbl" cols="6">Last Name:</b-col>
+          <b-col class="rowsLbl" cols="6">Contact:</b-col>
           <b-col
             ><p class="rowsVal">
-              {{ ownerItem.lastName }}
+              {{ ownerItem.Contact == "" ? "-" : ownerItem.Contact }}
             </p></b-col
           >
         </b-row>
@@ -93,7 +93,7 @@
       <b-row>
         <b-col>
           <p class="rowsVal pl-5" style="text-decoration: underline solid gray">
-            {{ ownerItem.IBAN == "" ? null : ownerItem.IBAN }}
+            {{ ownerItem.IBAN == "" ? "-" : ownerItem.IBAN }}
           </p>
         </b-col>
       </b-row>
@@ -117,7 +117,7 @@ export default {
       isHovering:false,
       ownerItem: {
         firstName: "",
-        lastName: "",
+        Contact: "",
         email: "",
         IBAN: "",
         propertyId: 0,
@@ -131,9 +131,14 @@ export default {
       this.ownerItem.ownerId = value.ownerId;
       if(this.property.owner != null) {
         this.ownerItem.firstName = value.owner.firstName;
-        this.ownerItem.lastName = value.owner.lastName;
+        this.ownerItem.Contact = value.owner.Contact;
         this.ownerItem.email = value.owner.email;
         this.ownerItem.IBAN = value.owner.IBAN;
+      } else if(this.property.owner === null & this.property.newOwner != null){
+        this.ownerItem.firstName = value.newOwner.Name;
+        this.ownerItem.Contact = value.newOwner.Contact;
+        this.ownerItem.email = value.newOwner.Email;
+        this.ownerItem.IBAN = value.newOwner.IBAN;
       }
     },
   },

@@ -7,7 +7,7 @@
       modal-class="modal-right"
     >
       <b-form>
-        <b-form-group label="Owners">
+        <b-form-group label="Select Owner">
           <b-form-select
             class="pt-2"
             v-model="item.ownerId"
@@ -22,6 +22,57 @@
             </template>
           </b-form-select>
         </b-form-group>
+        <template v-if="item.ownerId === 0">
+          <b-form-group label="Name">
+            <b-form-input v-model="Name" :rows="2" :max-rows="2" required />
+          </b-form-group>
+          <b-form-group label="Contact">
+            <b-form-input v-model="Contact" :rows="2" :max-rows="2" required />
+          </b-form-group>
+          <b-form-group label="E-mail">
+            <b-form-input v-model="Email" :rows="2" :max-rows="2" required />
+          </b-form-group>
+          <b-form-group label="IBAN">
+            <b-form-input
+              v-model="IBAN"
+              :state="ibanState"
+              :rows="2"
+              :max-rows="2"
+              aria-describedby="input-live-help input-live-feedback"
+              required
+            />
+            <b-form-invalid-feedback id="input-live-feedback">
+              Enter 14 Character IBAN.
+            </b-form-invalid-feedback>
+          </b-form-group>
+        </template>
+        <template v-else-if="!item.ownerId">
+          <p>Select an owner from above dropdown to continue further.</p>
+        </template>
+        <template v-else-if="item.ownerId > 0">
+          <!-- <b-form-group label="Name">
+            <b-form-input v-model="item.Name" :rows="2" :max-rows="2" disabled />
+          </b-form-group>
+          <b-form-group label="Contact">
+            <b-form-input v-model="item.Contact" :rows="2" :max-rows="2" disabled />
+          </b-form-group>
+          <b-form-group label="E-mail">
+            <b-form-input v-model="item.Email" :rows="2" :max-rows="2" disabled />
+          </b-form-group> -->
+          <b-form-group label="IBAN">
+            <b-form-input
+              v-model="IBAN"
+              :state="ibanState"
+              :rows="2"
+              :max-rows="2"
+              aria-describedby="input-live-help input-live-feedback"
+              required
+            />
+            <b-form-invalid-feedback id="input-live-feedback">
+              Enter 14 Character IBAN.
+            </b-form-invalid-feedback>
+          </b-form-group>
+        </template>
       </b-form>
 
       <template slot="modal-footer">
@@ -44,7 +95,16 @@ export default {
   },
   data() {
     return {
-      ownerLst: [],
+      ownerLst: [
+        {
+          text: "New Owner",
+          value: 0,
+        },
+      ],
+      Name: "",
+      Contact: "",
+      Email: "",
+      IBAN: "",
       propertyId: 0,
     };
   },
@@ -61,7 +121,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      updatePropOwner: "updatePropertyOwner",
+      updatePropEOwner: "updatePropertyExistingOwner",
+      updatePropNOwner: "updatePropertyNewOwner",
     }),
     async update() {
       let uri = window.location.search.substring(1);
@@ -69,23 +130,57 @@ export default {
       let propertyID = id.get("p");
 
       let ownerId = this.item.ownerId;
+      console.log(ownerId);
 
-      const res = await this.updatePropOwner({
-        pk: propertyID,
-        pc: ownerId,
-        config: this.config,
-      });
-
-      if (res.status == 200 || res.status == 201) {
-        this.$notify("Success", "Owner assigned to property succesfully", res.status, {
-          type: "success",
-          duration: 5000,
-          permanent: false,
+      if (ownerId === 0) {
+        let payload = {
+          Name: this.Name,
+          Contact: this.Contact,
+          Email: this.Email,
+          IBAN: this.IBAN,
+        };
+        const res = await this.updatePropNOwner({
+          pk: propertyID,
+          payload: payload,
+          config: this.config,
         });
-        this.$emit("updateData");
-        this.hideModal("propOwnerEditModal");
+        if (res.status == 200 || res.status == 201) {
+          this.$notify("Success", "Owner assigned to property succesfully", res.status, {
+            type: "success",
+            duration: 5000,
+            permanent: false,
+          });
+          this.hideModal("propOwnerEditModal");
+        } else {
+          this.$notify("Error", "Owner could not be assigned.", res.status, {
+            type: "error",
+            duration: 5000,
+            permanent: false,
+          });
+        }
+      } else if (ownerId > 0) {
+        const res = await this.updatePropEOwner({
+          pk: propertyID,
+          pc: ownerId,
+          payload: {IBAN: this.IBAN},
+          config: this.config,
+        });
+        if (res.status == 200 || res.status == 201) {
+          this.$notify("Success", "Owner assigned to property succesfully", res.status, {
+            type: "success",
+            duration: 5000,
+            permanent: false,
+          });
+          this.hideModal("propOwnerEditModal");
+        } else {
+          this.$notify("Error", "Owner could not be assigned.", res.status, {
+            type: "error",
+            duration: 5000,
+            permanent: false,
+          });
+        }
       } else {
-        this.$notify("Error", "Owner could not be assigned.", res.status, {
+        this.$notify("Error", "Owner could not be assigned.", "400", {
           type: "error",
           duration: 5000,
           permanent: false,
@@ -93,11 +188,15 @@ export default {
       }
     },
     hideModal(refname) {
+      this.$emit("updateData");
       this.$refs[refname].hide();
     },
   },
   computed: {
     ...mapGetters(["config", "agentsList"]),
+    ibanState() {
+      return this.IBAN.length === 14 ? true : false;
+    },
   },
 };
 </script>
