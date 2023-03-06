@@ -43,11 +43,11 @@ import { mapGetters } from "vuex";
 export default {
   methods: {
     goBack() {
-      if (this.currentUser != null) {
-        this.$router.push(`${adminRoot}/piaf/Dashboard`);
-      } else {
+      // if (this.currentUser != null) {
+        // this.$router.push(`${adminRoot}/piaf/Dashboard`);
+      // } else {
         this.$router.push("/user");
-      }
+      // }
     },
   },
   computed: {

@@ -21,7 +21,14 @@
             <template #append>
               <b-input-group-text>CHF</b-input-group-text>
             </template>
-            <b-form-input v-model="item.price" placeholder="Enter the price of the property" type="number" min="0" :rows="2" :max-rows="2" />
+            <b-form-input
+              v-model="item.price"
+              placeholder="Enter the price of the property"
+              type="number"
+              min="0"
+              :rows="2"
+              :max-rows="2"
+            />
           </b-input-group>
         </b-form-group>
       </b-form>
@@ -62,22 +69,25 @@ export default {
         price: Number(this.item.price),
       };
 
-      const res = await this.updatePropCost({
-        pk: this.item.propertyId,
-        payload: cost,
-        config: this.config,
-      });
-
-      if (res.status == 200 || res.status == 201) {
-        this.$notify("Success", "Property cost edited succesfully", res.status, {
-          type: "success",
-          duration: 5000,
-          permanent: false,
+      console.log(cost);
+      try {
+        const res = await this.updatePropCost({
+          pk: this.item.propertyId,
+          payload: cost,
+          config: this.config,
         });
-        this.$emit("updateData");
-        this.hideModal("propCostEditModal");
-      } else {
-        this.$notify("Error", "Property cost could not be edited", res.status, {
+
+        if (res.status == 200 || res.status == 201) {
+          this.$notify("Success", "Property cost edited succesfully", res.status, {
+            type: "success",
+            duration: 5000,
+            permanent: false,
+          });
+          this.$emit("updateData");
+          this.hideModal("propCostEditModal");
+        }
+      } catch(err) {
+        this.$notify("Error", "Property cost could not be edited", err.message, {
           type: "error",
           duration: 5000,
           permanent: false,
@@ -87,7 +97,6 @@ export default {
     hideModal(refname) {
       this.$refs[refname].hide();
     },
-
   },
   computed: {
     ...mapGetters(["config"]),

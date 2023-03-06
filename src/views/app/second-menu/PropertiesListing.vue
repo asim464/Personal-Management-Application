@@ -97,6 +97,7 @@ export default {
           if (res.status == 200 || res.status == 201) {
             let propLst = _.sortBy(res.data, this.sort.column);
             this.items = propLst;
+            console.log(this.items);
             this.total = this.items.length;
             this.$store.dispatch("setProperties", this.items);
             this.selectedItems = [];

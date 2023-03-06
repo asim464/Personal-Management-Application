@@ -30,7 +30,7 @@
         </b-col>
       </b-row>
     </template>
-    <template v-if="!furnishingFeature">
+    <template v-if="furnishingFeature === false">
       <b-row class="m-1">
         <h4
           @mouseover="isHovering = true"

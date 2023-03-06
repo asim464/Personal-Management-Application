@@ -40,12 +40,12 @@ import { UserRole } from '../utils/auth.roles';
 export default {
   methods: {
     goBack() {
-      let user = getCurrentUser();
-      if (user.length > 0) {
-        this.$router.push(adminRoot);
-      } else {
+      // let user = getCurrentUser();
+      // if (user.length > 0) {
+        // this.$router.push(adminRoot);
+      // } else {
         this.$router.push("/user");
-      }
+      // }
     },
   },
   mounted: function () {

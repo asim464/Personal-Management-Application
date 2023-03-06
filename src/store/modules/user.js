@@ -91,27 +91,6 @@ export default {
       }
       return res;
     },
-    // async login({ commit }, { payload, config }) {
-    //   if (payload != null) {
-    //     if (payload.role == UserRole.Admin) {
-    //       await axios
-    //         .get(apiUrl + "users/findUser/" + payload.id, getters.config)
-    //         .then(async (res) => {
-    //           Object.assign(payload, { agencyID: res.data.agencyId });
-    //           await axios
-    //             .get(
-    //               apiUrl + "agency/findAgency/" + payload.agencyID,
-    //               getters.config
-    //             )
-    //             .then((res) => {
-    //               Object.assign(payload, { agencyName: res.data.name });
-    //             });
-    //         });
-    //     }
-    //   }
-    //   setCurrentUser(payload);
-    //   commit("setUser", payload);
-    // },
     signOut({ commit }) {
       setCurrentUser({
         title: "None",

@@ -30,7 +30,7 @@
         </b-colxx>
       </b-row>
     </template>
-    <template v-if="property.propertyDetail == null">
+    <template v-if="propertyDetail.Floors === 0 && propertyDetail.numberOfFloors === 0">
       <b-row class="m-1">
         <h4
           @mouseover="isHovering = true"

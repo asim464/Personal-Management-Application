@@ -30,7 +30,7 @@
         </b-colxx>
       </b-row>
     </template>
-    <template v-if="mainFeature === null">
+    <template v-if="mainFeature.Rooms === 0 && mainFeature.LeavingSpace === 0">
       <b-row class="m-1">
         <h4
           @mouseover="isHovering = true"

@@ -291,31 +291,34 @@ export default {
         oldBuilding: this.item.oldBuilding,
       };
       console.log(features);
+      console.log(this.item.propertyId);
 
-      const res = await this.updatePropFurnishing({
-        pk: this.item.propertyId,
-        payload: features,
-        config: this.config,
-      });
+      try {
+        const res = await this.updatePropFurnishing({
+          pk: this.item.propertyId,
+          payload: features,
+          config: this.config,
+        });
 
-      if (res.status == 201 || res.status == 200) {
-        this.$notify(
-          "Success",
-          "Property furnishing features updated successfully!",
-          "Code: " + res.status + ", Message:" + res.statusText,
-          {
-            permanent: false,
-            duration: 1000,
-            type: "success",
-          }
-        );
-        this.$emit("updateData");
-        this.hideModal("propFurnishingEditModal");
-      } else {
+        if (res.status == 201 || res.status == 200) {
+          this.$notify(
+            "Success",
+            "Property furnishing features updated successfully!",
+            "Code: " + res.status + ", Message:" + res.statusText,
+            {
+              permanent: false,
+              duration: 5000,
+              type: "success",
+            }
+          );
+          this.$emit("updateData");
+          this.hideModal("propFurnishingEditModal");
+        }
+      } catch (err) {
         this.$notify(
           "Error",
           "Property furnishing features could not be updated!",
-          "Code: " + res.status + ", Message:" + res.statusText,
+          "Code: " + res.status + ", Message:" + err,
           {
             permanent: false,
             duration: 5000,
