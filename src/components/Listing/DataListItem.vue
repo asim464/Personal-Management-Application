@@ -7,7 +7,7 @@
     }"
     no-body
   >
-    <div class="pl-2 d-flex flex-grow-1 min-width-zero">
+    <div class="d-flex flex-grow-1 min-width-zero" style="max-height: min-content;height: 72px;">
       <div
         class="
           card-body
@@ -33,12 +33,12 @@
             v-if="data.image.length"
             :src="imageUrl"
             class="card-img-top"
-            style="height: 72px; width: 86px"
+            style="height: 72px; width: 86px; border-color: aliceblue;"
           />
           <img
             v-else
             class="card-img-top"
-            style="height: 72px; width: 86px"
+            style="height: 72px; width: 86px; border-color: aliceblue;"
           />
         </router-link>
         <router-link

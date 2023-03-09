@@ -52,7 +52,7 @@ const data = [
   },
   {
     id: "second-menu",
-    icon: "iconsminds-magnifi-glass",
+    icon: "iconsminds-box-with-folders",
     label: "menu.property",
     to: `${adminRoot}/second-menu/PropertiesListing`,
     roles: [

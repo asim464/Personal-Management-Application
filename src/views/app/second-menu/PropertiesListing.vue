@@ -155,6 +155,8 @@ export default {
         properties: this.paginatedItems,
         currentPage: this.page,
       };
+      this.from = 1;
+      this.to = 10;
       this.$store.dispatch("onPaginationChange", data);
     },
     onPageChanged(page) {
